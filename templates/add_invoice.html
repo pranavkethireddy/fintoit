@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}New Invoice - Fintoit{% endblock %}
+{% block content %}
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+.fp-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.fp-form-row{display:flex;flex-direction:column;gap:.25rem;}
+.fp-email-wrap{position:relative;}
+.fp-email-icon{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);pointer-events:none;}
+.fp-email-input{padding-left:2.2rem;}
+.fp-hint{font-size:.75rem;color:var(--muted);margin-top:.35rem;}
+.fp-form-actions{display:flex;gap:.75rem;padding-top:.5rem;}
+.fp-form-actions .fp-btn{flex:1;justify-content:center;padding:.75rem 1rem;}
+</style>
+
+<div class="fp" style="max-width:640px;margin:0 auto;">
+
+  <div class="fp-head">
+    <div>
+      <div class="fp-eyebrow">Invoices</div>
+      <h1 class="fp-title">🧾 Create Invoice</h1>
+      <p class="fp-sub">Fill in the details below. If you add a customer email, the invoice will be sent automatically.</p>
+    </div>
+    <div class="fp-actions">
+      <a href="/invoices" class="fp-btn fp-btn-ghost">← Back to Invoices</a>
+    </div>
+  </div>
+
+  <div class="fp-card">
+    <form method="POST">
+
+      <div class="fp-form-grid" style="margin-bottom:1rem;">
+        <div class="fp-form-row">
+          <label class="fp-label" for="invoice_number">Invoice Number</label>
+          <input type="text" name="invoice_number" value="{{ invoice_number }}" required
+                 class="fp-input" id="invoice_number">
+        </div>
+        <div class="fp-form-row">
+          <label class="fp-label" for="customer_name">Customer Name</label>
+          <input type="text" name="customer_name" required placeholder="Customer or Company"
+                 class="fp-input" id="customer_name">
+        </div>
+      </div>
+
+      <!-- Customer Email -->
+      <div class="fp-form-row" style="margin-bottom:1rem;">
+        <label class="fp-label" for="customer_email">
+          Customer Email
+          <span style="color:var(--muted);font-style:italic;text-transform:none;letter-spacing:0;font-size:.7rem;">(Optional — invoice will be emailed automatically)</span>
+        </label>
+        <div class="fp-email-wrap">
+          <span class="fp-email-icon">✉️</span>
+          <input type="email" name="customer_email" placeholder="customer@example.com"
+                 class="fp-input fp-email-input" id="customer_email">
+        </div>
+        <p class="fp-hint">
+          Sent from Fintoit — customer replies will go directly to <strong>{{ current_user.email }}</strong>
+        </p>
+      </div>
+
+      <div class="fp-form-grid" style="margin-bottom:1rem;">
+        <div class="fp-form-row">
+          <label class="fp-label" for="invoice_date">Invoice Date</label>
+          <input type="date" name="invoice_date" value="{{ today }}" required
+                 class="fp-input" id="invoice_date">
+        </div>
+        <div class="fp-form-row">
+          <label class="fp-label" for="due_date">Due Date</label>
+          <input type="date" name="due_date" required
+                 class="fp-input" id="due_date">
+        </div>
+      </div>
+
+      <div class="fp-form-row" style="margin-bottom:1rem;">
+        <label class="fp-label" for="total_amount">Total Amount ($)</label>
+        <input type="number" name="total_amount" step="0.01" required placeholder="0.00"
+               class="fp-input" id="total_amount">
+      </div>
+
+      <div class="fp-form-row" style="margin-bottom:1.25rem;">
+        <label class="fp-label" for="notes">
+          Notes <span style="color:var(--muted);font-style:italic;text-transform:none;letter-spacing:0;font-size:.7rem;">(Optional)</span>
+        </label>
+        <textarea name="notes" rows="3" placeholder="Payment terms, bank details, notes..."
+                  class="fp-textarea" id="notes"></textarea>
+      </div>
+
+      <div class="fp-form-actions">
+        <button type="submit" class="fp-btn fp-btn-dark">
+          🚀 Create &amp; Send Invoice
+        </button>
+        <a href="/invoices" class="fp-btn fp-btn-ghost">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% block title %}Zoho CRM Integration — Fintoit Admin{% endblock %}
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap');
+:root{--ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--purple:#7c3aed;--muted:#6b6b7a;--border:#e2e1db;}
+.pw{font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.form-wrap{background:white;border:2px solid var(--ink);border-radius:20px;padding:2rem;box-shadow:6px 6px 0 var(--ink);}
+.flash-ok{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:.75rem 1rem;font-size:.875rem;color:#15803d;font-weight:600;margin-bottom:1.25rem;}
+.flash-err{background:#fef2f2;border:1.5px solid #fecaca;border-radius:10px;padding:.75rem 1rem;font-size:.875rem;color:var(--red);font-weight:600;margin-bottom:1.25rem;}
+.step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.25rem;}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--ink);color:white;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0;margin-top:2px;}
+.step-body{flex:1;}
+.step-title{font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:.2rem;}
+.step-desc{font-size:.825rem;color:var(--muted);line-height:1.6;}
+code{background:var(--paper);border:1px solid var(--border);border-radius:5px;padding:.1rem .4rem;font-family:'DM Mono',monospace;font-size:.78rem;color:var(--ink);}
+.env-table{width:100%;border-collapse:collapse;margin:1rem 0;}
+.env-table th,.env-table td{padding:.6rem .875rem;text-align:left;font-size:.825rem;border-bottom:1px solid var(--border);}
+.env-table th{background:var(--ink);color:white;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;}
+.env-table tr:last-child td{border-bottom:none;}
+.connected-badge{display:inline-flex;align-items:center;gap:.5rem;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:100px;padding:.35rem 1rem;font-size:.825rem;font-weight:700;color:#15803d;font-family:'DM Mono',monospace;}
+.disconnected-badge{display:inline-flex;align-items:center;gap:.5rem;background:#fef2f2;border:1.5px solid #fecaca;border-radius:100px;padding:.35rem 1rem;font-size:.825rem;font-weight:700;color:var(--red);font-family:'DM Mono',monospace;}
+.btn-connect{display:inline-flex;align-items:center;gap:.5rem;background:var(--blue);color:white;padding:.875rem 2rem;border-radius:12px;font-weight:700;font-size:1rem;text-decoration:none;font-family:'Bricolage Grotesque',sans-serif;transition:all .2s;box-shadow:4px 4px 0 #1e3a8a;}
+.btn-connect:hover{background:#1e40af;transform:translate(-2px,-2px);box-shadow:6px 6px 0 #1e3a8a;}
+.btn-danger{display:inline-flex;align-items:center;gap:.5rem;background:white;color:var(--red);border:2px solid #fecaca;padding:.65rem 1.25rem;border-radius:10px;font-weight:700;font-size:.875rem;font-family:'Bricolage Grotesque',sans-serif;cursor:pointer;transition:all .18s;}
+.btn-danger:hover{background:var(--red);color:white;border-color:var(--red);}
+.btn-outline{display:inline-flex;align-items:center;gap:.375rem;background:white;color:var(--ink);border:1.5px solid var(--border);padding:.65rem 1.1rem;border-radius:10px;font-size:.825rem;font-weight:700;text-decoration:none;font-family:'Bricolage Grotesque',sans-serif;transition:all .18s;}
+.btn-outline:hover{border-color:var(--ink);}
+.info-box{background:var(--paper);border:1.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;font-size:.875rem;color:var(--muted);line-height:1.65;}
+.info-box.blue{background:#eff6ff;border-color:#bfdbfe;color:#1e40af;}
+.info-box.amber{background:#fffbeb;border-color:#fde68a;color:#92400e;}
+</style>
+
+<div class="pw" style="max-width:780px;margin:0 auto;">
+
+    <!-- Back link -->
+    <a href="/admin/outreach" style="font-size:.78rem;font-weight:600;color:var(--muted);text-decoration:none;font-family:'DM Mono',monospace;display:inline-flex;align-items:center;gap:.35rem;margin-bottom:.875rem;">← Back to Outreach</a>
+
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;">
+        <div>
+            <h1 style="font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.03em;margin-bottom:.25rem;">
+                🌐 Zoho CRM Integration
+            </h1>
+            <p style="font-size:.875rem;color:var(--muted);font-family:'DM Mono',monospace;">
+                Sync outreach contacts as Leads with automatic token refresh
+            </p>
+        </div>
+        <div style="margin-left:auto;">
+            {% if connected %}
+            <span class="connected-badge">● Connected</span>
+            {% else %}
+            <span class="disconnected-badge">● Not Connected</span>
+            {% endif %}
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="{% if category=='success' %}flash-ok{% else %}flash-err{% endif %}">
+        {{ '✓' if category=='success' else '✗' }} {{ message }}
+    </div>
+    {% endfor %}
+    {% endwith %}
+
+    {% if connected %}
+    <!-- ── CONNECTED STATE ── -->
+    <div class="form-wrap" style="margin-bottom:1.5rem;">
+        <div style="display:flex;align-items:center;gap:.875rem;margin-bottom:1.5rem;">
+            <span style="font-size:2.5rem;">✅</span>
+            <div>
+                <div style="font-size:1.1rem;font-weight:800;color:var(--ink);">Zoho CRM is connected</div>
+                <div style="font-size:.825rem;color:var(--muted);">Access tokens are stored and refresh automatically before each sync.</div>
+            </div>
+        </div>
+
+        <div class="info-box blue" style="margin-bottom:1.5rem;">
+            <strong>Auto-refresh active.</strong> Zoho access tokens expire every hour — Fintoit automatically
+            requests a new one using the stored refresh token before every sync. You never need to
+            re-authorise unless you explicitly disconnect.
+        </div>
+
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+            <a href="/admin/outreach" class="btn-outline">📬 Go to Outreach</a>
+            <form method="POST" action="/admin/zoho/disconnect"
+                  onsubmit="return confirm('Disconnect Zoho? You will need to re-authorise to sync again.')">
+                <button type="submit" class="btn-danger">🔌 Disconnect Zoho</button>
+            </form>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- ── NOT CONNECTED STATE ── -->
+
+    <!-- Step-by-step setup guide -->
+    <div class="form-wrap" style="margin-bottom:1.5rem;">
+        <div style="font-size:1rem;font-weight:800;margin-bottom:1.25rem;">🛠️ One-Time Setup Guide</div>
+
+        <div class="info-box amber" style="margin-bottom:1.5rem;">
+            Complete steps 1–3 once in the Zoho console, then click <strong>Connect to Zoho</strong> below.
+            After that, everything is automatic forever.
+        </div>
+
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+                <div class="step-title">Create a Zoho OAuth Client</div>
+                <div class="step-desc">
+                    Go to <a href="https://api-console.zoho.com/" target="_blank" style="color:var(--blue);font-weight:600;">api-console.zoho.com</a>
+                    → click <strong>Add Client</strong> → choose <strong>Server-based Applications</strong>.
+                    Give it any name (e.g. "Fintoit Sync").
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+                <div class="step-title">Set the Redirect URI</div>
+                <div class="step-desc">
+                    In the client settings, add this exact redirect URI:<br>
+                    <code>https://www.fintoit.com/admin/zoho/callback</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+                <div class="step-title">Add these environment variables to Render</div>
+                <div class="step-desc" style="margin-bottom:.75rem;">
+                    Copy the Client ID and Client Secret from the Zoho console into your Render dashboard
+                    (Environment → Add Environment Variable):
+                </div>
+                <table class="env-table">
+                    <thead>
+                        <tr><th>Variable</th><th>Where to find it</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>ZOHO_CLIENT_ID</code></td>
+                            <td>Zoho API Console → your client → Client ID</td>
+                        </tr>
+                        <tr>
+                            <td><code>ZOHO_CLIENT_SECRET</code></td>
+                            <td>Zoho API Console → your client → Client Secret</td>
+                        </tr>
+                        <tr>
+                            <td><code>ZOHO_REDIRECT_URI</code></td>
+                            <td><code>https://www.fintoit.com/admin/zoho/callback</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+                <div class="step-title">Authorise Fintoit to access your Zoho CRM</div>
+                <div class="step-desc">
+                    Click the button below. You'll be taken to Zoho's login page.
+                    After you approve, you'll be redirected back here and the connection
+                    will be active permanently (auto-refresh handles token expiry).
+                </div>
+            </div>
+        </div>
+
+        {% if auth_url %}
+        <div style="margin-top:1.5rem;">
+            <a href="{{ auth_url }}" class="btn-connect">
+                🔗 Connect to Zoho CRM →
+            </a>
+            <p style="margin-top:.875rem;font-size:.75rem;color:var(--muted);font-family:'DM Mono',monospace;">
+                You'll be redirected to Zoho's authorisation page. After approving,
+                you'll return here automatically.
+            </p>
+        </div>
+        {% else %}
+        <div class="info-box" style="margin-top:1.5rem;">
+            ⚠️ <strong>ZOHO_CLIENT_ID</strong> is not set in your environment.
+            Complete step 3 first, then reload this page.
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- How it works under the hood -->
+    <div class="form-wrap">
+        <div style="font-size:1rem;font-weight:800;margin-bottom:1.25rem;">🔄 How Auto-Refresh Works</div>
+        <div style="display:flex;flex-direction:column;gap:.875rem;">
+            {% for icon, title, desc in [
+                ('🔑', 'Initial authorisation (once)', 'You click "Connect to Zoho" → approve access → Zoho sends back an access token (1-hour) and a refresh token (permanent). Both are stored in your database.'),
+                ('⏱️', 'Every sync call', 'Before each API request, Fintoit checks if the access token expires within 60 seconds. If so, it automatically calls the Zoho token endpoint with the refresh token and gets a fresh access token.'),
+                ('💾', 'Stored securely in DB', 'Tokens live in the zoho_tokens table in your PostgreSQL database — never in plain environment variables that expire with deploys.'),
+                ('♾️', 'Refresh tokens never expire', 'Zoho refresh tokens are permanent unless you revoke them from the Zoho console. You never need to re-authorise.')
+            ] %}
+            <div style="display:flex;gap:.875rem;align-items:flex-start;padding:.875rem;background:var(--paper);border-radius:12px;">
+                <span style="font-size:1.5rem;flex-shrink:0;">{{ icon }}</span>
+                <div>
+                    <div style="font-size:.875rem;font-weight:700;margin-bottom:.2rem;">{{ title }}</div>
+                    <div style="font-size:.8rem;color:var(--muted);line-height:1.65;">{{ desc }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

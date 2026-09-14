@@ -1,0 +1,466 @@
+{% extends "blog_base.html" %}
+
+{% block extra_styles %}
+/* ── POST HERO ── */
+.post-hero {
+  position: relative;
+  padding: 4rem 1.5rem 3rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: white;
+}
+.post-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+.post-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "DM Mono", monospace;
+  font-size: 0.66rem;
+  color: var(--muted);
+  margin-bottom: 1.75rem;
+}
+.breadcrumb a { color: var(--muted); transition: color 0.15s; }
+.breadcrumb a:hover { color: var(--ink); }
+
+.post-title {
+  font-size: clamp(1.9rem, 5vw, 3.1rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0.875rem 0 1.1rem;
+}
+.post-subtitle {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.author-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  overflow: hidden;      /* hides overflow outside the circle */
+  flex-shrink: 0;
+}
+
+.author-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;     /* crops image to fill circle */
+  display: block;
+}
+.meta-info { flex: 1; }
+.meta-name { font-size: 0.88rem; font-weight: 600; }
+.meta-date { font-family: "DM Mono", monospace; font-size: 0.63rem; color: var(--muted); margin-top: 0.15rem; }
+.meta-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: "DM Mono", monospace;
+  font-size: 0.63rem;
+  color: var(--muted);
+}
+.meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+
+/* ── LAYOUT ── */
+.post-layout {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* ── ARTICLE BODY ── */
+.post-body { min-width: 0; }
+.post-body h2 {
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin: 2.5rem 0 0.875rem;
+}
+.post-body h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 2rem 0 0.625rem;
+}
+.post-body p { font-size: 1rem; line-height: 1.8; color: #2a2a35; margin-bottom: 1.25rem; }
+.post-body ul, .post-body ol { padding-left: 1.5rem; margin-bottom: 1.25rem; }
+.post-body li { font-size: 1rem; line-height: 1.75; color: #2a2a35; margin-bottom: 0.4rem; }
+.post-body strong { font-weight: 700; color: var(--ink); }
+.post-body a { color: var(--blue); font-weight: 600; }
+
+/* callout */
+.callout {
+  border-left: 3px solid var(--blue);
+  border-radius: 0 12px 12px 0;
+  padding: 1.25rem 1.5rem;
+  margin: 1.75rem 0;
+  background: #eff6ff;
+}
+.callout.green { border-color: var(--green); background: #f0fdf4; }
+.callout.purple { border-color: var(--purple); background: #faf5ff; }
+.callout-label {
+  font-family: "DM Mono", monospace;
+  font-size: 0.63rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blue);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.callout.green .callout-label { color: var(--green); }
+.callout.purple .callout-label { color: var(--purple); }
+.callout p { margin: 0; font-size: 0.95rem; color: var(--ink); }
+
+/* formula */
+.formula {
+  background: var(--ink);
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+  margin: 1.75rem 0;
+  font-family: "DM Mono", monospace;
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.9;
+}
+.formula .formula-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.28);
+  margin-bottom: 0.75rem;
+}
+.formula .hl { color: #a5b4fc; font-weight: 500; }
+.formula .hl-green { color: #4ade80; font-weight: 500; }
+
+/* data table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.75rem 0;
+  font-size: 0.9rem;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+}
+.data-table thead { background: var(--paper); }
+.data-table th {
+  font-family: "DM Mono", monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  padding: 0.875rem 1.25rem;
+  text-align: left;
+  font-weight: 500;
+}
+.data-table td { padding: 0.875rem 1.25rem; border-top: 1px solid var(--border); color: #2a2a35; }
+.data-table tr.total td { font-weight: 700; color: var(--ink); background: var(--paper); }
+.c-red { color: #ef4444 !important; font-weight: 600; }
+.c-green { color: var(--green) !important; font-weight: 600; }
+.c-blue { color: var(--blue) !important; font-weight: 600; }
+
+hr.divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+/* ── SHARE ── */
+.share-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-top: 3rem;
+}
+.share-label {
+  font-family: "DM Mono", monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: white;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--ink);
+  text-decoration: none;
+}
+.share-btn:hover { border-color: var(--ink); transform: translateY(-1px); }
+.share-btn.twitter:hover  { border-color: #000; background: #000; color: white; }
+.share-btn.linkedin:hover { border-color: #0077b5; background: #0077b5; color: white; }
+.share-btn.copied { border-color: var(--green); color: var(--green); }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.sidebar-box {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+.sidebar-title {
+  font-family: "DM Mono", monospace;
+  font-size: 0.63rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.15rem; }
+.toc-list a {
+  font-size: 0.85rem;
+  color: var(--muted);
+  display: block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  transition: all 0.15s;
+  line-height: 1.45;
+}
+.toc-list a:hover { background: var(--paper); color: var(--ink); }
+.toc-list a.active { background: var(--paper); color: var(--ink); font-weight: 600; }
+
+.cta-sidebar {
+  background: var(--ink);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.cta-sidebar::before {
+  content: "";
+  position: absolute;
+  width: 200px; height: 200px;
+  top: -80px; right: -60px;
+  background: radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.cta-sidebar h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  position: relative; z-index: 1;
+}
+.cta-sidebar p {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.42);
+  line-height: 1.6;
+  margin-bottom: 1.1rem;
+  position: relative; z-index: 1;
+}
+.cta-sidebar a {
+  display: block;
+  background: white;
+  color: var(--ink);
+  text-align: center;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: background 0.15s;
+  position: relative; z-index: 1;
+}
+.cta-sidebar a:hover { background: #f0f0f0; }
+
+.related-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+}
+.related-item:last-child { border-bottom: none; padding-bottom: 0; }
+.related-emoji {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+.related-item h4 { font-size: 0.8rem; font-weight: 600; line-height: 1.4; color: var(--ink); transition: color 0.15s; }
+.related-item:hover h4 { color: var(--blue); }
+.related-item span { font-family: "DM Mono", monospace; font-size: 0.6rem; color: var(--muted); display: block; margin-top: 0.2rem; }
+
+@media (max-width: 860px) {
+  .post-layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+}
+{% endblock %}
+
+{% block content %}
+
+<!-- POST HERO -->
+<section class="post-hero">
+  <div class="post-hero-inner">
+    <div class="breadcrumb">
+      <a href="/blog">Blog</a>
+      <span>→</span>
+      <a href="/?category={{ post.category_slug }}">{{ post.category }}</a>
+      <span>→</span>
+      <span>{{ post.title[:45] }}{% if post.title|length > 45 %}…{% endif %}</span>
+    </div>
+    <span class="tag {{ post.tag_style }}">{{ post.category }}</span>
+    <h1 class="post-title">{% block post_title %}{{ post.title }}{% endblock %}</h1>
+    <p class="post-subtitle">{% block post_subtitle %}{{ post.excerpt }}{% endblock %}</p>
+    <div class="post-meta">
+    <div class="author-avatar">
+      <img
+        src="{{ url_for('static', filename='images/' ~ post.image) }}"
+        alt="{{ post.author }}"
+      >
+    </div>
+      <div class="meta-info">
+        <div class="meta-name">{{ post.author }}</div>
+        <div class="meta-date">{{ post.date }}</div>
+      </div>
+      <div class="meta-stats">
+        <span>{{ post.read_time }}</span>
+        <div class="meta-dot"></div>
+        <span>{{ post.category }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BODY + SIDEBAR -->
+<div class="post-layout">
+  <article class="post-body">
+
+    {% block post_content %}{% endblock %}
+
+    <!-- SHARE -->
+    <div class="share-row">
+      <span class="share-label">Share</span>
+      <button class="share-btn" id="copyBtn" onclick="copyLink()">🔗 Copy link</button>
+      <a class="share-btn twitter" id="twitterBtn" href="#" target="_blank" rel="noopener">𝕏 Twitter</a>
+      <a class="share-btn linkedin" id="linkedinBtn" href="#" target="_blank" rel="noopener">in LinkedIn</a>
+    </div>
+
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-box">
+      <div class="sidebar-title">In this article</div>
+      <ul class="toc-list" id="tocList">
+        {% block toc %}{% endblock %}
+      </ul>
+    </div>
+
+    <div class="cta-sidebar">
+      <h3>See your numbers move in real time</h3>
+      <p>Fintoit connects to your accounts and gives you instant financial clarity, no CFO needed.</p>
+      <a href="https://fintoit.com/signup">Try Fintoit free →</a>
+    </div>
+
+    {% if related %}
+    <div class="sidebar-box">
+      <div class="sidebar-title">Related Articles</div>
+      {% for r in related %}
+      <a href="/{{ r.slug }}" class="related-item">
+        <div class="related-emoji">{{ r.emoji }}</div>
+        <div>
+          <h4>{{ r.title }}</h4>
+          <span>{{ r.read_time }}</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </aside>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const pageUrl  = window.location.href;
+  const pageTitle = document.querySelector('.post-title').textContent;
+
+  // Wire up share buttons
+  document.getElementById('twitterBtn').href =
+    `https://twitter.com/intent/tweet?text=${encodeURIComponent(pageTitle)}&url=${encodeURIComponent(pageUrl)}`;
+
+  document.getElementById('linkedinBtn').href =
+    `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`;
+
+  function copyLink() {
+    navigator.clipboard.writeText(pageUrl).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '🔗 Copy link';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // TOC active state
+  const headings = document.querySelectorAll('.post-body h2[id]');
+  const tocLinks  = document.querySelectorAll('.toc-list a');
+  const tocObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px' });
+  headings.forEach(h => tocObs.observe(h));
+</script>
+{% endblock %}

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Fintoit{% endblock %}</title>
+    <!-- Precompiled Tailwind (replaces the runtime Play CDN so pages don't
+         recompile CSS in the browser on every load). Rebuild with the Tailwind
+         CLI after adding new utility classes — see tailwind.config.js. -->
+    <link rel="stylesheet" href="/static/css/tailwind.css">
+    <link rel="shortcut icon" href="/static/images/other.png">
+    <!-- Fintoit brand fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XBT6631QQ7"></script>
+<script async src="https://cdn.pagesense.io/js/fintoit/f1cf313955bc44e6a394f60172925564.js"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XBT6631QQ7');
+</script>
+<style>
+  @media (max-width: 768px) {
+  footer div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+}
+</style>
+<!-- ═══ Fintoit brand design layer (applies app-wide) ═══ -->
+<style>
+  :root{
+    --ink:#0a0a0f; --paper:#f7f6f2; --blue:#1d4ed8; --green:#16a34a;
+    --red:#dc2626; --amber:#d97706; --muted:#6b6b7a; --border:#e2e1db;
+  }
+  /* Brand typography + canvas across the whole app */
+  body.fin-app{ background:var(--paper); color:var(--ink);
+    font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  body.fin-app h1, body.fin-app h2, body.fin-app h3, body.fin-app h4{ letter-spacing:-0.02em; }
+
+  /* Auto-upgrade standard content cards to the neo-brutalist marketing look.
+     Scoped to <main> so the nav menu, flash toasts and modals stay untouched. */
+  main .bg-white.rounded-lg,
+  main .bg-white.rounded-xl,
+  main .bg-white.rounded-2xl{
+    border:2px solid var(--ink);
+    box-shadow:4px 4px 0 var(--ink);
+  }
+  /* Soft-shadow utilities inside cards shouldn't fight the hard shadow */
+  main .bg-white.rounded-lg.shadow, main .bg-white.rounded-lg.shadow-md, main .bg-white.rounded-lg.shadow-lg,
+  main .bg-white.rounded-xl.shadow, main .bg-white.rounded-xl.shadow-md, main .bg-white.rounded-xl.shadow-lg,
+  main .bg-white.rounded-2xl.shadow, main .bg-white.rounded-2xl.shadow-md, main .bg-white.rounded-2xl.shadow-lg{
+    box-shadow:4px 4px 0 var(--ink);
+  }
+
+  /* Shared components for page-level use (used as pages are converted) */
+  .fin-eyebrow{ font-family:'DM Mono',monospace; font-size:0.7rem; font-weight:500;
+    letter-spacing:0.16em; text-transform:uppercase; color:var(--blue); }
+  .fin-title{ font-family:'Bricolage Grotesque',sans-serif; font-weight:800;
+    letter-spacing:-0.03em; line-height:1.05; }
+  .fin-card{ background:#fff; border:2px solid var(--ink); border-radius:16px;
+    box-shadow:4px 4px 0 var(--ink); padding:1.5rem; }
+  .fin-btn{ display:inline-flex; align-items:center; gap:.4rem; background:var(--ink);
+    color:#fff; border:2px solid var(--ink); border-radius:12px; padding:.6rem 1.1rem;
+    font-weight:700; font-family:'Bricolage Grotesque',sans-serif; cursor:pointer;
+    transition:transform .12s, box-shadow .12s; text-decoration:none; }
+  .fin-btn:hover{ transform:translateY(-1px); box-shadow:3px 3px 0 var(--ink); }
+  .fin-btn-ghost{ background:#fff; color:var(--ink); }
+  .fin-input{ width:100%; padding:.7rem .9rem; border:1.5px solid var(--border);
+    border-radius:10px; background:#fff; font-family:'Bricolage Grotesque',sans-serif; color:var(--ink); }
+  .fin-input:focus{ outline:none; border-color:var(--ink); box-shadow:0 0 0 3px rgba(10,10,15,.06); }
+  .num{ font-family:'DM Mono',monospace; font-variant-numeric:tabular-nums; }
+</style>
+    {% block head %}{% endblock %}
+</head>
+<body class="fin-app min-h-screen flex flex-col">
+
+<!-- Navigation Bar -->
+<nav class="bg-white shadow-lg relative z-40">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+            <a href="/">
+                <img src="/static/images/logo 6.png" alt="Fintoit" class="h-[50px] w-auto">
+            </a>
+
+            <!-- Hamburger Button (mobile only) -->
+            <button onclick="toggleNav()" class="md:hidden text-gray-600 hover:text-blue-600 focus:outline-none">
+                <svg id="menuIcon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+                <svg id="closeIcon" class="w-7 h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center space-x-2">
+                {% if current_user.is_authenticated %}
+                    {% if current_user.is_admin %}
+                        {% if request.endpoint == 'admin_panel' or request.path.startswith('/admin') %}
+                        <a href="/dashboard" class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 text-sm font-semibold">📊 Switch to App</a>
+                        {% else %}
+                        <a href="/admin" class="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 text-sm font-semibold">🔐 Switch to Admin</a>
+                        {% endif %}
+                    {% endif %}
+                    <a href="/dashboard" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">Dashboard</a>
+                    <a href="/transactions" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">Transactions</a>
+                    <a href="/accounting" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50 font-semibold">Accounting</a>
+                    <a href="/budgets" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">Budgets</a>
+                    <a href="/goals" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">Goals</a>
+                    {% if plaid_enabled %}<a href="/plaid/connect" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">Connect Bank</a>{% endif %}
+                    <span class="text-gray-400">|</span>
+                    <div class="relative group">
+                        <button class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition">
+                            <img src="/profile/avatar/{{ current_user.id }}" class="w-8 h-8 rounded-full object-cover flex-shrink-0">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown -->
+                        <div class="absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
+                            <div class="px-4 py-2 border-b border-gray-100">
+                                <p class="text-xs font-semibold text-gray-800 truncate">{{ current_user.full_name or 'No name set' }}</p>
+                                <p class="text-xs text-gray-400 truncate">{{ current_user.email }}</p>
+                                {% set _ud = current_user.get_user_data() if current_user.get_user_data is defined else none %}
+                            </div>
+                            <a href="/profile"
+                            class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">
+                                👤 My Profile
+                            </a>
+                            <a href="/billing"
+                            class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">
+                                💳 Billing
+                            </a>
+                            <a href="/feedback" 
+                            class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">
+                            💬 Feedback</a>
+                            <a href="/referrals"
+                            class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">
+                                🎁 Refer &amp; Earn
+                            </a>
+                            <div class="border-t border-gray-100 mt-1 pt-1">
+                                <a href="/logout"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                    🚪 Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="/" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">Home</a>
+                    <a href="/pricing" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">Pricing</a>
+                    <a href="/login" class="text-gray-700 hover:text-blue-600 px-3">Login</a>
+                    <a href="/signup" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-1">
+        {% if current_user.is_authenticated %}
+            <div class="text-xs text-gray-400 font-semibold uppercase px-2 py-1">{{ current_user.email }}</div>
+            {% if current_user.is_admin %}
+                {% if request.endpoint == 'admin_panel' or request.path.startswith('/admin') %}
+                <a href="/dashboard" class="block bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-semibold mb-2">📊 Switch to App</a>
+                {% else %}
+                <a href="/admin" class="block bg-purple-600 text-white px-3 py-2 rounded-lg text-sm font-semibold mb-2">🔐 Switch to Admin</a>
+                {% endif %}
+            {% endif %}
+            <a href="/dashboard" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">📊 Dashboard</a>
+            <a href="/transactions" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">💳 Transactions</a>
+            <a href="/accounting" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">🏦 Accounting</a>
+            <a href="/budgets" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">🎯 Budgets</a>
+            <a href="/goals" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">🏆 Goals</a>
+            {% if plaid_enabled %}<a href="/plaid/connect" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">🏦 Connect Bank</a>{% endif %}
+            <a href="/feedback" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">💬 Feedback</a>
+            <div class="px-3 py-2 border-b border-gray-100 mb-1">
+                <p class="text-sm font-semibold text-gray-800">{{ current_user.full_name or 'No name set' }}</p>
+                <p class="text-xs text-gray-400">{{ current_user.email }}</p>
+            </div>
+            <a href="/profile" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">👤 My Profile</a>
+            <a href="/billing" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">💳 Billing</a>
+            <a href="/referrals" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">🎁 Refer &amp; Earn</a>
+            <a href="/logout" class="block text-red-600 hover:text-white hover:bg-red-500 px-3 py-2 rounded text-sm font-semibold">🚪 Logout</a>
+        {% else %}
+            <a href="/" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">🏠 Home</a>
+            <a href="/pricing" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">💰 Pricing</a>
+            <a href="/login" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded hover:bg-blue-50">🔑 Login</a>
+            <a href="/signup" class="block bg-blue-600 text-white px-3 py-2 rounded-lg text-center font-semibold">Sign Up</a>
+        {% endif %}
+    </div>
+</nav>
+
+{% if session.get('impersonating') %}
+<div class="bg-yellow-400 text-yellow-900 text-center py-2 px-4 font-semibold text-sm flex items-center justify-center gap-3">
+    ⚠️ You are impersonating <strong>{{ current_user.email }}</strong>
+    <a href="/admin/stop-impersonating"
+       class="bg-yellow-900 text-yellow-100 px-3 py-1 rounded-lg text-xs hover:bg-yellow-800 transition">
+        Stop Impersonating
+    </a>
+</div>
+{% endif %}
+
+<!-- Flash Messages Toast -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2" style="max-width: 360px;">
+    {% for category, message in messages %}
+    <div class="toast flex items-start gap-3 px-4 py-3 rounded-xl shadow-lg text-sm font-medium
+        {% if category == 'success' %}bg-green-600 text-white
+        {% elif category == 'error' %}bg-red-600 text-white
+        {% elif category == 'warning' %}bg-yellow-500 text-white
+        {% else %}bg-gray-800 text-white{% endif %}">
+        <span class="flex-1">
+            {% if category == 'success' %}✅{% elif category == 'error' %}❌{% elif category == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+            {{ message }}
+        </span>
+        <button onclick="this.parentElement.remove()" class="opacity-70 hover:opacity-100 text-lg leading-none ml-2">×</button>
+    </div>
+    {% endfor %}
+</div>
+<script>
+setTimeout(() => {
+    document.querySelectorAll('.toast').forEach(t => {
+        t.style.transition = 'opacity 0.5s';
+        t.style.opacity = '0';
+        setTimeout(() => t.remove(), 500);
+    });
+}, 4000);
+</script>
+{% endif %}
+{% endwith %}
+
+<!-- Main Content Area -->
+<main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Footer -->
+<footer style="background:#0f0f0f; color:#fff; margin-top:3rem;">
+  <div style="
+  max-width:1200px;
+  margin:0 auto;
+  padding:3.5rem 2rem 2.5rem;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:3rem;
+">
+    <!-- Col 1: Brand -->
+    <div>
+      <p>
+      <img src="/static/images/logo 6.png" alt="Fintoit" class="h-[30px] w-auto mb-4">
+      </p>
+      <p style="font-size:0.875rem; color:#a0a0a0; line-height:1.7; margin:0 0 1.75rem; max-width:320px;">
+        Fintoit brings all your startup's financial tools into one connected system. From burn rate and runway to AI-powered insights, everything you need is right at your fingertips.
+      </p>
+          <p style="font-size:0.8rem; color:#666; margin:0;">
+      <!-- Social icons -->
+      <div style="display:flex; gap:10px;">
+        <a href="https://www.linkedin.com/company/fintoit" target="_blank" style="width:36px;height:36px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#a0a0a0;text-decoration:none;transition:border-color .2s,color .2s;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#a0a0a0';this.style.borderColor='#333'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="https://x.com/fintoit" target="_blank" style="width:36px;height:36px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#a0a0a0';this.style.borderColor='#333'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://instagram.com/fintoit" target="_blank" style="width:36px;height:36px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#a0a0a0';this.style.borderColor='#333'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@Fintoit" target="_blank" style="width:36px;height:36px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#a0a0a0';this.style.borderColor='#333'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+        </a>
+      </div>
+    </div>
+ 
+    <!-- Col 2: Company -->
+    <div>
+      <p style="font-size:0.875rem; font-weight:600; margin:0 0 1.25rem; letter-spacing:.03em;">Company</p>
+      <div style="display:flex; flex-direction:column; gap:0.75rem;">
+        <a href="/about" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">About Us</a>
+        <a href="/media-kit" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Press Kit</a>
+        <a href="/status" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Status</a>
+        <a href="/privacy" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Privacy Policy</a>
+        <a href="/terms" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Terms of Service</a>
+        <a href="https://donate.stripe.com/4gM6oG93n7cJgJD3k4bo400" target="_blank" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Donate</a>
+      </div>
+    </div>
+ 
+    <!-- Col 3: Resources -->
+    <div>
+      <p style="font-size:0.875rem; font-weight:600; margin:0 0 1.25rem; letter-spacing:.03em;">Resources</p>
+      <div style="display:flex; flex-direction:column; gap:0.75rem;">
+        <a href="/pricing" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Pricing</a>
+        <a href="/features" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Features</a>
+        <a href="/guides" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Guides</a>
+        <a href="/contact" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Contact</a>
+        <a href="/dashboard" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Dashboard</a>
+        <a href="/blog" target="_blank" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" rel="noopener noreferrer">Blog</a>
+    </div>
+    </div>
+
+  </div>
+</footer>
+      <script> (function(ss,ex){ window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));}; (function(d,s){ fs=d.getElementsByTagName(s)[0]; function ce(src){ var cs=d.createElement(s); cs.src=src; cs.async=1; fs.parentNode.insertBefore(cs,fs); }; ce('https://sc.lfeeder.com/lftracker_v1_'+ss+(ex?'_'+ex:'')+'.js'); })(document,'script'); })('lAxoEaKrnJo4OYGd'); </script>
+<!-- ═══════════════════════════════════════════════
+     SESSION INACTIVITY TIMEOUT
+     Warning at 13 min, logout at 15 min of inactivity
+════════════════════════════════════════════════ -->
+<style>
+  #inactivity-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(10,10,15,0.55);
+    backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  #inactivity-overlay.visible {
+    opacity: 1; pointer-events: all;
+  }
+  #inactivity-modal {
+    background: white;
+    border: 2px solid #0a0a0f;
+    border-radius: 20px;
+    padding: 2.25rem 2.5rem;
+    box-shadow: 8px 8px 0 #0a0a0f;
+    max-width: 400px; width: 90%;
+    text-align: center;
+    transform: translateY(16px);
+    transition: transform 0.25s ease;
+    font-family: 'Bricolage Grotesque', sans-serif;
+  }
+  #inactivity-overlay.visible #inactivity-modal {
+    transform: translateY(0);
+  }
+  .inactivity-icon {
+    font-size: 2.75rem; margin-bottom: 0.875rem; display: block;
+  }
+  .inactivity-title {
+    font-size: 1.375rem; font-weight: 800;
+    letter-spacing: -0.03em; color: #0a0a0f;
+    margin-bottom: 0.5rem;
+  }
+  .inactivity-sub {
+    font-size: 0.9rem; color: #6b6b7a;
+    line-height: 1.65; margin-bottom: 1.5rem;
+  }
+  .inactivity-countdown {
+    display: inline-block;
+    font-size: 2rem; font-weight: 800;
+    color: #dc2626; letter-spacing: -0.04em;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 1.5rem;
+  }
+  .inactivity-btn-stay {
+    width: 100%; background: #0a0a0f; color: white;
+    padding: 0.875rem; border: none; border-radius: 12px;
+    font-size: 1rem; font-weight: 700;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    cursor: pointer; transition: all 0.18s; margin-bottom: 0.625rem;
+  }
+  .inactivity-btn-stay:hover {
+    background: #1e1e2e; transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(10,10,15,0.2);
+  }
+  .inactivity-btn-logout {
+    width: 100%; background: transparent; color: #6b6b7a;
+    padding: 0.625rem; border: 1.5px solid #e2e1db;
+    border-radius: 10px; font-size: 0.875rem; font-weight: 600;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    cursor: pointer; transition: all 0.18s;
+  }
+  .inactivity-btn-logout:hover {
+    border-color: #dc2626; color: #dc2626;
+  }
+  .inactivity-progress-bar {
+    width: 100%; height: 4px;
+    background: #f3f4f6; border-radius: 100px;
+    overflow: hidden; margin-bottom: 1.25rem;
+  }
+  .inactivity-progress-fill {
+    height: 100%; background: #dc2626;
+    border-radius: 100px;
+    transition: width 1s linear;
+  }
+</style>
+
+<div id="inactivity-overlay" role="dialog" aria-modal="true" aria-labelledby="inactivity-title">
+  <div id="inactivity-modal">
+    <span class="inactivity-icon">⏱️</span>
+    <div class="inactivity-title" id="inactivity-title">Still there?</div>
+    <p class="inactivity-sub">
+      You've been inactive for a while. For your security,<br>
+      you'll be signed out automatically in:
+    </p>
+    <div class="inactivity-progress-bar">
+      <div class="inactivity-progress-fill" id="inactivity-progress"></div>
+    </div>
+    <div class="inactivity-countdown" id="inactivity-countdown">2:00</div>
+    <button class="inactivity-btn-stay" onclick="resetInactivityTimer()">
+      ✓ Keep me signed in
+    </button>
+    <button class="inactivity-btn-logout" onclick="doLogout()">
+      Sign out now
+    </button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const WARN_MS   = 13 * 60 * 1000;   // show warning after 13 min
+  const LOGOUT_MS = 15 * 60 * 1000;   // log out after 15 min
+  const WARNING_DURATION = LOGOUT_MS - WARN_MS; // 2 min countdown
+
+  let warnTimer, logoutTimer, countdownInterval;
+  let countdownRemaining = WARNING_DURATION;
+
+  const overlay    = document.getElementById('inactivity-overlay');
+  const countdown  = document.getElementById('inactivity-countdown');
+  const progressEl = document.getElementById('inactivity-progress');
+
+  function formatTime(ms) {
+    const totalSec = Math.ceil(ms / 1000);
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  }
+
+  function showWarning() {
+    countdownRemaining = WARNING_DURATION;
+    overlay.classList.add('visible');
+    progressEl.style.width = '100%';
+
+    // Tick every second
+    countdownInterval = setInterval(() => {
+      countdownRemaining -= 1000;
+      countdown.textContent = formatTime(countdownRemaining);
+      const pct = (countdownRemaining / WARNING_DURATION) * 100;
+      progressEl.style.width = pct + '%';
+      if (countdownRemaining <= 0) clearInterval(countdownInterval);
+    }, 1000);
+
+    countdown.textContent = formatTime(countdownRemaining);
+  }
+
+  function hideWarning() {
+    overlay.classList.remove('visible');
+    clearInterval(countdownInterval);
+  }
+
+  function doLogout() {
+    window.location.href = '/logout';
+  }
+
+  window.resetInactivityTimer = function() {
+    hideWarning();
+    clearTimeout(warnTimer);
+    clearTimeout(logoutTimer);
+    startTimers();
+  };
+
+  function startTimers() {
+    warnTimer   = setTimeout(showWarning, WARN_MS);
+    logoutTimer = setTimeout(doLogout,   LOGOUT_MS);
+  }
+
+  // Reset on any user activity
+  const activityEvents = ['mousemove','mousedown','keydown','touchstart','scroll','click'];
+  function onActivity() {
+    // Only reset if modal isn't showing (don't reset while warning is visible)
+    if (!overlay.classList.contains('visible')) {
+      clearTimeout(warnTimer);
+      clearTimeout(logoutTimer);
+      startTimers();
+    }
+  }
+
+  activityEvents.forEach(e => document.addEventListener(e, onActivity, { passive: true }));
+
+  // Kick off
+  startTimers();
+})();
+</script>
+<script>
+function toggleNav() {
+    const menu = document.getElementById("mobileMenu");
+    const menuIcon = document.getElementById("menuIcon");
+    const closeIcon = document.getElementById("closeIcon");
+
+    menu.classList.toggle("hidden");
+
+    // toggle icons
+    menuIcon.classList.toggle("hidden");
+    closeIcon.classList.toggle("hidden");
+}
+</script>
+
+</body>
+</html>

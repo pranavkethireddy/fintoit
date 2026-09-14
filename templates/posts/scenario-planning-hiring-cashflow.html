@@ -1,0 +1,220 @@
+{% extends "post_base.html" %}
+{% block title %}Scenario Planning: Hiring & Cash Flow — Fintoit Blog{% endblock %}
+
+{% block post_title %}Scenario Planning: What Happens to Your Cash When You Hire?{% endblock %}
+{% block post_subtitle %}Before you make your next hire, run the numbers. We break down exactly how adding engineers, sales reps, or contractors changes your runway, and how to model it like a CFO.{% endblock %}
+
+{% block toc %}
+<li><a href="#why-it-matters">Why hiring decisions are cash decisions</a></li>
+<li><a href="#true-cost">The true cost of a hire</a></li>
+<li><a href="#role-types">How different roles hit cash differently</a></li>
+<li><a href="#base-case">A base-case company</a></li>
+<li><a href="#scenarios">Three hiring scenarios</a></li>
+<li><a href="#contractor-vs-fte">Contractor vs. full-time</a></li>
+<li><a href="#framework">A simple decision framework</a></li>
+<li><a href="#mistakes">6 mistakes founders make</a></li>
+<li><a href="#when-to-hire">When to hire anyway</a></li>
+{% endblock %}
+
+{% block post_content %}
+
+<p>Most founders treat hiring as a product or growth decision: "We need this person to ship faster / close more deals." That's half the picture. Every hire is also a cash decision, and the cash side is where startups get blindsided.</p>
+
+<p>A $150K engineer doesn't cost $150K. A sales hire who "pays for themselves" still burns cash for 3–6 months before they do. And the difference between hiring one person now versus two people in six months can mean the difference between a clean fundraise and a desperate bridge note.</p>
+
+<p>This guide walks through how to model hiring against cash flow the way a CFO would, with real numbers, role-by-role differences, and a simple framework you can use before every offer letter.</p>
+
+<h2 id="why-it-matters">Why Hiring Decisions Are Cash Decisions</h2>
+
+<p>Your runway is cash divided by net burn. A hire increases burn. That means every hire shortens runway unless it generates enough revenue (or cost savings) to offset itself.</p>
+
+<p>The problem is timing. Most hires increase burn immediately and generate value later. That lag is where founders get into trouble: they hire for growth, watch runway compress, and then raise under pressure.</p>
+
+<div class="callout">
+  <div class="callout-label">💡 The core question</div>
+  <p>Before every hire, ask: <strong>"What does this do to my runway, and when does this person pay for themselves?"</strong> If you can't answer both, you're guessing.</p>
+</div>
+
+<h2 id="true-cost">The True Cost of a Hire</h2>
+
+<p>Founders often budget salary and nothing else. Here's what a hire actually costs:</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Cost Component</th><th>Typical Range</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Base salary</td><td>$80K–$200K+</td><td>Role and market dependent</td></tr>
+    <tr><td>Payroll taxes / benefits</td><td>+15–25%</td><td>FICA, health, 401k, PTO</td></tr>
+    <tr><td>Equity (dilution)</td><td>0.1–1.0%</td><td>Not cash, but real cost</td></tr>
+    <tr><td>Laptop / setup</td><td>$2K–$4K</td><td>One-time</td></tr>
+    <tr><td>Software seats</td><td>$50–$300/mo</td><td>GitHub, CRM, design tools</td></tr>
+    <tr><td>Recruiting fees</td><td>15–25% of salary</td><td>If using a recruiter</td></tr>
+    <tr><td>Onboarding productivity lag</td><td>1–3 months</td><td>They burn cash before producing</td></tr>
+  </tbody>
+</table>
+
+<p>A practical rule of thumb for early-stage startups:</p>
+
+<div class="formula">
+  <div class="formula-label">True Monthly Cost of a Hire</div>
+  <div><span class="hl">True monthly cost</span> ≈ (Salary × 1.2) ÷ 12 + software seats</div>
+  <div style="margin-top:0.6rem; color:rgba(255,255,255,0.35); font-size:0.78rem;">Example: $120,000 × 1.2 ÷ 12 = $12,000/month fully loaded</div>
+</div>
+
+<p>That 1.2x multiplier is a conservative estimate for payroll taxes and benefits. In high-cost markets or with generous benefits, use 1.25–1.30x.</p>
+
+<h2 id="role-types">How Different Roles Hit Cash Differently</h2>
+
+<p>Not all hires are equal from a cash perspective. The same salary can have very different runway implications depending on the role.</p>
+
+<p><strong>Engineers / product builders</strong>: increase burn immediately. Create product value over time. Rarely generate direct revenue in the first 3–6 months. These are the purest form of "invest cash now, get leverage later."</p>
+
+<p><strong>Sales / revenue roles</strong>: also increase burn immediately, but have a clearer path to paying for themselves. The question is ramp time: how long until they close enough deals to cover their fully loaded cost? For B2B SaaS, 3–6 months is common. Until then, they're pure burn.</p>
+
+<p><strong>Marketing / growth</strong>: similar lag, but often harder to attribute. A content hire might take 6–12 months to show clear pipeline impact. Paid acquisition roles can be measured faster if you have clean CAC data.</p>
+
+<p><strong>Ops / admin / finance</strong>: protect the business but rarely generate revenue. Hire these when complexity demands it (compliance, payroll chaos, investor reporting), not because "it would be nice."</p>
+
+<div class="callout green">
+  <div class="callout-label">✅ Cash ranking of early hires</div>
+  <p>If runway is tight, prioritize roles that either (1) unlock revenue soon, or (2) unblock a clear bottleneck that is already costing you deals or product velocity. Avoid "nice to have" hires when you have under 9 months of runway.</p>
+</div>
+
+<h2 id="base-case">A Base-Case Company</h2>
+
+<p>Let's model a realistic early-stage SaaS company:</p>
+
+<ul>
+  <li><strong>Cash on hand:</strong> $360,000</li>
+  <li><strong>Monthly revenue:</strong> $18,000</li>
+  <li><strong>Current gross burn:</strong> $42,000</li>
+  <li><strong>Current net burn:</strong> $24,000</li>
+  <li><strong>Current runway:</strong> 15 months</li>
+  <li><strong>Team:</strong> 3 founders + 1 engineer + 1 contractor</li>
+</ul>
+
+<p>They're considering hires. Below are three scenarios.</p>
+
+<h2 id="scenarios">Three Hiring Scenarios</h2>
+
+<p><strong>Scenario A: Hire one senior engineer now</strong></p>
+
+<p>Fully loaded cost: $14,000/month. Revenue stays flat for 3 months while they ramp.</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Metric</th><th>Before</th><th>After hire</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Gross burn</td><td>$42,000</td><td>$56,000</td></tr>
+    <tr><td>Net burn</td><td>$24,000</td><td>$38,000</td></tr>
+    <tr><td>Runway</td><td>15 months</td><td>9.5 months</td></tr>
+  </tbody>
+</table>
+
+<p>One engineer just cut runway by 5.5 months. If they were planning to raise at 9 months of runway, this hire forces them to start fundraising almost immediately.</p>
+
+<p><strong>Scenario B: Hire a sales rep now</strong></p>
+
+<p>Fully loaded cost: $10,000/month base + $2,000 tools/travel = $12,000/month. They ramp over 4 months and then add $8,000/month in new MRR.</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Month</th><th>Net Burn</th><th>Cash Left</th><th>Runway</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Before hire</td><td>$24,000</td><td>$360,000</td><td>15.0 mo</td></tr>
+    <tr><td>Month 1 (ramping)</td><td>$36,000</td><td>$324,000</td><td>9.0 mo</td></tr>
+    <tr><td>Month 2</td><td>$36,000</td><td>$288,000</td><td>8.0 mo</td></tr>
+    <tr><td>Month 3</td><td>$36,000</td><td>$252,000</td><td>7.0 mo</td></tr>
+    <tr><td>Month 4 (starts producing)</td><td>$28,000</td><td>$224,000</td><td>8.0 mo</td></tr>
+    <tr><td>Month 6 (fully ramped)</td><td>$20,000</td><td>$184,000</td><td>9.2 mo</td></tr>
+  </tbody>
+</table>
+
+<p>Notice the U-shape: runway compresses hard during ramp, then recovers as revenue comes online. If the rep underperforms, you stay stuck in the trough.</p>
+
+<p><strong>Scenario C: Hire two people at once (engineer + sales)</strong></p>
+
+<p>Combined fully loaded cost: ~$26,000/month. Net burn jumps from $24K to $50K. Runway drops from 15 months to 7.2 months overnight.</p>
+
+<div class="callout">
+  <div class="callout-label">⚠️ The double-hire trap</div>
+  <p>Hiring two people at once feels efficient ("we're scaling"). Cash-wise, it's often the riskiest move. You stack two ramp lags on top of each other and compress runway below the 9-month comfort zone. Sequence hires when possible.</p>
+</div>
+
+<h2 id="contractor-vs-fte">Contractor vs. Full-Time</h2>
+
+<p>Contractors look more expensive hourly, but they're often cheaper on cash, and more flexible.</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th></th><th>Full-Time Engineer</th><th>Senior Contractor</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Monthly cash cost</td><td>$12K–$15K fully loaded</td><td>$8K–$16K (hours-based)</td></tr>
+    <tr><td>Benefits / taxes</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Equity</td><td>Usually</td><td>Rarely</td></tr>
+    <tr><td>Can reduce hours</td><td>Hard</td><td>Easy</td></tr>
+    <tr><td>Can pause</td><td>No (severance risk)</td><td>Yes</td></tr>
+    <tr><td>Long-term leverage</td><td>Higher</td><td>Lower</td></tr>
+  </tbody>
+</table>
+
+<p>If runway is under 10 months and the need is project-based (ship a feature, rebuild onboarding, clean up billing), a contractor is often the smarter cash move. Convert to full-time once you have more runway or clearer product-market fit.</p>
+
+<h2 id="framework">A Simple Decision Framework</h2>
+
+<p>Before sending an offer, run this checklist:</p>
+
+<ol>
+  <li><strong>Calculate fully loaded monthly cost</strong>: salary × 1.2 + tools.</li>
+  <li><strong>Recalculate net burn and runway</strong>: with the hire included.</li>
+  <li><strong>Estimate time-to-value</strong>: when does this person produce meaningful output or revenue?</li>
+  <li><strong>Model the trough</strong>: what is your lowest runway point during their ramp?</li>
+  <li><strong>Set a kill/adjust criterion</strong>: if a sales hire hasn't hit X by month 4, what happens?</li>
+  <li><strong>Check fundraise timing</strong>: does this hire force you to raise earlier than planned?</li>
+</ol>
+
+<div class="formula">
+  <div class="formula-label">Hire Impact Formula</div>
+  <div><span class="hl">New runway</span> = Cash ÷ (Current net burn + Fully loaded hire cost − Expected monthly revenue from hire)</div>
+</div>
+
+<p>If expected revenue is zero for the first N months, just add the full hire cost to net burn for those months.</p>
+
+<h2 id="mistakes">6 Mistakes Founders Make</h2>
+
+<ol>
+  <li><strong>Budgeting salary only</strong>: forgetting taxes, benefits, tools, and ramp lag understates cost by 20–40%.</li>
+  <li><strong>Hiring two roles at once</strong>: stacks burn and compresses runway faster than the team can absorb.</li>
+  <li><strong>Assuming sales hires pay for themselves immediately</strong>: they don't. Model 3–6 months of pure burn.</li>
+  <li><strong>Ignoring opportunity cost of founder time</strong>: a bad hire costs more than salary; it costs your focus.</li>
+  <li><strong>Using best-case ramp assumptions</strong>: if your model only works when everything goes perfectly, it will fail.</li>
+  <li><strong>Hiring to fix process problems</strong>: if your sales process is broken, a new rep inherits the broken process. Fix the system first.</li>
+</ol>
+
+<h2 id="when-to-hire">When to Hire Anyway</h2>
+
+<p>Not every hire should be delayed for cash reasons. Hire even with shorter runway when:</p>
+
+<ul>
+  <li>You have a clear bottleneck that is already losing revenue (e.g., founder is the only closer and deals are dying).</li>
+  <li>The hire unlocks a committed contract or enterprise opportunity.</li>
+  <li>You're post-fundraise with 12+ months of runway and the hire is part of the plan you raised for.</li>
+  <li>The alternative is founder burnout that would slow the company more than the cash cost.</li>
+</ul>
+
+<div class="callout green">
+  <div class="callout-label">✅ The healthy pattern</div>
+  <p>Raise with 12–18 months of runway → hire deliberately against a plan → watch burn and ramp monthly → start the next raise before runway drops under 6–9 months. Hiring without a cash model is how startups accidentally accelerate into a fundraise crisis.</p>
+</div>
+
+<hr class="divider" />
+
+<p>Hiring is one of the highest-leverage decisions a founder makes, and one of the easiest ways to accidentally destroy runway. The fix isn't to never hire. It's to model the cash impact before you commit.</p>
+
+<p>Fintoit lets you run hiring scenarios against your real burn rate and runway in seconds, so you can see exactly what an engineer, sales rep, or contractor does to your cash before you send the offer. <a href="https://fintoit.com/signup">Model your next hire →</a></p>
+
+{% endblock %}

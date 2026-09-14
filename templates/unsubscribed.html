@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Unsubscribed - Fintoit{% endblock %}
+{% block content %}
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.unsub{--ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);
+  max-width:520px;margin:0 auto;padding:3rem 1rem;text-align:center;}
+.unsub-icon{font-size:2.75rem;display:block;margin-bottom:1rem;}
+.unsub-title{font-size:clamp(1.6rem,3.5vw,2.1rem);font-weight:800;letter-spacing:-.03em;margin:0 0 .6rem;}
+.unsub-sub{color:var(--muted);font-size:.95rem;line-height:1.7;margin:0 0 2rem;}
+.unsub-email{font-family:'DM Mono',monospace;color:var(--ink);font-weight:500;word-break:break-all;}
+.unsub-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--ink);color:#fff;
+  padding:.8rem 1.6rem;border-radius:12px;font-weight:700;font-size:.95rem;text-decoration:none;
+  font-family:'Bricolage Grotesque',sans-serif;transition:all .2s;}
+.unsub-btn:hover{background:#1e1e2e;transform:translateY(-1px);}
+</style>
+
+<div class="unsub">
+  <span class="unsub-icon">✓</span>
+  <h1 class="unsub-title">You're unsubscribed</h1>
+  <p class="unsub-sub">
+    <span class="unsub-email">{{ email }}</span> has been removed from our list.
+    You won't get marketing email from us again.
+    <br><br>
+    This doesn't affect account emails like verification codes or billing receipts —
+    those are still sent when they're needed.
+  </p>
+  <a href="{{ url_for('home') }}" class="unsub-btn">Back to Fintoit →</a>
+</div>
+{% endblock %}

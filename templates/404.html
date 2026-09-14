@@ -1,0 +1,248 @@
+{% extends "base.html" %} {% block title %}404 Page Not Found{% endblock %} {%
+block content %}
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f7f6f2;
+    --blue: #1d4ed8;
+    --muted: #6b6b7a;
+    --border: #e2e1db;
+  }
+
+  .page-404 {
+    font-family: "Bricolage Grotesque", sans-serif;
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Grid background */
+  .page-404::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.5;
+  }
+
+  /* Orb */
+  .page-404::after {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle,
+      rgba(29, 78, 216, 0.08) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .inner-404 {
+    position: relative;
+    z-index: 1;
+    max-width: 560px;
+  }
+
+  /* Big 404 number */
+  .num-404 {
+    font-size: clamp(6rem, 18vw, 12rem);
+    font-weight: 800;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+    color: transparent;
+    -webkit-text-stroke: 3px var(--ink);
+    margin-bottom: 1.5rem;
+    display: block;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .title-404 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+
+  .sub-404 {
+    font-size: 0.975rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    font-family: "DM Mono", monospace;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+
+  /* CTA buttons */
+  .btns-404 {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.6s ease 0.3s both;
+  }
+
+  .btn-dark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--ink);
+    color: white;
+    padding: 0.85rem 1.75rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    font-family: "Bricolage Grotesque", sans-serif;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: all 0.18s;
+  }
+  .btn-dark:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .btn-light {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: white;
+    color: var(--ink);
+    padding: 0.85rem 1.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    font-family: "Bricolage Grotesque", sans-serif;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: all 0.18s;
+  }
+  .btn-light:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  /* Quick links card */
+  .links-card {
+    background: white;
+    border: 2px solid var(--ink);
+    border-radius: 18px;
+    padding: 1.75rem 2rem;
+    box-shadow: 6px 6px 0 var(--ink);
+    animation: fadeUp 0.6s ease 0.4s both;
+    text-align: left;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .links-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-family: "DM Mono", monospace;
+    margin-bottom: 1rem;
+  }
+
+  .links-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.625rem;
+  }
+
+  .quick-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 0.5rem 0.625rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    transition: all 0.15s;
+    font-family: "Bricolage Grotesque", sans-serif;
+  }
+  .quick-link:hover {
+    background: var(--paper);
+    border-color: var(--ink);
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<div class="page-404">
+  <div class="inner-404">
+    <span class="num-404">404</span>
+
+    <h1 class="title-404">Page not found.</h1>
+    <p class="sub-404">
+      Looks like this page ran out of runway.<br />Let's get you back on track.
+    </p>
+
+    <div class="btns-404">
+      {% if current_user.is_authenticated %}
+      <a href="/dashboard" class="btn-dark">→ Go to Dashboard</a>
+      <a href="/transactions" class="btn-light">View Transactions</a>
+      {% else %}
+      <a href="/" class="btn-dark">→ Go Home</a>
+      <a href="/login" class="btn-light">Log In</a>
+      {% endif %}
+    </div>
+
+    <div class="links-card">
+      <div class="links-label">Quick Links</div>
+      <div class="links-grid">
+        {% if current_user.is_authenticated %}
+        <a href="/dashboard" class="quick-link">📊 Dashboard</a>
+        <a href="/transactions" class="quick-link">💳 Transactions</a>
+        <a href="/invoices" class="quick-link">🧾 Invoices</a>
+        <a href="/payroll" class="quick-link">👥 Payroll</a>
+        <a href="/goals" class="quick-link">🎯 Goals</a>
+        <a href="/ai-insights" class="quick-link">🤖 AI Insights</a>
+        {% else %}
+        <a href="/" class="quick-link">🏠 Home</a>
+        <a href="/about" class="quick-link">ℹ️ About</a>
+        <a href="https://fintoit.zohorecruit.com/jobs/Careers" target="_blank" rel="noopener noreferrer" class="quick-link">💼 Careers</a>
+        <a href="/contact" class="quick-link">📬 Contact</a>
+        <a href="/login" class="quick-link">🔑 Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

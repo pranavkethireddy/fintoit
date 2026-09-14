@@ -1,0 +1,559 @@
+{% extends "blog_base.html" %}
+{% block title %}Fintoit Blog — Startup Finance & AI Insights{% endblock %}
+
+{% block extra_styles %}
+/* ── HERO ── */
+.blog-hero {
+  position: relative;
+  padding: 5rem 1.5rem 4rem;
+  text-align: center;
+  overflow: hidden;
+}
+.blog-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.blog-hero::after {
+  content: "";
+  position: absolute;
+  width: 600px; height: 600px;
+  top: -200px; left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(29,78,216,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.blog-hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 0.75rem 0 1.1rem;
+}
+.blog-hero h1 .accent {
+  background: linear-gradient(135deg, var(--blue) 0%, #6366f1 55%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.blog-hero p {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto 2.25rem;
+}
+
+/* ── SEARCH ── */
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 440px;
+  margin: 0 auto;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 0.55rem 0.55rem 0.55rem 1.1rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-form:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(29,78,216,0.1);
+}
+.search-form input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 0.92rem;
+  color: var(--ink);
+  background: transparent;
+  min-width: 0;
+}
+.search-form input::placeholder { color: var(--muted); }
+.search-btn {
+  background: var(--ink);
+  color: white;
+  border: none;
+  border-radius: 9px;
+  padding: 0.5rem 1.1rem;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.search-btn:hover { background: #1e1e2e; }
+
+/* ── FILTERS ── */
+.filters-wrap {
+  padding: 1.75rem 1.5rem 0;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filters-label {
+  font-family: "DM Mono", monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-right: 0.25rem;
+}
+.filter-btn {
+  font-family: "DM Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+.filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+.filter-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
+
+/* ── SEARCH RESULT NOTICE ── */
+.search-notice {
+  max-width: 1080px;
+  margin: 1.5rem auto 0;
+  padding: 0 1.5rem;
+  font-family: "DM Mono", monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.search-notice a { color: var(--blue); }
+
+/* ── FEATURED ── */
+.featured-wrap {
+  max-width: 1080px;
+  margin: 2.5rem auto 0;
+  padding: 0 1.5rem;
+}
+.section-label {
+  font-family: "DM Mono", monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+.featured-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.featured-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.09); }
+
+.featured-visual {
+  background: linear-gradient(135deg, #0a0a0f 0%, #1e1e2e 50%, #1d4ed8 100%);
+  min-height: 320px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+}
+.featured-visual-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.featured-chart {
+  position: relative; z-index: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 1.25rem;
+  width: 100%; max-width: 240px;
+}
+.chart-label { font-family: "DM Mono", monospace; font-size: 0.6rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+.chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 72px; }
+.chart-bar { flex: 1; border-radius: 4px 4px 0 0; background: rgba(29,78,216,0.4); }
+.chart-bar.hi { background: #6366f1; }
+.chart-num { font-size: 1.4rem; font-weight: 800; color: white; margin-top: 0.75rem; letter-spacing: -0.03em; }
+.chart-sub { font-family: "DM Mono", monospace; font-size: 0.6rem; color: rgba(255,255,255,0.4); margin-top: 0.2rem; }
+
+.featured-content {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.featured-content h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin: 0.75rem 0 0.75rem;
+}
+.featured-content p {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 1.75rem;
+}
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: "DM Mono", monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+.meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; flex-shrink: 0; }
+.read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--blue);
+  transition: gap 0.2s;
+  margin-top: 1.5rem;
+}
+.read-more:hover { gap: 0.7rem; }
+
+/* ── ARTICLE GRID ── */
+.articles-wrap {
+  max-width: 1080px;
+  margin: 3rem auto 5rem;
+  padding: 0 1.5rem;
+}
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.article-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.article-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
+.card-visual {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+}
+.dark-bg  { background: linear-gradient(135deg, #0a0a0f, #1e1e2e); }
+.blue-bg  { background: linear-gradient(135deg, #eff6ff, #dbeafe); }
+.green-bg { background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
+.purple-bg { background: linear-gradient(135deg, #faf5ff, #ede9fe); }
+.paper-bg { background: var(--paper); }
+
+.card-body {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.card-body h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+.card-body p {
+  font-size: 0.83rem;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+}
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--border);
+  font-family: "DM Mono", monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  color: var(--muted);
+}
+.empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.empty-state h3 { font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: 0.5rem; }
+.empty-state p { font-size: 0.9rem; line-height: 1.6; }
+.empty-state a { color: var(--blue); font-weight: 600; }
+
+/* NEWSLETTER */
+.newsletter-wrap {
+  max-width: 1080px;
+  margin: 0 auto 5rem;
+  padding: 0 1.5rem;
+}
+.newsletter-box {
+  background: var(--ink);
+  border-radius: 24px;
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3rem;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.newsletter-box::before {
+  content: "";
+  position: absolute;
+  width: 400px; height: 400px;
+  top: -150px; right: -100px;
+  background: radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.newsletter-box h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+  position: relative; z-index: 1;
+}
+.newsletter-box p {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.6;
+  position: relative; z-index: 1;
+}
+.newsletter-form {
+  display: flex;
+  gap: 0.6rem;
+  position: relative; z-index: 1;
+  min-width: 300px;
+}
+.newsletter-form input {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 0.9rem;
+  color: white;
+  outline: none;
+  transition: border-color 0.2s;
+  min-width: 0;
+}
+.newsletter-form input::placeholder { color: rgba(255,255,255,0.3); }
+.newsletter-form input:focus { border-color: rgba(255,255,255,0.35); }
+.newsletter-form button {
+  background: white;
+  color: var(--ink);
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.newsletter-form button:hover { background: #f0f0f0; transform: translateY(-1px); }
+
+@media (max-width: 768px) {
+  .featured-card { grid-template-columns: 1fr; }
+  .featured-visual { min-height: 180px; }
+  .articles-grid { grid-template-columns: 1fr 1fr; }
+  .newsletter-box { grid-template-columns: 1fr; gap: 1.5rem; }
+  .newsletter-form { min-width: 0; }
+}
+@media (max-width: 500px) {
+  .articles-grid { grid-template-columns: 1fr; }
+}
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="blog-hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Fintoit Blog</span>
+    <h1>Finance clarity for<br /><span class="accent">startup founders</span></h1>
+    <p>Practical guides on burn rate, fundraising, AI-powered finance, and everything in between — no CFO required.</p>
+
+    <form class="search-form" method="GET" action="/blog">
+      <input
+        type="text"
+        name="q"
+        placeholder="Search articles…"
+        value="{{ query }}"
+        autocomplete="off"
+      />
+      {% if active_category and active_category != 'All' %}
+        <input type="hidden" name="category" value="{{ active_category }}" />
+      {% endif %}
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+  </div>
+</section>
+
+<!-- CATEGORY FILTERS -->
+<div class="filters-wrap">
+  <span class="filters-label">Filter:</span>
+  {% for cat in categories %}
+    <a
+      href="/blog?{% if query %}q={{ query }}&{% endif %}category={{ cat if cat != 'All' else '' }}"
+      class="filter-btn {% if active_category == cat %}active{% endif %}"
+    >{{ cat }}</a>
+  {% endfor %}
+</div>
+
+<!-- SEARCH NOTICE -->
+{% if query or (active_category and active_category != 'All') %}
+<div class="search-notice">
+  {% if total == 0 %}
+    No articles found
+    {% if query %}for "<strong>{{ query }}</strong>"{% endif %}
+    {% if active_category and active_category != 'All' %}in <strong>{{ active_category }}</strong>{% endif %}
+    — <a href="/blog">clear filters</a>
+  {% else %}
+    {{ total }} article{{ 's' if total != 1 else '' }} found
+    {% if query %}for "<strong>{{ query }}</strong>"{% endif %}
+    {% if active_category and active_category != 'All' %}in <strong>{{ active_category }}</strong>{% endif %}
+    · <a href="/blog">clear</a>
+  {% endif %}
+</div>
+{% endif %}
+
+<!-- FEATURED (only shown when no search/filter active) -->
+{% if not query and (not active_category or active_category == 'All') and featured %}
+<div class="featured-wrap reveal">
+  <div class="section-label">Featured Article</div>
+  <a href="/blog/{{ featured.slug }}" class="featured-card">
+    <div class="featured-visual">
+      <div class="featured-visual-grid"></div>
+      <div class="featured-chart">
+        <div class="chart-label">Assets vs Liabilities</div>
+        <div class="chart-bars">
+          <div class="chart-bar" style="height:55%"></div>
+          <div class="chart-bar hi" style="height:80%"></div>
+          <div class="chart-bar" style="height:40%"></div>
+          <div class="chart-bar" style="height:65%"></div>
+          <div class="chart-bar hi" style="height:90%"></div>
+        </div>
+        <div class="chart-num">$142K</div>
+        <div class="chart-sub">Total equity · healthy ratio</div>
+      </div>
+    </div>
+    <div class="featured-content">
+      <span class="tag {{ featured.tag_style }}">{{ featured.category }}</span>
+      <h2>{{ featured.title }}</h2>
+      <p>{{ featured.excerpt }}</p>
+      <div class="article-meta">
+        <span>{{ featured.date }}</span>
+        <div class="meta-dot"></div>
+        <span>{{ featured.read_time }}</span>
+        <div class="meta-dot"></div>
+        <span>{{ featured.author }}</span>
+      </div>
+      <span class="read-more">Read article →</span>
+    </div>
+  </a>
+</div>
+{% endif %}
+
+<!-- ARTICLE GRID -->
+<div class="articles-wrap">
+  {% if not query and (not active_category or active_category == 'All') %}
+    <div class="section-label">All Articles</div>
+  {% endif %}
+
+  {% if posts %}
+    <div class="articles-grid">
+      {% for p in posts %}
+      <a href="/blog/{{ p.slug }}" class="article-card reveal" style="transition-delay: {{ loop.index0 * 0.07 }}s">
+        <div class="card-visual {{ p.visual_class }}">
+            {% if p.v_image %}
+                <img src="{{ url_for('static', filename='images/' ~ p.v_image) }}" alt="{{ p.title }}" style="width:100%;height:100%;object-fit:cover;">
+            {% else %}
+                {{ p.emoji }}
+            {% endif %}
+        </div>
+        <div class="card-body">
+          <span class="tag {{ p.tag_style }}">{{ p.category }}</span>
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.excerpt }}</p>
+          <div class="card-footer">
+            <span>{{ p.date }}</span>
+            <span>{{ p.read_time }}</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+  {% elif not featured or query or (active_category and active_category != 'All') %}
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <h3>No articles found</h3>
+      <p>Try a different search term or <a href="/blog">browse all articles</a>.</p>
+    </div>
+  {% endif %}
+</div>
+
+<!-- NEWSLETTER -->
+<div class="newsletter-wrap reveal">
+  <div class="newsletter-box">
+    <div>
+      <h2>Finance clarity, every month.</h2>
+      <p>Startup finance tips, new articles, and product updates straight to your inbox. No noise.</p>
+    </div>
+    <form class="newsletter-form" method="POST" action="/blog/subscribe">
+    <input type="email" name="email" placeholder="you@startup.com" required />
+    <button type="submit">Subscribe →</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

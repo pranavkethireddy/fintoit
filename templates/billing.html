@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block title %}Billing — Fintoit{% endblock %}
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap');
+:root{--ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--purple:#7c3aed;--muted:#6b6b7a;--border:#e2e1db;--red:#dc2626;}
+.bw{font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);max-width:780px;margin:0 auto;}
+.page-title{font-size:clamp(1.75rem,4vw,2.25rem);font-weight:800;letter-spacing:-.03em;margin-bottom:.25rem;}
+.page-sub{font-size:.875rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:2rem;}
+
+/* Current plan card */
+.current-plan-card{background:var(--ink);border-radius:20px;padding:2rem 2.25rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+.current-plan-card::before{content:'';position:absolute;width:400px;height:400px;top:-100px;right:-100px;
+  background:radial-gradient(circle,rgba(29,78,216,.25) 0%,transparent 70%);border-radius:50%;pointer-events:none;}
+.cp-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;margin-bottom:.5rem;}
+.cp-name{font-size:2rem;font-weight:800;color:white;letter-spacing:-.03em;margin-bottom:.25rem;}
+.cp-desc{font-size:.9rem;color:rgba(255,255,255,.5);margin-bottom:1.5rem;}
+.cp-actions{display:flex;gap:.75rem;flex-wrap:wrap;position:relative;z-index:1;}
+.btn{display:inline-flex;align-items:center;gap:.375rem;padding:.7rem 1.25rem;border-radius:10px;
+  font-size:.875rem;font-weight:700;text-decoration:none;font-family:'Bricolage Grotesque',sans-serif;
+  transition:all .18s;border:1.5px solid transparent;white-space:nowrap;cursor:pointer;}
+.btn-white{background:white;color:var(--ink);border-color:white;}
+.btn-white:hover{background:var(--paper);}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.2);}
+.btn-ghost:hover{color:white;border-color:rgba(255,255,255,.5);}
+.btn-blue{background:var(--blue);color:white;}
+.btn-blue:hover{background:#1e40af;transform:translateY(-1px);}
+.btn-outline{background:white;color:var(--ink);border-color:var(--border);}
+.btn-outline:hover{border-color:var(--ink);}
+
+/* Info cards */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+@media(max-width:560px){.info-grid{grid-template-columns:1fr;}}
+.info-card{background:white;border:1.5px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;}
+.info-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:.375rem;}
+.info-value{font-size:1rem;font-weight:700;color:var(--ink);}
+
+/* Upgrade section */
+.upgrade-section{background:white;border:1.5px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;}
+.section-title{font-size:1rem;font-weight:800;color:var(--ink);margin-bottom:1rem;letter-spacing:-.01em;}
+.upgrade-grid{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;}
+@media(max-width:560px){.upgrade-grid{grid-template-columns:1fr;}}
+.upgrade-card{border:1.5px solid var(--border);border-radius:12px;padding:1.25rem;transition:border-color .15s;}
+.upgrade-card:hover{border-color:var(--blue);}
+.uc-name{font-size:1rem;font-weight:800;color:var(--ink);margin-bottom:.25rem;}
+.uc-price{font-size:1.375rem;font-weight:800;color:var(--blue);letter-spacing:-.03em;}
+.uc-period{font-size:.75rem;color:var(--muted);margin-bottom:.75rem;}
+.uc-feats{list-style:none;padding:0;margin:0 0 1rem;display:flex;flex-direction:column;gap:.3rem;}
+.uc-feat{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.4rem;}
+.uc-feat::before{content:"✓";color:var(--blue);font-weight:700;font-size:.75rem;}
+
+/* Free plan notice */
+.free-notice{background:var(--paper);border:1.5px solid var(--border);border-radius:12px;
+  padding:1rem 1.25rem;font-size:.875rem;color:var(--muted);line-height:1.6;}
+.free-notice a{color:var(--blue);font-weight:600;text-decoration:none;}
+.free-notice a:hover{text-decoration:underline;}
+</style>
+
+<div class="bw">
+  <h1 class="page-title">💳 Billing</h1>
+  <p class="page-sub">Manage your subscription and plan.</p>
+
+  <!-- Current plan -->
+  <div class="current-plan-card">
+    <div class="cp-label">Current Plan</div>
+    <div class="cp-name">
+      {% if user_plan == 'free' %}Free
+      {% elif user_plan == 'starter' %}Starter
+      {% elif user_plan == 'pro' %}Pro
+      {% else %}{{ user_plan | title }}{% endif %}
+    </div>
+    <div class="cp-desc">
+      {% if user_plan == 'free' %}Core features — free forever.
+      {% elif user_plan == 'starter' %}$49/month · Best for individuals.
+      {% elif user_plan == 'pro' %}$149/month · Full CFO suite with priority support.
+      {% endif %}
+    </div>
+    <div class="cp-actions">
+      {% if user_plan != 'free' and user.stripe_customer_id %}
+        <a href="/billing/portal" class="btn btn-white">⚙️ Manage Subscription</a>
+        <a href="/billing/portal" class="btn btn-ghost">Cancel Plan</a>
+      {% elif user_plan == 'free' %}
+        <a href="/pricing" class="btn btn-white">Upgrade Plan →</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Info cards -->
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-label">Account Email</div>
+      <div class="info-value">{{ user.email }}</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">Billing Status</div>
+      <div class="info-value">
+        {% if user_plan == 'free' %}
+          <span style="color:var(--muted);">Free account</span>
+        {% else %}
+          <span style="color:var(--green);">✓ Active</span>
+        {% endif %}
+      </div>
+    </div>
+    {% if user.plan_expires_at %}
+    <div class="info-card">
+      <div class="info-label">Next Renewal</div>
+      <div class="info-value">{{ user.plan_expires_at }}</div>
+    </div>
+    {% endif %}
+    <!-- {% if user.stripe_customer_id %}
+    <div class="info-card">
+      <div class="info-label">Stripe Customer</div>
+      <div class="info-value" style="font-size:.85rem;font-family:'DM Mono',monospace;">
+        {{ user.stripe_customer_id[:20] }}…
+      </div>
+    </div>
+    {% endif %} -->
+  </div>
+
+  <!-- Upgrade options (only shown if not on Pro) -->
+  {% if user_plan != 'pro' %}
+  <div class="upgrade-section">
+    <div class="section-title">Available Upgrades</div>
+    <div class="upgrade-grid">
+      {% for key, plan in plans.items() %}
+        {% if key != user_plan %}
+        <div class="upgrade-card">
+          <div class="uc-name">{{ plan.name }}</div>
+          <div class="uc-price">{{ plan.display }}</div>
+          <div class="uc-period">{{ plan.period }}</div>
+          <ul class="uc-feats">
+            {% for f in plan.features[:4] %}
+            <li class="uc-feat">{{ f }}</li>
+            {% endfor %}
+          </ul>
+          <a href="/subscribe/{{ key }}" class="btn btn-blue" style="width:100%;justify-content:center;">
+            Upgrade to {{ plan.name }} →
+          </a>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Free plan notice -->
+  {% if user_plan == 'free' %}
+  <div class="free-notice">
+    You're on the <strong>Free plan</strong>. Upgrade to unlock unlimited AI chat, cash flow forecasting,
+    scenario planning, and more.
+    <a href="/pricing">See all plans →</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,248 @@
+{% extends "post_base.html" %}
+{% block title %}Unit Economics: CAC, LTV & Payback — Fintoit Blog{% endblock %}
+
+{% block post_title %}Unit Economics: CAC, LTV, and Payback Period Explained{% endblock %}
+{% block post_subtitle %}The three numbers that tell investors whether your startup can actually scale — and how founders miscalculate them every day.{% endblock %}
+
+{% block toc %}
+<li><a href="#what-are-they">What unit economics actually are</a></li>
+<li><a href="#cac">CAC: cost to acquire a customer</a></li>
+<li><a href="#ltv">LTV: lifetime value</a></li>
+<li><a href="#ratio">The LTV:CAC ratio</a></li>
+<li><a href="#payback">Payback period</a></li>
+<li><a href="#worked-example">A full worked example</a></li>
+<li><a href="#benchmarks">What good looks like</a></li>
+<li><a href="#mistakes">7 ways founders get this wrong</a></li>
+<li><a href="#improve">How to improve your unit economics</a></li>
+{% endblock %}
+
+{% block post_content %}
+
+<p>Unit economics answer one question: <strong>does each customer make you money?</strong></p>
+
+<p>If the answer is no, growth makes the problem worse. If the answer is yes, growth is a machine you can pour fuel into. Investors know this, which is why CAC, LTV, and payback period show up in almost every seed and Series A conversation even when founders wish they wouldn't.</p>
+
+<p>This guide explains each metric, how to calculate it correctly, what "good" looks like for early-stage SaaS, and the mistakes that make founders look either naive or dishonest in diligence.</p>
+
+<h2 id="what-are-they">What Unit Economics Actually Are</h2>
+
+<p>Unit economics measure the profitability of a single customer (or unit) over their lifetime. For SaaS, the "unit" is usually one paying customer or one subscription seat.</p>
+
+<p>The three core metrics:</p>
+
+<ul>
+  <li><strong>CAC</strong> — Customer Acquisition Cost: what you spend to get one customer</li>
+  <li><strong>LTV</strong> — Lifetime Value: how much gross profit that customer generates over time</li>
+  <li><strong>Payback period</strong> — how many months until that customer has paid back their CAC</li>
+</ul>
+
+<div class="callout">
+  <div class="callout-label">💡 Why this matters before scale</div>
+  <p>If CAC is $500 and LTV is $400, every new customer loses you money. Scaling ads or hiring more salespeople just accelerates the losses. Fix unit economics before you scale acquisition.</p>
+</div>
+
+<h2 id="cac">CAC: Cost to Acquire a Customer</h2>
+
+<p>CAC is the fully loaded cost of getting one new paying customer in a period.</p>
+
+<div class="formula">
+  <div class="formula-label">CAC Formula</div>
+  <div><span class="hl">CAC</span> = Total sales & marketing spend ÷ New customers acquired</div>
+  <div style="margin-top:0.6rem; color:rgba(255,255,255,0.35); font-size:0.78rem;">Example: $30,000 S&M spend ÷ 40 new customers = $750 CAC</div>
+</div>
+
+<p>What counts as sales & marketing spend:</p>
+
+<ul>
+  <li>Paid ads (Google, Meta, LinkedIn, etc.)</li>
+  <li>Sales salaries and commissions</li>
+  <li>Marketing salaries</li>
+  <li>Tools (CRM, email, analytics, enrichment)</li>
+  <li>Agencies, freelancers, content production</li>
+  <li>Events, sponsorships, swag</li>
+</ul>
+
+<p>What usually should <em>not</em> be dumped into CAC:</p>
+
+<ul>
+  <li>Product engineering salaries</li>
+  <li>Customer success after the sale (sometimes split into a separate metric)</li>
+  <li>One-time brand campaigns with no acquisition intent (optional to exclude early)</li>
+</ul>
+
+<div class="callout green">
+  <div class="callout-label">⚠️ Blended vs. paid CAC</div>
+  <p><strong>Blended CAC</strong> includes all customers (organic + paid). <strong>Paid CAC</strong> only includes customers from paid channels. Report both. Blended can look healthy while paid channels are underwater.</p>
+</div>
+
+<h2 id="ltv">LTV: Lifetime Value</h2>
+
+<p>LTV estimates the total gross profit a customer generates before they churn.</p>
+
+<div class="formula">
+  <div class="formula-label">Simple SaaS LTV</div>
+  <div><span class="hl">LTV</span> = ARPU × Gross Margin % ÷ Monthly Churn Rate</div>
+  <div style="margin-top:0.6rem; color:rgba(255,255,255,0.35); font-size:0.78rem;">Example: $100 ARPU × 80% GM ÷ 4% churn = $2,000 LTV</div>
+</div>
+
+<p>Definitions that matter:</p>
+
+<ul>
+  <li><strong>ARPU</strong> — Average Revenue Per User (or account) per month</li>
+  <li><strong>Gross margin</strong> — revenue minus cost of goods sold (hosting, support directly tied to delivery, payment fees)</li>
+  <li><strong>Monthly churn</strong> — % of customers (or revenue) lost each month</li>
+</ul>
+
+<p>A common early-stage shortcut if you don't trust churn yet:</p>
+
+<div class="formula">
+  <div class="formula-label">Conservative Early LTV</div>
+  <div><span class="hl">LTV</span> = ARPU × Gross Margin % × Expected lifetime in months</div>
+  <div style="margin-top:0.6rem; color:rgba(255,255,255,0.35); font-size:0.78rem;">Example: $100 × 80% × 18 months = $1,440</div>
+</div>
+
+<p>If your data is thin, use a conservative lifetime (12–24 months) instead of pretending you have enterprise retention.</p>
+
+<h2 id="ratio">The LTV:CAC Ratio</h2>
+
+<p>This is the headline ratio investors ask for.</p>
+
+<div class="formula">
+  <div class="formula-label">LTV:CAC</div>
+  <div><span class="hl-green">LTV:CAC</span> = LTV ÷ CAC</div>
+  <div style="margin-top:0.6rem; color:rgba(255,255,255,0.35); font-size:0.78rem;">Example: $2,000 ÷ $750 = 2.7x</div>
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr><th>LTV:CAC</th><th>What it usually means</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Under 1x</td><td>Broken — you lose money on every customer</td></tr>
+    <tr><td>1x – 2x</td><td>Weak — growth is expensive and fragile</td></tr>
+    <tr><td>3x – 5x</td><td>Healthy SaaS target zone</td></tr>
+    <tr><td>5x+</td><td>Strong — may be under-investing in growth</td></tr>
+  </tbody>
+</table>
+
+<p>A ratio above 5x is not automatically "better." It can mean you're under-spending on acquisition and leaving growth on the table. Context matters.</p>
+
+<h2 id="payback">Payback Period</h2>
+
+<p>Payback period is how long it takes to recover CAC from gross profit.</p>
+
+<div class="formula">
+  <div class="formula-label">CAC Payback (months)</div>
+  <div><span class="hl">Payback</span> = CAC ÷ (ARPU × Gross Margin %)</div>
+  <div style="margin-top:0.6rem; color:rgba(255,255,255,0.35); font-size:0.78rem;">Example: $750 ÷ ($100 × 80%) = 9.4 months</div>
+</div>
+
+<p>Why payback matters as much as LTV:CAC:</p>
+
+<ul>
+  <li>LTV can look great over 4 years while cash is still tight this year</li>
+  <li>Long payback means you need more capital to grow</li>
+  <li>Short payback means growth can partially self-fund</li>
+</ul>
+
+<div class="callout">
+  <div class="callout-label">💡 Cash vs. accounting</div>
+  <p>Even with great LTV, a 18-month payback can kill an early startup. You may be "profitable per customer" on paper while still running out of cash. Track payback alongside runway.</p>
+</div>
+
+<h2 id="worked-example">A Full Worked Example</h2>
+
+<p>Startup: B2B analytics SaaS</p>
+
+<ul>
+  <li>New customers this month: 25</li>
+  <li>Sales & marketing spend: $20,000</li>
+  <li>ARPU: $120/month</li>
+  <li>Gross margin: 85%</li>
+  <li>Monthly logo churn: 3.5%</li>
+</ul>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Metric</th><th>Calculation</th><th>Result</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>CAC</td><td>$20,000 ÷ 25</td><td>$800</td></tr>
+    <tr><td>Monthly gross profit / customer</td><td>$120 × 85%</td><td>$102</td></tr>
+    <tr><td>LTV</td><td>$102 ÷ 3.5%</td><td>$2,914</td></tr>
+    <tr><td>LTV:CAC</td><td>$2,914 ÷ $800</td><td>3.6x</td></tr>
+    <tr class="total"><td>Payback period</td><td>$800 ÷ $102</td><td>7.8 months</td></tr>
+  </tbody>
+</table>
+
+<p>This is a solid early SaaS profile: LTV:CAC above 3x and payback under 12 months. Not perfect but fundable and scalable with care.</p>
+
+<h2 id="benchmarks">What Good Looks Like</h2>
+
+<p>Benchmarks vary by ACV, sales motion, and market. Rough early-stage B2B SaaS ranges:</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Metric</th><th>Weak</th><th>Okay</th><th>Strong</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>LTV:CAC</td><td>< 2x</td><td>2–3x</td><td>3–5x+</td></tr>
+    <tr><td>CAC payback</td><td>> 18 mo</td><td>12–18 mo</td><td>< 12 mo</td></tr>
+    <tr><td>Gross margin</td><td>< 60%</td><td>60–75%</td><td>75–90%+</td></tr>
+    <tr><td>Monthly logo churn</td><td>> 5%</td><td>3–5%</td><td>< 3%</td></tr>
+  </tbody>
+</table>
+
+<p>Enterprise sales motions can tolerate higher CAC and longer payback if retention and expansion are excellent. Self-serve PLG motions usually need faster payback.</p>
+
+<h2 id="mistakes">7 Ways Founders Get This Wrong</h2>
+
+<ol>
+  <li><strong>Using revenue instead of gross profit for LTV</strong> — overstates value, especially with high hosting or support costs.</li>
+  <li><strong>Ignoring churn reality</strong> — using aspirational churn ("we'll be at 1%") instead of actual churn.</li>
+  <li><strong>Only counting ad spend in CAC</strong> — forgetting sales salaries, tools, and agencies understates CAC dramatically.</li>
+  <li><strong>Mixing trials with customers</strong> — CAC should use converted paying customers, not signups.</li>
+  <li><strong>Using one magic LTV number forever</strong> — LTV changes as pricing, retention, and expansion change. Recalculate monthly.</li>
+  <li><strong>Reporting blended metrics only</strong> — hiding that paid acquisition is broken while organic looks fine.</li>
+  <li><strong>Optimizing LTV:CAC while ignoring payback</strong> — great ratio, terrible cash conversion.</li>
+</ol>
+
+<div class="callout green">
+  <div class="callout-label">✅ Diligence tip</div>
+  <p>Investors will reverse-engineer your numbers. If CAC excludes sales salaries or LTV assumes 5-year retention with no evidence, trust drops fast. Be conservative and transparent.</p>
+</div>
+
+<h2 id="improve">How to Improve Your Unit Economics</h2>
+
+<p>You can improve the system from either side: lower CAC, raise LTV, or shorten payback.</p>
+
+<p><strong>Lower CAC</strong></p>
+<ul>
+  <li>Improve conversion rate on existing traffic before buying more traffic</li>
+  <li>Tighten ICP so sales cycles shorten</li>
+  <li>Shift budget from weak channels to proven ones</li>
+  <li>Build organic loops (content, referrals, product-led growth)</li>
+</ul>
+
+<p><strong>Raise LTV</strong></p>
+<ul>
+  <li>Reduce churn with better onboarding and activation</li>
+  <li>Expand revenue via seats, usage, or higher tiers</li>
+  <li>Improve gross margin (infrastructure efficiency, support automation)</li>
+  <li>Move upmarket carefully if larger customers retain better</li>
+</ul>
+
+<p><strong>Shorten payback</strong></p>
+<ul>
+  <li>Annual prepay discounts (cash now, lower effective CAC pressure)</li>
+  <li>Faster time-to-value so expansion happens earlier</li>
+  <li>Price packaging that increases initial ARPU without killing conversion</li>
+</ul>
+
+<hr class="divider" />
+
+<p>Unit economics are not a vanity dashboard. They tell you whether growth creates value or destroys it. Founders who know their CAC, LTV, and payback cold make better decisions on pricing, hiring, channel spend, and fundraising timing.</p>
+
+<p>Fintoit tracks revenue, churn, and acquisition costs together so you can see LTV, CAC, and payback update as your business changes not once a quarter in a messy spreadsheet. <a href="https://fintoit.com/signup">See your unit economics →</a></p>
+
+{% endblock %}

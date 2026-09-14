@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block title %}Investor Update Template: What to Send (Free Example){% endblock %}
+
+{% block head %}
+<meta name="description" content="A copy-paste monthly investor update template for startup founders, plus what investors actually want to see, the right cadence, and mistakes to avoid.">
+<link rel="canonical" href="https://fintoit.com/investor-update-template">
+<meta name="robots" content="index,follow">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Investor Update Template: What to Send (Free Example)">
+<meta property="og:description" content="A copy-paste monthly investor update template, what investors actually look for, cadence by stage, and the mistakes that kill trust.">
+<meta property="og:url" content="https://fintoit.com/investor-update-template">
+<meta property="og:image" content="https://fintoit.com/static/images/logo 6.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Investor Update Template (Free Example)">
+<meta name="twitter:description" content="Copy-paste monthly investor update template for startup founders.">
+
+<!-- Structured data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Monthly Investor Update Template",
+  "description": "A copy-paste monthly investor update template for startup founders, plus what investors actually want to see, the right cadence, and mistakes to avoid.",
+  "author": { "@type": "Organization", "name": "Fintoit" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Fintoit",
+    "logo": { "@type": "ImageObject", "url": "https://fintoit.com/static/images/logo 6.png" }
+  },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://fintoit.com/investor-update-template" },
+  "url": "https://fintoit.com/investor-update-template"
+}
+</script>
+
+<!-- Structured data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How often should I send investor updates?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Monthly at pre-seed and seed; quarterly is common after Series A. Consistency matters more than frequency." }
+    },
+    {
+      "@type": "Question",
+      "name": "What should a monthly investor update include?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A TL;DR, the core numbers (cash, net burn, runway, revenue), what went well, what didn't, product and team news, and specific asks." }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I share bad news with investors?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Investors expect problems; what damages trust is being surprised. Present the issue with your plan for it." }
+    },
+    {
+      "@type": "Question",
+      "name": "How long should an investor update be?",
+      "acceptedAnswer": { "@type": "Answer", "text": "One screen, roughly 300 to 600 words. If it takes more than five minutes to read, it won't get read." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to include runway in every update?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. It's the first number most investors look for, and omitting it invites concern." }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+  .gd{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--muted:#6b6b7a;--border:#e2e1db;
+       font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);max-width:44rem;margin:0 auto;padding:3rem 1.25rem 4rem;}
+  .gd-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.75rem;}
+  .gd h1{font-size:clamp(2rem,4.5vw,2.9rem);font-weight:800;letter-spacing:-.03em;line-height:1.07;margin:0 0 1rem;}
+  .gd-lede{font-size:1.08rem;line-height:1.7;color:var(--ink);margin:0 0 .9rem;}
+  .gd h2{font-size:clamp(1.3rem,2.6vw,1.6rem);font-weight:800;letter-spacing:-.02em;margin:2.75rem 0 .85rem;line-height:1.2;}
+  .gd p{font-size:1rem;line-height:1.78;color:#33333d;margin:0 0 1.05rem;}
+  .gd a{color:var(--blue);font-weight:600;text-decoration:underline;text-underline-offset:2px;}
+  .gd strong{color:var(--ink);font-weight:700;}
+  .tpl-wrap{position:relative;margin:0 0 1.5rem;}
+  .tpl{font-family:'DM Mono',monospace;font-size:.85rem;line-height:1.85;background:var(--ink);color:#e9e9ee;border-radius:14px;
+       padding:1.4rem 1.35rem;white-space:pre-wrap;overflow-x:auto;margin:0;}
+  .tpl-copy{position:absolute;top:.75rem;right:.75rem;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);
+            border-radius:8px;padding:.35rem .7rem;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;}
+  .tpl-copy:hover{background:rgba(255,255,255,.22);}
+  .cta{background:var(--ink);color:#fff;border-radius:18px;padding:1.75rem;margin:2.5rem 0;}
+  .cta h3{color:#fff;margin:0 0 .5rem;font-size:1.15rem;}
+  .cta p{color:rgba(255,255,255,.72);margin:0 0 1.15rem;font-size:.95rem;line-height:1.7;}
+  .cta a.btn{display:inline-block;background:#fff;color:var(--ink);border-radius:11px;padding:.75rem 1.25rem;font-weight:700;
+             text-decoration:none;font-size:.93rem;transition:transform .15s;}
+  .cta a.btn:hover{transform:translateY(-1px);}
+  .faq-q{font-weight:800;font-size:1rem;margin:1.4rem 0 .35rem;letter-spacing:-.01em;}
+  .faq-a{font-size:1rem;line-height:1.75;color:#33333d;margin:0;}
+  .nextup{border-top:1.5px solid var(--border);margin-top:2.75rem;padding-top:1.25rem;font-size:.95rem;color:var(--muted);}
+</style>
+
+<article class="gd">
+  <div class="gd-eyebrow">Template</div>
+  <h1>The Monthly Investor Update Template</h1>
+
+  <p class="gd-lede">Most founders write their first investor update the month after they raise, realise it takes a whole evening, and quietly stop sending them.</p>
+
+  <p>That's a mistake, and not for the reason you'd think. Investor updates aren't a reporting obligation. They're the cheapest way to keep people who can help you actually helping you: intros, hires, follow-on capital. The founders who send them consistently get more from their investors than the ones who don't.</p>
+
+  <p>Below is a template you can copy, plus what to put in each section.</p>
+
+  <h2>The template</h2>
+  <div class="tpl-wrap">
+    <button class="tpl-copy" onclick="copyTemplate(this)">Copy</button>
+    <pre class="tpl" id="updateTemplate">Subject: [Company], [Month Year] Update
+
+TL;DR
+• [Biggest win this month]
+• [Biggest challenge]
+• [The one thing you need help with]
+
+THE NUMBERS
+• Cash in bank: $X
+• Net monthly burn: $X
+• Runway: X months (cash-zero: Month Year)
+• Revenue / MRR: $X (up/down X% MoM)
+• [1–2 core product metrics]
+
+WHAT WENT WELL
+• [2–3 specific wins, with numbers]
+
+WHAT DIDN'T
+• [1–2 things honestly. Include what you're doing about them.]
+
+PRODUCT
+• [Shipped this month]
+• [Shipping next month]
+
+TEAM
+• [Hires, departures, open roles]
+
+ASKS
+1. [Specific ask: a named intro, a hire, advice on a decision]
+2. [Second ask]
+
+Thanks,
+[Name]</pre>
+  </div>
+
+  <h2>What investors actually want to see</h2>
+  <p><strong>The runway number, every time.</strong> It's the first thing they look for. Omitting it reads as hiding something, and it's the number that tells them whether you'll need them soon. <a href="/runway-calculator">Calculate your runway here</a> if you don't have it current.</p>
+  <p><strong>Consistency over polish.</strong> A plain-text email on the 5th of every month beats a beautiful deck twice a year. Predictability is the point: investors who know the update is coming stop worrying between them.</p>
+  <p><strong>The bad news, early.</strong> Every experienced investor knows something is going wrong; a report of only wins reads as either naive or evasive. Surfacing a problem with your plan for it builds more confidence than hiding it. Surprises are what damage trust, not problems.</p>
+  <p><strong>Specific asks.</strong> "Let me know if you can help" gets nothing. "Can you introduce me to a VP Eng who has scaled a data platform, ideally someone from your portfolio" gets a reply. Make it easy to say yes.</p>
+
+  <h2>Cadence</h2>
+  <p>Monthly is standard for pre-seed and seed. Quarterly is normal after Series A, once a formal board takes over.</p>
+  <p>Send on the same date each month. Pick the 5th: late enough to have last month's numbers, early enough to feel current.</p>
+
+  <h2>What to include by stage</h2>
+  <p><strong>Pre-seed:</strong> cash, net burn, runway, and evidence of learning: conversations held, what you learned, what changed. You're reporting progress toward proof, not scale.</p>
+  <p><strong>Seed:</strong> add revenue/MRR, growth rate, retention, and pipeline. You're reporting progress toward product-market fit.</p>
+  <p><strong>Series A+:</strong> full metrics: CAC, LTV, net revenue retention, burn multiple, headcount plan.</p>
+
+  <h2>Five mistakes to avoid</h2>
+  <p><strong>1. Skipping months.</strong> The gap says more than the update would have. If it's late, send it late. Don't skip.</p>
+  <p><strong>2. Leaving out runway.</strong> The number they most want is the one founders most often omit.</p>
+  <p><strong>3. Burying the ask at the bottom.</strong> Put it in the TL;DR too. Most people read three lines.</p>
+  <p><strong>4. Reporting only vanity metrics.</strong> Signups without retention, or downloads without usage, reads as evasion to anyone experienced.</p>
+  <p><strong>5. Rebuilding it from scratch every month.</strong> If it takes a weekend, you'll stop. Make it a repeatable format with numbers that are already current.</p>
+
+  <h2>Make it a one-click job</h2>
+  <p>The reason updates get skipped is almost never unwillingness: it's that assembling the numbers is a chore.</p>
+
+  <div class="cta">
+    <h3>Turn the update into a review-and-send</h3>
+    <p>Fintoit keeps your burn, runway, and metrics live and generates a board-ready report in under 30 seconds, so the update becomes a review-and-send rather than a rebuild.</p>
+    <a class="btn" href="/runway-calculator">Try it free →</a>
+  </div>
+
+  <h2>Frequently asked questions</h2>
+
+  <div class="faq-q">How often should I send investor updates?</div>
+  <p class="faq-a">Monthly at pre-seed and seed; quarterly is common after Series A. Consistency matters more than frequency.</p>
+
+  <div class="faq-q">What should a monthly investor update include?</div>
+  <p class="faq-a">A TL;DR, the core numbers (cash, net burn, runway, revenue), what went well, what didn't, product and team news, and specific asks.</p>
+
+  <div class="faq-q">Should I share bad news with investors?</div>
+  <p class="faq-a">Yes. Investors expect problems; what damages trust is being surprised. Present the issue with your plan for it.</p>
+
+  <div class="faq-q">How long should an investor update be?</div>
+  <p class="faq-a">One screen: roughly 300–600 words. If it takes more than five minutes to read, it won't get read.</p>
+
+  <div class="faq-q">Do I need to include runway in every update?</div>
+  <p class="faq-a">Yes. It's the first number most investors look for, and omitting it invites concern.</p>
+
+  <p class="nextup">Related: <a href="/burn-rate-guide">what is burn rate and how to calculate it</a>.</p>
+</article>
+
+<script>
+function copyTemplate(btn) {
+  var text = document.getElementById('updateTemplate').innerText;
+  navigator.clipboard && navigator.clipboard.writeText(text).then(function () {
+    var prev = btn.textContent;
+    btn.textContent = '✓ Copied';
+    setTimeout(function () { btn.textContent = prev; }, 1800);
+  });
+}
+</script>
+{% endblock %}

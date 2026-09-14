@@ -1,0 +1,97 @@
+startup,founder,website,company_email
+Stripe,Patrick Collison,https://stripe.com,info@stripe.com
+Airbnb,Brian Chesky,https://airbnb.com,support@airbnb.com
+Dropbox,Drew Houston,https://dropbox.com,support@dropbox.com
+Coinbase,Brian Armstrong,https://coinbase.com,press@coinbase.com
+Notion,Ivan Zhao,https://notion.so,team@makenotion.com
+Figma,Dylan Field,https://figma.com,hello@figma.com
+Instacart,Apoorva Mehta,https://instacart.com,press@instacart.com
+DoorDash,Tony Xu,https://doordash.com,press@doordash.com
+Perplexity AI,Aravind Srinivas,https://perplexity.ai,press@perplexity.ai
+OpenAI,Sam Altman,https://openai.com,press@openai.com
+Zapier,Wade Foster,https://zapier.com,contact@zapier.com
+Calendly,Tope Awotona,https://calendly.com,help@calendly.com
+Brex,Henrique Dubugras,https://brex.com,info@brex.com
+Rippling,Parker Conrad,https://rippling.com,info@rippling.com
+Airtable,Howie Liu,https://airtable.com,hello@airtable.com
+Webflow,Vlad Magdalin,https://webflow.com,contact@webflow.com
+Retool,David Hsu,https://retool.com,hello@retool.com
+Coda,Shishir Mehrotra,https://coda.io,team@coda.io
+ClickUp,Zeb Evans,https://clickup.com,help@clickup.com
+Linear,Karri Saarinen,https://linear.app,hello@linear.app
+Vercel,Guillermo Rauch,https://vercel.com,contact@vercel.com
+Supabase,Paul Copplestone,https://supabase.com,hello@supabase.com
+PlanetScale,Jiten Vaidya,https://planetscale.com,contact@planetscale.com
+Render,Anurag Goel,https://render.com,hello@render.com
+Fly.io,Kurt Mackey,https://fly.io,info@fly.io
+PostHog,James Hawkins,https://posthog.com,hello@posthog.com
+Plausible Analytics,Marko Saric,https://plausible.io,hello@plausible.io
+Amplitude,Spencer Skates,https://amplitude.com,info@amplitude.com
+Segment,Peter Reinhardt,https://segment.com,contact@segment.com
+Mixpanel,Suhail Doshi,https://mixpanel.com,info@mixpanel.com
+Intercom,Eoghan McCabe,https://intercom.com,hello@intercom.com
+Drift,David Cancel,https://drift.com,info@drift.com
+Gong,Amit Bendov,https://gong.io,info@gong.io
+Loom,Joe Thomas,https://loom.com,hello@loom.com
+Miro,Andrey Khusid,https://miro.com,hello@miro.com
+Canva,Melanie Perkins,https://canva.com,support@canva.com
+Pitch,Christian Reber,https://pitch.com,hello@pitch.com
+Typeform,David Okuniev,https://typeform.com,hello@typeform.com
+Tally,Marie Martens,https://tally.so,hello@tally.so
+Framer,Koen Bok,https://framer.com,hello@framer.com
+Descript,Andrew Mason,https://descript.com,hello@descript.com
+Otter.ai,Sam Liang,https://otter.ai,hello@otter.ai
+Grammarly,Alex Shevchenko,https://grammarly.com,support@grammarly.com
+Jasper,Dave Rogenmoser,https://jasper.ai,hello@jasper.ai
+Copy.ai,Paul Yacoubian,https://copy.ai,hello@copy.ai
+Writesonic,Samanyou Garg,https://writesonic.com,hello@writesonic.com
+Runway,Cristobal Valenzuela,https://runwayml.com,hello@runwayml.com
+Stability AI,Emad Mostaque,https://stability.ai,press@stability.ai
+Hugging Face,Clement Delangue,https://huggingface.co,press@huggingface.co
+Scale AI,Alexandr Wang,https://scale.com,info@scale.com
+DataRobot,Jeremy Achin,https://datarobot.com,info@datarobot.com
+UiPath,Daniel Dines,https://uipath.com,info@uipath.com
+Automation Anywhere,Mihir Shukla,https://automationanywhere.com,info@automationanywhere.com
+Snowflake,Benoit Dageville,https://snowflake.com,info@snowflake.com
+Databricks,Ali Ghodsi,https://databricks.com,info@databricks.com
+MongoDB,Eliot Horowitz,https://mongodb.com,info@mongodb.com
+Elastic,Shay Banon,https://elastic.co,info@elastic.co
+Confluent,Jay Kreps,https://confluent.io,info@confluent.io
+HashiCorp,Mitchell Hashimoto,https://hashicorp.com,info@hashicorp.com
+Docker,Solomon Hykes,https://docker.com,info@docker.com
+GitLab,Sid Sijbrandij,https://about.gitlab.com,contact@gitlab.com
+Bitwarden,Kyle Spearrin,https://bitwarden.com,hello@bitwarden.com
+1Password,Dave Teare,https://1password.com,info@1password.com
+Cloudflare,Matthew Prince,https://cloudflare.com,press@cloudflare.com
+Fastly,Artur Bergman,https://fastly.com,info@fastly.com
+DigitalOcean,Ben Uretsky,https://digitalocean.com,info@digitalocean.com
+Heroku,James Lindenbaum,https://heroku.com,info@heroku.com
+Netlify,Mathias Biilmann,https://netlify.com,hello@netlify.com
+Glitch,Anil Dash,https://glitch.com,hello@glitch.com
+Replit,Amjad Masad,https://replit.com,hello@replit.com
+CodeSandbox,Ives van Hoorne,https://codesandbox.io,hello@codesandbox.io
+Snyk,Guy Podjarny,https://snyk.io,info@snyk.io
+Tenable,Ronen Schwartz,https://tenable.com,info@tenable.com
+CrowdStrike,George Kurtz,https://crowdstrike.com,info@crowdstrike.com
+SentinelOne,Tomer Weingarten,https://sentinelone.com,info@sentinelone.com
+Okta,Todd McKinnon,https://okta.com,info@okta.com
+Auth0,Eugenio Pace,https://auth0.com,info@auth0.com
+Plaid,Zach Perret,https://plaid.com,info@plaid.com
+Wise,Taavet Hinrikus,https://wise.com,press@wise.com
+Revolut,Nikolay Storonsky,https://revolut.com,press@revolut.com
+Chime,Chris Britt,https://chime.com,press@chime.com
+Robinhood,Vlad Tenev,https://robinhood.com,press@robinhood.com
+SoFi,Anthony Noto,https://sofi.com,press@sofi.com
+Affirm,Max Levchin,https://affirm.com,press@affirm.com
+Square,Jack Dorsey,https://squareup.com,press@squareup.com
+Adyen,Pieter van der Does,https://adyen.com,press@adyen.com
+Checkout.com,Guillaume Pousaz,https://checkout.com,press@checkout.com
+Gusto,Josh Reeves,https://gusto.com,press@gusto.com
+Bench,Forrest Zeisler,https://bench.co,hello@bench.co
+Pilot,Waseem Daher,https://pilot.com,hello@pilot.com
+Mercury,Immad Akhund,https://mercury.com,hello@mercury.com
+Ramp,Eric Glyman,https://ramp.com,press@ramp.com
+Brex,Pedro Franceschi,https://brex.com,info@brex.com
+Arc,Don Muir,https://arc.tech,hello@arc.tech
+AngelList,Naval Ravikant,https://angellist.com,info@angellist.com
+Product Hunt,Ryan Hoover,https://producthunt.com,hello@producthunt.com

@@ -1,0 +1,107 @@
+{% extends "post_base.html" %}
+{% block title %}What Is MRR and How Do You Grow It — Fintoit Blog{% endblock %}
+
+{% block post_title %}What Is MRR and How Do You Actually Grow It?{% endblock %}
+{% block post_subtitle %}Monthly Recurring Revenue is the number every SaaS investor will ask about first. Here's how to calculate it correctly and the levers that move it.{% endblock %}
+
+{% block toc %}
+<li><a href="#what-is-mrr">What MRR actually is</a></li>
+<li><a href="#how-to-calculate">How to calculate it correctly</a></li>
+<li><a href="#types">The 5 types of MRR movement</a></li>
+<li><a href="#benchmarks">What good MRR growth looks like</a></li>
+<li><a href="#levers">The levers that move MRR</a></li>
+{% endblock %}
+
+{% block post_content %}
+
+<p>MRR, or Monthly Recurring Revenue, is the single number investors use to judge the health of a SaaS startup faster than anything else. It compounds, it's predictable, and when it grows consistently it signals product-market fit better than almost any other metric.</p>
+
+<p>But a surprising number of founders calculate it wrong, report it inconsistently, or chase it in ways that actually hide churn. Here's how to get it right.</p>
+
+<h2 id="what-is-mrr">What MRR Actually Is</h2>
+
+<p>MRR is the normalised, monthly value of all active subscriptions. The key word is <em>normalised</em>. If a customer pays you $1,200 per year, their contribution to MRR is $100, not $1,200 in January and zero for the rest of the year.</p>
+
+<p>MRR only counts <strong>recurring revenue</strong>. One-time setup fees, professional services, or consulting revenue don't belong in MRR. Including them inflates the number and will embarrass you in a due diligence conversation.</p>
+
+<div class="callout">
+  <div class="callout-label">💡 MRR vs ARR</div>
+  <p>ARR (Annual Recurring Revenue) is just MRR × 12. Most early-stage startups talk in MRR. Once you pass ~$1M ARR, investors start using ARR as the primary metric.</p>
+</div>
+
+<h2 id="how-to-calculate">How to Calculate It Correctly</h2>
+
+<div class="formula">
+  <div class="formula-label">MRR Calculation</div>
+  <div><span class="hl">MRR</span> = Sum of (monthly value of each active subscription)</div>
+  <div style="margin-top:0.6rem"><span class="hl">Annual plan contribution</span> = Annual price ÷ 12</div>
+  <div style="margin-top:0.6rem"><span class="hl">ARR</span> = MRR × 12</div>
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Customer</th><th>Plan</th><th>Billing</th><th>MRR Contribution</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Acme Corp</td><td>Pro ($99/mo)</td><td>Monthly</td><td class="c-green">$99</td></tr>
+    <tr><td>Startup XYZ</td><td>Growth ($1,188/yr)</td><td>Annual</td><td class="c-green">$99</td></tr>
+    <tr><td>Widgets Inc</td><td>Starter ($29/mo)</td><td>Monthly</td><td class="c-green">$29</td></tr>
+    <tr><td>TechCo</td><td>Pro ($99/mo)</td><td>Monthly</td><td class="c-green">$99</td></tr>
+    <tr class="total"><td colspan="3">Total MRR</td><td class="c-green">$326</td></tr>
+  </tbody>
+</table>
+
+<h2 id="types">The 5 Types of MRR Movement</h2>
+
+<p>MRR isn't just one number. It has components, and understanding each one tells you a different thing about your business:</p>
+
+<ul>
+  <li><strong>New MRR</strong>: revenue from brand new customers acquired this month.</li>
+  <li><strong>Expansion MRR</strong>: additional revenue from existing customers who upgraded or added seats.</li>
+  <li><strong>Contraction MRR</strong>: revenue lost from customers who downgraded.</li>
+  <li><strong>Churned MRR</strong>: revenue lost from customers who cancelled entirely.</li>
+  <li><strong>Reactivation MRR</strong>: revenue from previously churned customers who came back.</li>
+</ul>
+
+<div class="formula">
+  <div class="formula-label">Net New MRR</div>
+  <div><span class="hl-green">Net New MRR</span> = New + Expansion + Reactivation − Contraction − Churned</div>
+</div>
+
+<div class="callout green">
+  <div class="callout-label">✅ The goal to aim for</div>
+  <p><strong>Negative churn</strong> means your Expansion MRR exceeds your Churned + Contraction MRR. This is the holy grail: your existing customers are growing your revenue even before you acquire new ones.</p>
+</div>
+
+<h2 id="benchmarks">What Good MRR Growth Looks Like</h2>
+
+<p>There's no universal answer, but here are rough benchmarks for early-stage B2B SaaS:</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Stage</th><th>Monthly MRR Growth</th><th>Context</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Pre-product-market fit</td><td>Anything positive</td><td>Survival mode; focus on learning</td></tr>
+    <tr><td>Finding PMF ($0–$10K MRR)</td><td>20–30%+ / month</td><td>"Triple triple double double" pace</td></tr>
+    <tr><td>Early growth ($10K–$100K MRR)</td><td>10–20% / month</td><td>Default Alive territory</td></tr>
+    <tr><td>Scaling ($100K+ MRR)</td><td>5–10% / month</td><td>T2D3 benchmark applies</td></tr>
+  </tbody>
+</table>
+
+<h2 id="levers">The Levers That Move MRR</h2>
+
+<p>When founders ask "how do I grow MRR?" they often focus only on new customer acquisition. But there are four real levers:</p>
+
+<ol>
+  <li><strong>Acquire more customers</strong>: the obvious one. More paying users = more MRR. But it's the most expensive lever, especially early.</li>
+  <li><strong>Reduce churn</strong>: keeping the customers you have is almost always higher ROI than acquiring new ones. A 2% monthly churn rate means you lose nearly 22% of your base per year.</li>
+  <li><strong>Expand revenue per customer</strong>: usage-based pricing, feature tiers, add-ons, and seat expansion. This is how the best SaaS companies achieve negative net churn.</li>
+  <li><strong>Move upmarket</strong>: larger customers pay more, churn less, and expand more. If your ACV (average contract value) is under $500/year, moving upmarket even slightly can double MRR without adding a single new customer.</li>
+</ol>
+
+<hr class="divider" />
+
+<p>Fintoit tracks your MRR automatically, breaking it into new, expansion, contraction, and churned buckets, so you always know which lever is working and which isn't. <a href="https://fintoit.com/signup">See your MRR dashboard →</a></p>
+
+{% endblock %}

@@ -1,0 +1,247 @@
+{% extends "post_base.html" %}
+{% block title %}A Board Report Template You Can Fill In Today | Fintoit Blog{% endblock %}
+
+{% block post_title %}A Board Report Template You Can Fill In Today{% endblock %}
+{% block post_subtitle %}A blank template you can copy, plus two filled examples: a pre-revenue company with nothing to put on the revenue line, and a seed company in a month the numbers went the wrong way.{% endblock %}
+
+{% block toc %}
+<li><a href="#email-or-deck">Email or deck</a></li>
+<li><a href="#blank-template">The blank template</a></li>
+<li><a href="#filled-pre-revenue">Filled in: pre-revenue, pre-seed</a></li>
+<li><a href="#filled-bad-month">Filled in: seed, in a bad month</a></li>
+<li><a href="#which-metrics">Which metrics belong in your block</a></li>
+<li><a href="#the-ask">The ask, done properly and badly</a></li>
+<li><a href="#cadence">Cadence</a></li>
+<li><a href="#the-deck">If you genuinely need a deck</a></li>
+<li><a href="#not-an-evening">The part that should not take an evening</a></li>
+{% endblock %}
+
+{% block post_content %}
+
+<p>You came here for a template, so it is below and you can copy it. There are two filled versions, because a pre-revenue company and a company doing $31,000 in MRR are answering different questions, and one skeleton does not serve both.</p>
+
+<p>A word about the other results you are looking at. Most investor update templates sit behind an email signup, and the ones that do not are usually an empty outline with square brackets where the hard part goes. The section headings were never the hard part. The hard part is knowing what belongs in a metrics block when your revenue is zero, and what to write in the month the numbers went the wrong way. Both of those are filled in below.</p>
+
+<p>If you want the reasoning behind the format rather than the format itself, <a href="/blog/what-goes-in-a-board-report">what actually goes in a board report</a> covers that. This post is the artifact.</p>
+
+<h2 id="email-or-deck">First, work out whether you need an email or a deck</h2>
+
+<p>These are different documents and founders conflate them, usually building the wrong one.</p>
+
+<p>You need a <strong>monthly email</strong> if you have investors and no formal board, or a board that meets occasionally. That is almost everyone at pre-seed and most companies at seed. It is the document this post is mostly about.</p>
+
+<p>You need a <strong>deck</strong> if you have a real board with a scheduled meeting, typically after a priced round. Even then the deck is a pre-read circulated in advance, not slides you narrate in the room. NextView makes the point that the deck should be <a href="https://nextview.vc/blog/free-startup-board-decks-template/" target="_blank" rel="noopener noreferrer">readable without commentary</a>, and that more than half the meeting should go to discussing problems rather than walking through pages. There is a deck outline at the end of this post for the people who need it.</p>
+
+<p>If you are unsure, send the email. Nobody has ever been annoyed at receiving a clear monthly email.</p>
+
+<h2 id="blank-template">The blank template</h2>
+
+<p>Plain text. No formatting required, no tool required. Paste it into your mail client and fill it in.</p>
+
+<pre style="background:var(--paper); border:1.5px solid var(--border); border-radius:14px; padding:1.5rem 1.75rem; margin:1.75rem 0; font-family:'DM Mono', monospace; font-size:0.8rem; line-height:1.75; color:#2a2a35; overflow-x:auto; white-space:pre;">Subject: [Company], [Month Year] update
+
+[Two or three sentences. The headline number, the direction it moved,
+and the single most important thing that happened. If your investor
+reads only this paragraph, it should still be worth having sent.]
+
+BY THE NUMBERS
+
+| Metric        | This month | Last month | Change |
+|---------------|------------|------------|--------|
+| [Revenue]     |            |            |        |
+| Net burn      |            |            |        |
+| Cash on hand  |            |            |        |
+| Runway        |            |            |        |
+| [Stage metric]|            |            |        |
+
+WHAT CHANGED
+[One or two sentences on the trend, not the level. Why did the number
+move? What did you learn that you did not know last month?]
+
+WHAT IS NOT WORKING
+[The honest one. Name the problem, attach the number, say what you are
+doing about it. Every company has one of these every month.]
+
+WHAT IS NEXT
+[One to three things that define a good next thirty days. Specific
+enough that your reader can check them against next month's update.]
+
+ASK
+[One. Two at most. Specific enough to act on without a reply asking
+you to clarify.]
+
+[Optional closing line. Where the detail lives, and an invitation to reply.]</pre>
+
+<p>That is the whole thing. Under 400 words when filled in.</p>
+
+<h2 id="filled-pre-revenue">Filled in: pre-revenue, pre-seed</h2>
+
+<p>This is the version nobody publishes. Every template assumes you have MRR. If you do not, the instinct is to leave the metrics block out entirely, and that is the wrong move: the block is where you demonstrate that you know your own numbers, and you have numbers even with no revenue.</p>
+
+<p>The company and every figure below are invented.</p>
+
+<blockquote style="border-left:3px solid var(--border); background:var(--paper); border-radius:0 12px 12px 0; padding:1.5rem 1.75rem; margin:1.75rem 0;">
+
+  <p><strong>Subject: Kestrel, August 2026 update</strong></p>
+
+  <p>No revenue yet and that is still on plan. We got two more design partners live, weekly usage is up 47%, and I have 11.1 months of runway. September is about turning one design partner into a paying contract.</p>
+
+  <p><strong>By the numbers</strong></p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>Metric</th><th>Aug</th><th>Jul</th><th>Change</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Revenue</td><td>$0</td><td>$0</td><td></td></tr>
+      <tr><td>Net burn</td><td>$28,000</td><td>$26,500</td><td>+$1,500</td></tr>
+      <tr><td>Cash</td><td>$310,000</td><td>$338,000</td><td></td></tr>
+      <tr><td>Runway</td><td>11.1 months at current burn</td><td></td><td></td></tr>
+      <tr><td>Design partners live</td><td>5</td><td>3</td><td>+2</td></tr>
+      <tr><td>Weekly active users</td><td>140</td><td>95</td><td>+47%</td></tr>
+      <tr><td>Customer interviews</td><td>22</td><td>14</td><td>+8</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>What changed.</strong> The two partners who went live in August both came from the same referral chain, which is the first time we have seen that happen. Worth understanding before we spend anything on outbound.</p>
+
+  <p><strong>What is not working.</strong> Usage is up but concentrated: three of five partners account for roughly 80% of those 140 weekly actives. The other two logged in twice each in August. I do not yet know whether that is an onboarding problem or a wrong-fit problem, and I am running four calls next week to find out.</p>
+
+  <p><strong>What is next.</strong> Convert one design partner to a paid contract. Get the two quiet partners to weekly usage or replace them. Hold burn under $29,000.</p>
+
+  <p><strong>Ask.</strong> I am looking for one intro to a head of operations at a 50 to 200 person logistics company. Not a buyer conversation, a diagnostic one. Thirty minutes.</p>
+
+  <p>Raw usage numbers are in the shared folder. Reply any time.</p>
+
+</blockquote>
+
+<p>Note what stands in for revenue: design partners, weekly actives, interviews. Three metrics that move, reported the same way every month so they become a trend. Note also that net burn equals gross burn here, because nothing is coming in, and the update says so implicitly by reporting $0 revenue on the line above.</p>
+
+<p>The cash line drops from $338,000 to $310,000, which is exactly the $28,000 of net burn reported directly above it. Runway of 11.1 months is $310,000 divided by $28,000. A reader can check the whole block against itself in about ten seconds, which is the real reason to report it this way.</p>
+
+<h2 id="filled-bad-month">Filled in: seed, in a bad month</h2>
+
+<p>The good-month update is easy and it is the only one anyone publishes an example of. Here is the other one.</p>
+
+<p>Invented company, invented numbers.</p>
+
+<blockquote style="border-left:3px solid var(--border); background:var(--paper); border-radius:0 12px 12px 0; padding:1.5rem 1.75rem; margin:1.75rem 0;">
+
+  <p><strong>Subject: Ardent, August 2026 update</strong></p>
+
+  <p>August went backwards. MRR fell 5.2% to $31,200, our first down month, driven by three churned accounts. Burn went up because we had already committed to two hires. Runway is 12.8 months. September is entirely about why those three left.</p>
+
+  <p><strong>By the numbers</strong></p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>Metric</th><th>Aug</th><th>Jul</th><th>Change</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>MRR</td><td>$31,200</td><td>$32,900</td><td class="c-red">-5.2%</td></tr>
+      <tr><td>Net burn</td><td>$58,000</td><td>$51,000</td><td>+$7,000</td></tr>
+      <tr><td>Cash</td><td>$742,000</td><td>$800,000</td><td></td></tr>
+      <tr><td>Runway</td><td>12.8 months at current net burn</td><td></td><td></td></tr>
+      <tr><td>Customers</td><td>61</td><td>64</td><td class="c-red">-3</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>What changed.</strong> We added two customers and lost five. All five churned accounts came from the cohort we signed in March through a discounted annual promotion, and all five cited price at renewal. That promotion looked like our best acquisition month at the time. It was not.</p>
+
+  <p><strong>What is not working.</strong> The March cohort, specifically. If the remaining nine accounts from it churn at the same rate we lose about $4,100 of MRR over the next two quarters. We are calling all nine this month rather than waiting to find out. Separately, burn at $58,000 against $31,200 of MRR is higher than I want and the two hires are already in seat, so the fix has to come from revenue, not cuts.</p>
+
+  <p><strong>What is next.</strong> Talk to all nine remaining March accounts. Decide by the end of September whether the discount motion gets killed or repriced. Get back to net customer growth.</p>
+
+  <p><strong>Ask.</strong> If any of you have seen a company recover a badly priced early cohort without grandfathering them forever, I would like twenty minutes with that founder.</p>
+
+  <p>Cohort detail is in the shared folder. Reply any time.</p>
+
+</blockquote>
+
+<p>Read it again and notice what it does not do. It does not lead with the two new customers to soften the churn. It does not describe a down month as a learning opportunity. It gives the number, the cause, the size of the remaining exposure, and the date by which a decision gets made.</p>
+
+<p>This is the update that builds credibility, and it is the one founders skip. The pattern is well documented by the people receiving these: Brett Bohl of Bread &amp; Butter Ventures <a href="https://visible.vc/reports/investor-update-benchmarks/" target="_blank" rel="noopener noreferrer">put it plainly</a> that people are good at sending updates when things are going well, and "as soon as things kind of go sideways or go flat, all of a sudden updates stop coming." Your investors have seen that pattern many times. A silent month reads worse than a bad one.</p>
+
+<p>Again the arithmetic ties: $800,000 minus $742,000 is exactly the $58,000 of net burn, and $742,000 divided by $58,000 is 12.8 months.</p>
+
+<h2 id="which-metrics">Which metrics belong in your block</h2>
+
+<p>Four to six lines. Not twelve. The three financial lines are the same at every stage, and the stage-specific ones change.</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Stage</th><th>Revenue line</th><th>Stage metrics worth reporting</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Pre-revenue</td><td>$0, stated explicitly</td><td>Design partners live, weekly or monthly actives, customer interviews, letters of intent, waitlist</td></tr>
+    <tr><td>First revenue, under roughly $10k MRR</td><td>MRR, with the absolute dollar change as well as the percentage</td><td>Paying customers, conversion from trial or pilot, one activation metric</td></tr>
+    <tr><td>Seed, roughly $10k to $100k MRR</td><td>MRR, month over month percentage</td><td>Paying customers, gross churn by logo and by dollar, net new MRR, sales cycle length</td></tr>
+  </tbody>
+</table>
+
+<p>Percentages alone mislead at small numbers. Going from $2,000 to $3,000 of MRR is 50% growth and it is also a thousand dollars. Report both and let your reader decide which one matters this month.</p>
+
+<p>One definition trap worth naming because early-stage investors complain about it specifically. James Orsillo at Underscore VC <a href="https://underscore.vc/resources/investor-update-template/" target="_blank" rel="noopener noreferrer">says founders</a> confuse bookings with MRR, or start counting customers and revenue that are not yet implemented, and calls it dangerous. If you signed a $24,000 annual contract in August that starts in October, that is a booking. It is not $2,000 of August MRR. Report it in the narrative, not in the revenue line.</p>
+
+<p>The three financial lines have to be calculated consistently or the block undermines itself. <a href="/blog/burn-rate-and-runway">Burn rate and runway</a> works through net versus gross burn and how to get runway right, and the <a href="/blog/what-is-mrr-and-how-to-grow-it">MRR post</a> covers the revenue side.</p>
+
+<h2 id="the-ask">The ask, done properly and done badly</h2>
+
+<p>This is the section that converts your investor list from an audience into a resource, and most founders waste it. Three that work:</p>
+
+<ul>
+  <li>"One intro to a VP of Finance at a 100 to 500 person company that has already replaced its spreadsheet-based close. Not a CFO, they delegate this."</li>
+  <li>"We are hiring a first support engineer. Someone who has done support at a company under 20 people and wants more scope."</li>
+  <li>"Has anyone here priced a usage-based tier alongside a seat-based one? I want twenty minutes with whoever did it."</li>
+</ul>
+
+<p>Three that produce nothing:</p>
+
+<ul>
+  <li>"Intros to potential customers would be great."</li>
+  <li>"Let us know if you have any thoughts on our pricing."</li>
+  <li>"We are always looking to connect with great people."</li>
+</ul>
+
+<p>The difference is that the first three can be acted on by someone reading on their phone without replying to ask you what you mean. Aaron Harris at Y Combinator, who reads a lot of these, <a href="https://blog.aaronkharris.com/investor-updates" target="_blank" rel="noopener noreferrer">advises putting the asks high up</a> so investors definitely see them, and notes that keeping metrics and asks front and center improves your hit rate.</p>
+
+<p>One ask. Two if they are genuinely different. A list of five gets you none.</p>
+
+<h2 id="cadence">Cadence</h2>
+
+<p>Monthly, on a fixed date, whether the month was good or bad.</p>
+
+<p>Monthly is also what almost everyone actually does. Across more than 3.5 million updates sent through Visible's platform, <a href="https://visible.vc/reports/investor-update-benchmarks/" target="_blank" rel="noopener noreferrer">monthly accounted for 65% of structured sends</a>, quarterly 22%, and weekly 13%. Worth a caveat: that population is founders who already use investor-update software, so it skews toward the disciplined end. It tells you what the norm is among people who send updates at all, not what the average founder does.</p>
+
+<p>The same dataset found smaller recipient lists get read more. Updates to fewer than 15 recipients saw open rates of 83% or higher; at 50 or more, that fell to 69%. If your list has crept up to include everyone who ever took a meeting, prune it.</p>
+
+<p>Two practical notes. Draft it a week before you send, so a bad final week does not turn into a missed month. And write down the date you send on, then keep it, because the value of these is cumulative. Mark Suster's argument for why is still the clearest: an investor meeting you once has <a href="https://medium.com/both-sides-of-the-table/invest-in-lines-not-dots-611f36491d73" target="_blank" rel="noopener noreferrer">a single data point, a dot</a>, with no way to judge whether you were higher or lower three months ago. Twelve updates make you a line, and a line is something an investor can extrapolate from.</p>
+
+<h2 id="the-deck">If you genuinely need a deck</h2>
+
+<p>For a scheduled board meeting after a priced round. Circulate it 48 hours ahead, keep it to roughly ten pages, and expect to spend the meeting on items three and seven.</p>
+
+<ol>
+  <li>Agenda, and open action items from last time with owners and status</li>
+  <li>The metrics block, same lines as your monthly email, shown as a trend over at least six months rather than a single column</li>
+  <li>The two or three decisions you actually need from this group, stated as decisions, near the front</li>
+  <li>Financials: P&amp;L against plan, cash, burn, runway, and where you have diverged from the budget and why</li>
+  <li>Product and engineering, framed as what shipped and what it changed</li>
+  <li>Go to market: pipeline, sales cycle, cost of acquisition, and what you have learned about the motion</li>
+  <li>Team: current headcount, open roles, anything about people that this group should hear from you first</li>
+  <li>Risks, honestly ranked, with the top one on its own page</li>
+  <li>Formal items if any: option grants, board consents, minutes</li>
+  <li>Appendix, for everything someone might ask about but nobody needs to read aloud</li>
+</ol>
+
+<p>If you have no formal board, do not build this. Send the email.</p>
+
+<h2 id="not-an-evening">The part that should not take an evening</h2>
+
+<p>Every number in both examples above came from four inputs: revenue, cash, what went out, and what came in. If pulling those together means reconciling three spreadsheets against your bank feed, the update becomes a monthly chore you will eventually skip, and the skipped month is the one that costs you.</p>
+
+<p>That reconciliation is the part Fintoit handles. Burn, runway, MRR and cash stay current against your actual accounts, and the board-ready version generates off them, so writing the update is writing the narrative rather than assembling the arithmetic. The template above works fine in a spreadsheet, and if you are three months old with one bank account, a spreadsheet is genuinely the right answer. The math stops being free somewhere around the point where you have a payroll provider, a couple of subscriptions billing annually, and a cofounder who also wants to know the runway number.</p>
+
+<p>Start the email either way. This month, not next.</p>
+
+{% endblock %}

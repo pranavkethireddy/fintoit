@@ -1,0 +1,688 @@
+{% extends "base.html" %} {% block title %}Contact Us Fintoit{% endblock %} {%
+block content %}
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f7f6f2;
+    --blue: #1d4ed8;
+    --green: #16a34a;
+    --muted: #6b6b7a;
+    --border: #e2e1db;
+  }
+  .pw {
+    font-family: "Bricolage Grotesque", sans-serif;
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+  .grid-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.45;
+    pointer-events: none;
+  }
+  .eyebrow {
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 0.65rem;
+    font-family: "DM Mono", monospace;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--paper);
+    padding: 5rem 1.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    top: -180px;
+    right: -140px;
+    background: radial-gradient(
+      circle,
+      rgba(29, 78, 216, 0.1) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  @media (max-width: 720px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+  .hero-title {
+    font-size: clamp(2.75rem, 6vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  .hero-title span {
+    background: linear-gradient(
+      135deg,
+      var(--blue) 0%,
+      #6366f1 55%,
+      #8b5cf6 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.72;
+    margin-bottom: 2rem;
+  }
+
+  /* CONTACT CARDS */
+  .contact-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+  .cc {
+    background: white;
+    border: 2px solid var(--ink);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    transition:
+      transform 0.18s,
+      box-shadow 0.18s;
+  }
+  .cc:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .cc-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    width: 40px;
+    text-align: center;
+  }
+  .cc-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-family: "DM Mono", monospace;
+    margin-bottom: 0.15rem;
+  }
+  .cc-val {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .cc-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+
+  /* FORM SECTION */
+  .form-section {
+    padding: 5rem 1.5rem;
+    background: white;
+  }
+  .form-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  @media (max-width: 760px) {
+    .form-wrap {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  .form-side-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  .form-side-sub {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .info-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+  }
+  .info-icon {
+    font-size: 1.25rem;
+    width: 36px;
+    height: 36px;
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .info-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-family: "DM Mono", monospace;
+    margin-bottom: 0.15rem;
+  }
+  .info-val {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .info-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+
+  /* FORM */
+  .contact-form {
+    background: white;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+
+  .flash-msg {
+    padding: 0.875rem 1rem;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  .flash-success {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1.5px solid #bbf7d0;
+  }
+  .flash-error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1.5px solid #fecaca;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 500px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1.125rem;
+  }
+  .form-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: "DM Mono", monospace;
+  }
+  .form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.925rem;
+    font-family: "Bricolage Grotesque", sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    transition:
+      border-color 0.18s,
+      background 0.18s;
+    outline: none;
+    box-sizing: border-box;
+  }
+  .form-input:focus {
+    border-color: var(--ink);
+    background: white;
+  }
+  .form-input::placeholder {
+    color: #a1a1aa;
+  }
+
+  select.form-input {
+    cursor: pointer;
+  }
+  textarea.form-input {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .btn-submit {
+    width: 100%;
+    background: var(--ink);
+    color: white;
+    padding: 0.925rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: "Bricolage Grotesque", sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .btn-submit:hover {
+    background: #1e1e2e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(10, 10, 15, 0.2);
+  }
+
+  /* SOCIAL / FOLLOW */
+  .social-section {
+    padding: 4rem 1.5rem;
+    background: var(--paper);
+    position: relative;
+  }
+  .social-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .social-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    background: white;
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    padding: 0.875rem 1.5rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    transition:
+      transform 0.18s,
+      box-shadow 0.18s;
+    font-family: "Bricolage Grotesque", sans-serif;
+  }
+  .social-link:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition:
+      opacity 0.62s ease,
+      transform 0.62s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal.d1 {
+    transition-delay: 0.1s;
+  }
+</style>
+
+<div class="pw">
+  <!-- HERO -->
+  <section class="hero grid-bg">
+    <div class="hero-inner">
+      <div class="reveal">
+        <div class="eyebrow">Contact</div>
+        <h1 class="hero-title">Get in <span>touch.</span></h1>
+        <p class="hero-sub">
+          We'd love to hear from you. Whether it's a question, a demo request,
+          or just a hello we respond within 24 hours.
+        </p>
+        <div class="contact-cards">
+          <div class="cc">
+            <span class="cc-icon">💬</span>
+            <div>
+              <div class="cc-label">Feedback</div>
+              <div class="cc-val">Share your thoughts</div>
+              <div class="cc-sub">
+                <a
+                  href="/feedback"
+                  style="color: var(--blue); text-decoration: none"
+                  >Leave Feedback →</a
+                >
+              </div>
+            </div>
+          </div>
+          <div class="cc">
+            <span class="cc-icon">🚀</span>
+            <div>
+              <div class="cc-label">Sign Up Now</div>
+              <div class="cc-val">$0 to Start</div>
+              <div class="cc-sub">
+                <a
+                  href="/signup"
+                  style="color: var(--blue); text-decoration: none"
+                  >Sign Up →</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right side info -->
+      <div class="reveal d1">
+        <div
+          style="
+            background: var(--ink);
+            border-radius: 20px;
+            padding: 2.5rem;
+            color: white;
+          "
+        >
+          <div class="eyebrow" style="color: rgba(255, 255, 255, 0.35)">
+            Response Time
+          </div>
+          <div
+            style="
+              font-size: 2.5rem;
+              font-weight: 800;
+              letter-spacing: -0.03em;
+              color: white;
+              margin-bottom: 0.5rem;
+            "
+          >
+            Under 24hrs
+          </div>
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.5);
+              font-size: 0.9rem;
+              line-height: 1.65;
+              margin-bottom: 2rem;
+            "
+          >
+            We're a small team that actually reads every message. You'll hear
+            back from one of the founders directly.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 1rem">
+            {% for icon, label, val in [('✉️','Support','support@fintoit.com')]
+            %}
+            <div
+              style="
+                background: rgba(255, 255, 255, 0.06);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 12px;
+                padding: 1rem 1.25rem;
+              "
+            >
+              <div
+                style="
+                  font-size: 0.68rem;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  letter-spacing: 0.08em;
+                  color: rgba(255, 255, 255, 0.35);
+                  font-family: &quot;DM Mono&quot;, monospace;
+                  margin-bottom: 0.2rem;
+                "
+              >
+                {{ label }}
+              </div>
+              <div
+                style="
+                  font-size: 0.875rem;
+                  color: rgba(255, 255, 255, 0.8);
+                  font-family: &quot;DM Mono&quot;, monospace;
+                "
+              >
+                {{ icon }} {{ val }}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="form-section">
+    <div class="form-wrap">
+      <div class="reveal">
+        <div class="eyebrow">Send a Message</div>
+        <h2 class="form-side-title">We'd love to hear from you.</h2>
+        <p class="form-side-sub">
+          Questions, demo requests, partnership opportunities, press inquiries
+          send it all here.
+        </p>
+        <div class="info-items">
+          {% for icon, label, val, sub in [
+          ('🤝','Partnerships','partnership@fintoit.com','Business inquiries'),
+          ('📰','Press','press@fintoit.com','Media & interviews'),
+          ('📍','Location','5700 Tennyson Parkway Suite 300 Plano, Texas 75024','Mail & Packages') ] %}
+          <div class="info-item">
+            <div class="info-icon">{{ icon }}</div>
+            <div>
+              <div class="info-label">{{ label }}</div>
+              <div class="info-val">{{ val }}</div>
+              <div class="info-sub">{{ sub }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <a href="/media-kit" style="display:inline-flex;align-items:center;gap:0.4rem;margin-top:1.25rem;font-size:0.85rem;font-weight:700;color:var(--blue);text-decoration:none;font-family:'DM Mono',monospace;">📰 View our Media Kit →</a>
+      </div>
+
+      <div class="contact-form reveal d1">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% for
+        category, message in messages %}
+        <div
+          class="flash-msg {% if category == 'success' %}flash-success{% else %}flash-error{% endif %}"
+        >
+          {% if category == 'success' %}✓{% else %}✗{% endif %} {{ message }}
+        </div>
+        {% endfor %} {% endwith %}
+
+        <form method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Name *</label>
+              <input
+                type="text"
+                name="name"
+                required
+                placeholder="Your name"
+                {%
+                if
+                current_user.is_authenticated
+                %}value="{{ current_user.full_name or '' }}"
+                {%
+                endif
+                %}
+                class="form-input"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email *</label>
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="you@example.com"
+                {%
+                if
+                current_user.is_authenticated
+                %}value="{{ current_user.email }}"
+                {%
+                endif
+                %}
+                class="form-input"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <select name="subject" class="form-input">
+              <option value="">Select a subject...</option>
+              <option>General Inquiry</option>
+              <option>Request a Demo</option>
+              <option>Partnership Opportunity</option>
+              <option>Technical Support</option>
+              <option>Press & Media</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Message *</label>
+            <textarea
+              name="message"
+              required
+              placeholder="Tell us how we can help..."
+              class="form-input"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit">Send Message →</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL -->
+  <section class="social-section grid-bg">
+    <div class="social-inner reveal">
+      <div class="eyebrow">Follow Along</div>
+      <h2
+        style="
+          font-size: clamp(1.875rem, 4vw, 2.75rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          color: var(--ink);
+          line-height: 1.1;
+          margin-bottom: 0.5rem;
+        "
+      >
+        Stay in the loop.
+      </h2>
+      <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7">
+        Follow us for product updates, founder insights, and behind-the-scenes
+        building.
+      </p>
+      <div class="social-links">
+        <a
+          href="https://instagram.com/fintoit"
+          target="_blank"
+          class="social-link"
+        >
+          <span>📸</span> Instagram
+        </a>
+        <a
+          href="https://linkedin.com/company/fintoit"
+          target="_blank"
+          class="social-link"
+        >
+          <span>💼</span> LinkedIn
+        </a>
+        <a
+          href="https://x.com/fintoit"
+          class="social-link"
+          style="
+            background: var(--ink);
+            color: white;
+            border-color: var(--ink);
+            box-shadow: none;
+          "
+        >
+          <span>🚀</span> Twitter
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  const obs = new IntersectionObserver(
+    (e) => {
+      e.forEach((el, i) => {
+        if (el.isIntersecting) {
+          setTimeout(() => el.target.classList.add("visible"), i * 70);
+          obs.unobserve(el.target);
+        }
+      });
+    },
+    { threshold: 0.08 },
+  );
+  document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+</script>
+
+{% endblock %}

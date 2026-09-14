@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% block title %}Feedback & Messages - Fintoit Admin{% endblock %}
+{% block content %}
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+/* local helpers */
+.fp-section-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);overflow:hidden;margin-bottom:1.75rem;}
+.fp-section-head{padding:1rem 1.5rem;border-bottom:2px solid var(--ink);display:flex;align-items:center;justify-content:space-between;}
+.fp-section-head h2{font-size:1.1rem;font-weight:800;margin:0;}
+.fp-section-head span{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);}
+.fp-row{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;}
+.fp-row:last-child{border-bottom:none;}
+.fp-row:hover{background:var(--paper);}
+.fp-row-new-fb{border-left:4px solid var(--blue);}
+.fp-row-new-msg{border-left:4px solid #7c3aed;}
+.fp-meta{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);}
+.fp-row-actions{display:flex;flex-direction:column;gap:.4rem;flex-shrink:0;}
+.fp-act-btn{display:inline-flex;align-items:center;justify-content:center;gap:.3rem;padding:.35rem .7rem;border-radius:8px;font-size:.75rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid;text-decoration:none;cursor:pointer;transition:all .15s;background:#fff;white-space:nowrap;}
+.fp-act-green{color:var(--green);border-color:var(--green);} .fp-act-green:hover{background:var(--green);color:#fff;}
+.fp-act-blue{color:var(--blue);border-color:var(--blue);} .fp-act-blue:hover{background:var(--blue);color:#fff;}
+.fp-act-red{color:var(--red);border-color:var(--red);} .fp-act-red:hover{background:var(--red);color:#fff;}
+</style>
+
+<div class="fp" style="max-width:64rem;margin:0 auto;">
+
+    <!-- Header -->
+    <div class="fp-head">
+        <div>
+            <div class="fp-eyebrow">Admin</div>
+            <h1 class="fp-title">💬 Feedback &amp; Messages</h1>
+            <p class="fp-sub">User feedback and contact form submissions</p>
+        </div>
+        <div class="fp-actions">
+            <a href="/admin" class="fp-btn fp-btn-ghost">← Admin Panel</a>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:1rem;margin-bottom:1.75rem;">
+        <div class="fp-card" style="padding:1rem;">
+            <div class="fp-stat-label">Total Feedback</div>
+            <div class="fp-stat-val num">{{ feedback_list|length }}</div>
+        </div>
+        <div class="fp-card" style="padding:1rem;border-color:var(--amber);box-shadow:4px 4px 0 var(--amber);">
+            <div class="fp-stat-label">New Feedback</div>
+            <div class="fp-stat-val num" style="color:var(--amber);">{{ feedback_list|selectattr('status','equalto','new')|list|length }}</div>
+        </div>
+        <div class="fp-card" style="padding:1rem;border-color:var(--blue);box-shadow:4px 4px 0 var(--blue);">
+            <div class="fp-stat-label">Contact Messages</div>
+            <div class="fp-stat-val num" style="color:var(--blue);">{{ contact_list|length }}</div>
+        </div>
+        <div class="fp-card" style="padding:1rem;border-color:var(--red);box-shadow:4px 4px 0 var(--red);">
+            <div class="fp-stat-label">Unread Messages</div>
+            <div class="fp-stat-val num" style="color:var(--red);">{{ contact_list|selectattr('status','equalto','new')|list|length }}</div>
+        </div>
+    </div>
+
+    <!-- Feedback Section -->
+    <div class="fp-section-card">
+        <div class="fp-section-head">
+            <h2>💬 User Feedback</h2>
+            <span>{{ feedback_list|length }} total</span>
+        </div>
+
+        {% if feedback_list %}
+        <div>
+            {% for fb in feedback_list %}
+            <div class="fp-row {% if fb.status == 'new' %}fp-row-new-fb{% endif %}">
+                <div style="flex:1;">
+                    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;flex-wrap:wrap;">
+                        <!-- Type badge -->
+                        {% if fb.type == 'bug' %}
+                        <span class="fp-badge" style="color:var(--red);border-color:var(--red);background:#fef2f2;">🐛 Bug</span>
+                        {% elif fb.type == 'feature' %}
+                        <span class="fp-badge" style="color:#7c3aed;border-color:#7c3aed;background:#f5f3ff;">✨ Feature</span>
+                        {% elif fb.type == 'ux' %}
+                        <span class="fp-badge" style="color:#db2777;border-color:#db2777;background:#fdf2f8;">🎨 UX</span>
+                        {% else %}
+                        <span class="fp-badge" style="color:var(--muted);border-color:var(--border);background:var(--paper);">💬 General</span>
+                        {% endif %}
+                        <!-- Status badge -->
+                        {% if fb.status == 'new' %}
+                        <span class="fp-badge" style="color:var(--blue);border-color:var(--blue);background:#eff6ff;">{{ fb.status.title() }}</span>
+                        {% elif fb.status == 'reviewed' %}
+                        <span class="fp-badge" style="color:var(--green);border-color:var(--green);background:#f0fdf4;">{{ fb.status.title() }}</span>
+                        {% else %}
+                        <span class="fp-badge" style="color:var(--muted);border-color:var(--border);background:var(--paper);">{{ fb.status.title() }}</span>
+                        {% endif %}
+                        <span class="fp-meta">{{ fb.created_at }}</span>
+                    </div>
+
+                    <p style="font-size:.9rem;margin:0 0 .5rem;">{{ fb.message }}</p>
+
+                    {% if fb.name or fb.email %}
+                    <p class="fp-meta" style="margin:0;">
+                        From: {{ fb.name or 'Anonymous' }}
+                        {% if fb.email %} · <a href="mailto:{{ fb.email }}" style="color:var(--blue);">{{ fb.email }}</a>{% endif %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Actions -->
+                <div class="fp-row-actions">
+                    {% if fb.status == 'new' %}
+                    <form method="POST" action="/admin/feedback/status/{{ fb.id }}">
+                        <input type="hidden" name="status" value="reviewed">
+                        <button type="submit" class="fp-act-btn fp-act-green">✓ Mark Reviewed</button>
+                    </form>
+                    {% else %}
+                    <form method="POST" action="/admin/feedback/status/{{ fb.id }}">
+                        <input type="hidden" name="status" value="new">
+                        <button type="submit" class="fp-act-btn fp-act-blue">↩ Mark New</button>
+                    </form>
+                    {% endif %}
+                    <form method="POST" action="/admin/feedback/delete/{{ fb.id }}"
+                          onsubmit="return confirm('Delete this feedback?')">
+                        <button type="submit" class="fp-act-btn fp-act-red">🗑️ Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="fp-empty" style="margin:1.5rem;border-radius:12px;">
+            <span class="fp-empty-icon">💬</span>
+            <div class="fp-empty-title">No feedback yet</div>
+            <p class="fp-empty-sub">When users submit feedback it will appear here.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Contact Messages Section -->
+    <div class="fp-section-card" style="margin-bottom:0;">
+        <div class="fp-section-head">
+            <h2>📬 Contact Messages</h2>
+            <span>{{ contact_list|length }} total</span>
+        </div>
+
+        {% if contact_list %}
+        <div>
+            {% for msg in contact_list %}
+            <div class="fp-row {% if msg.status == 'new' %}fp-row-new-msg{% endif %}">
+                <div style="flex:1;">
+                    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;flex-wrap:wrap;">
+                        <span style="font-weight:700;font-size:.9rem;">{{ msg.name }}</span>
+                        <a href="mailto:{{ msg.email }}" style="color:var(--blue);font-size:.88rem;">{{ msg.email }}</a>
+                        <!-- Status badge -->
+                        {% if msg.status == 'new' %}
+                        <span class="fp-badge" style="color:#7c3aed;border-color:#7c3aed;background:#f5f3ff;">{{ msg.status.title() }}</span>
+                        {% elif msg.status == 'replied' %}
+                        <span class="fp-badge" style="color:var(--green);border-color:var(--green);background:#f0fdf4;">{{ msg.status.title() }}</span>
+                        {% else %}
+                        <span class="fp-badge" style="color:var(--muted);border-color:var(--border);background:var(--paper);">{{ msg.status.title() }}</span>
+                        {% endif %}
+                        <span class="fp-meta">{{ msg.created_at }}</span>
+                    </div>
+
+                    {% if msg.subject %}
+                    <p class="fp-meta" style="margin:0 0 .4rem;">Re: {{ msg.subject }}</p>
+                    {% endif %}
+                    <p style="font-size:.9rem;margin:0;">{{ msg.message }}</p>
+                </div>
+
+                <!-- Actions -->
+                <div class="fp-row-actions">
+                    <a href="mailto:{{ msg.email }}?subject=Re: {{ msg.subject or 'Your message to Fintoit' }}"
+                       class="fp-act-btn fp-act-blue">✉️ Reply</a>
+                    {% if msg.status == 'new' %}
+                    <form method="POST" action="/admin/contact/status/{{ msg.id }}">
+                        <input type="hidden" name="status" value="replied">
+                        <button type="submit" class="fp-act-btn fp-act-green">✓ Mark Replied</button>
+                    </form>
+                    {% endif %}
+                    <form method="POST" action="/admin/contact/delete/{{ msg.id }}"
+                          onsubmit="return confirm('Delete this message?')">
+                        <button type="submit" class="fp-act-btn fp-act-red">🗑️ Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="fp-empty" style="margin:1.5rem;border-radius:12px;">
+            <span class="fp-empty-icon">📬</span>
+            <div class="fp-empty-title">No contact messages yet</div>
+            <p class="fp-empty-sub">When users submit the contact form their messages will appear here.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

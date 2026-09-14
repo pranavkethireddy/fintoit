@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="600"
+     viewBox="0 0 1400 600" role="img"
+     aria-label="The blank board report template rendered as a structure: a by the numbers block with empty fields for revenue, net burn, cash on hand, runway and a stage metric, above the what changed, what is not working, what is next and ask sections">
+  <defs>
+    <style type="text/css"><![CDATA[
+      @font-face {
+        font-family: 'BricolageSub';
+        font-weight: 800;
+        font-style: normal;
+        src: url(data:font/woff2;base64,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) format('woff2');
+      }
+      @font-face {
+        font-family: 'DMMonoSub';
+        font-weight: 500;
+        font-style: normal;
+        src: url(data:font/woff2;base64,d09GMgABAAAAABb8ABEAAAAALjgAABahAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGhwbIBwqBmAAgRQIYAmfLREICrJsrE8BNgIkA2oLagAEIAUGByAMgT0bhCkVbFzFho0DCPz2tgD/f0puyBBsB9GvILsTNcLGmBf/bo6sq2tjhF1hQ6HArjaLhbhVmsViiRqNrnMm/LJ4OPCTr8rnwy8GolZ9WeXqR/bCpFIqW6fF5sHomUkwhg0jhcs+N0KSWXj636/dmXn/LyIelyaazKXRNmORkOjiJVrjdA6R0J492nybeSBpwUCf1rI/cZky3BlSu9o4tEnT4N2VzQ3hpl3wkbkgWmpokBKkEPCg0jof6pQJVdaZvbhXeHW2N3G6uEYmvbYHCA9AHQBIdIpA6GlA+XJ+Bs3p/6d4ly+rESjSUyJJGYxKbSc0W5JTY1diItx2z8jQoELqzpC1NHN1FuH51+abHSgqIAWe8rLoo1mgAL7xOEDOX5IWpczERe2i1kJVX024/wVgAfp+qoo7l9YgQ+BAfA9r/W7p/UiFb0+mLdNGeQpEMDb/MhlSdLctWH5+Tcu+9zPZzhGwMMv6zrgT8ucN/fkzbZPiZIqZEk1aTo8CB0QOFXHapSywOkBQQG7VCUNOnZUktDsbY6QYhEX/A6Rj2zY0jXzm1wKENrLT7qMggCTkqIpA5n0LElB/MoF5ZU1QO+YOgTgMgF8cYuAcck2EdP9S9ttHB0AeJrJmp9PQb3Og5zkGoO/zpskiqEodAJoYxjsVJwZ4n4PadhalWZkHyR/VBoTWQiru05H/PgUoG4WKZmdNh8edKPx+/kVWIlNzSkLGYdi4aXMW7Dh25k1WwjillEmfUVOHrNhz+psshuH/deoRD6t43Wvuc6977Ca8uHklyE/DMcEuwQbpVaUfrUU8r2cXf2sL/ZfVScb45Qno/b931V1gcd0FHlxWlzaJPHoPy3cewd/9Ftk8YPZL3kl98Bni5YMiszAa9YXzHvgCUNczJGC2AIKm7AIE6tUHJMj0Sto8sbAen5KzNbLZWxsnCOFPe8EwCPsyQV/vZ5Izs9F25zyE/WxtLa/PCYRqs582+mwKvI4v0xylzBRomhSEjMz7IDKQnq2TSTj1Qavf5tm0xGEc4LfRI3k6+D02hFx9rNzmpEdoFbu1/t0vSRqkysRs2WjhGLYqV7HhNCQ7qS+bLWh2rkIjvNGBbcO2l1OCrwLiGByBtxF4drR9TbiDVcOrZ+W9IyNW0fdM2pSmksDIDS0gvY5EVEsBBhkE6mUSZG4jshmKmfM+gSXATc4ZorfJrQkCqew6FegTP45ahhFWe49S/XP+mqKtTjm0eh7z1pWDFDX5JIh3EQxnG0OcpQVkoHI1Q3Y1KM9JNVMBzAqk3YEjsCDXARUicYbF8T2VVqgEiJLQqvN6WZGGWV0WDva5Dx7Qs4PJNSitHUMBQj3LUPtGJoNXwYFThmgOEEbzkBzlrtlcEpNEgqETIe8KFim14a/MRZm4sI3eqU+f+4CNRvItL7CpgINLCPk2HxKJbXrNEk4LvkUnFXBhmmFKynsqo9o3uMxSn2jOQaAlPTz6KTb6e50uY3a6r4Lf/jw++vGccP6K+EcO0GC9/1l4WQbYGG4ktXqJW7Mv6EwCt1WQ/JHNhMOhbvWlsk45tddWs+46HCCxqN26EzbvLT5jb3I4rBA3rraBbOgaJHA+Y0rX1yzEoskXfop4ZjJgmWEaUjHJ74bhUtYWxxZmZgUINhhsWjAbvIqDSykQocHWKhDnDCFhBFImQcYo5IxBwTiUTIaKKVAztXkB6oNZ4eXRT1GlA3/MGL4uuIhQFil/5l4qm5S/D1qDBT10bQebN2eCLB2xRcUOFXtUHFBxRMUJFWdQcRYV51BxHrVtGXIjaGElPTMU6bXk9G4NsLAct1vMKlgJVurAGkTuiUcDLVc0uReOJZ0FYF0/Bc2avo26JbFWN5a2hvhl0tTdMFHheG2bkO+kb9rCAi7mlq8Phjz5+wLYfg0vGTe39ErbTFv6PijbkBtyTwcPoP6CAjvoTt0I7KKnQI4tk/fQiGx/JN3pAzZjuh/Ul/fme4vEFy7zPg+zeTelreOfB/YBbBObQR3qqKWbIdfoXL2syyZyo+6O+RzUSEezE242whee5JXJ4k18RfWouqy3OrqfLNv2aZTaj/J0k/WmCNGAMp6+ZZqBMk8KY5luQVPb7WXOdjnHJYtKx+or3ZQrTtG4gTgaOV1tllUq2PpWZockmZeYE9GHVoIwt6XMyKbn4NeZAof2OI6IwCpPb1x5XXZUjYYjNkSMRbHtOdYU0q3Nqyd6Hzu5od5Z5xaBuSMJ98qFHuy/6I7MG/GGx6SFfcXJkzxg3vhzk03ZFdPNnoBiyZI8lo4Zt+4gRbmRuraaNleIec+c9sBtL/7s+IJH3edzYD+Yhs+Dg6iNUZxdw7qLngZnx2oXXKiG7Rh1K+t7BePW1ae70LYO6fQKj/SLaNqkG53nYf2XuBfJpBflsrve0CvOx0ytT7KCAp5m0YdlbG+FW63XYmhkmQF9rnLqV82Y5eLYO1X9+cL4uwNNKCTQcCqILoXQ8kR1q9LJpl4Ui1WFgzrBZpsWmUU2J0YZENsaGGeRCTy8x5IEkNoamGZpzbwSw97OWgTIbQPMRyILT7ZkRbZkJbZkZbaUFb44sCoOrIYDq+MgG3h4nzXxPmvhfdbG+05HNlxHurjGnt4OfQVnAATOEAhgpABjhaFJE6MTnWlLAutSZmiTc8NrC9rF4qULnsoySmQVBdb1YqKMG8WEW8Xk7qpohz2CVjwYSHCMAqd6MdPEs2LGi2LGq2LGmwFwjwKPKPaTyiz4Uiz4Viz4USz4NQB+UeAvStv/rNi7DeEFP5hp3q07qnc+JVuhdEjD7X6DzRe89muvu66pXumzEdDRmHUDPvsb9CnBdqRj3qv1GTh5Y3DZP/kvoC3zlLcYgxAMommTUdkKKA2bI9P6AXNfuqtIvjd09Tul9APwS5+lj3Yta95BivL6ceTtz16cpqfzPnzOjtc2w8H/8wNiJBOFEy90auFdJ+egD3z4PuPoUs+OIb0c9hH/hYzvjiaV1+I9lT5tTpkPccYn/Lv2iHm/zwYYyI9H8NKeG6b98SVkXSOJ2z21iapoTEEVojHlM/rEjPSws4g5FlCmzR/lxFYKGm4wNBJ2XaiG0GM+WPS2g4/bF6fbpLaqT3X/Ps7CAAT9ojAvW9f4c94GLXBRAIIrAeIAaUDikwCKQgQWJlkt5qdcoy5eKOiSEACKxrl0xkIE99SgiVPDbYBPI2LoYDh4oWhzT0sYBzp5R96bN8yEEebUeejYxdbZKJQhzzHIXSPmGSwyDwdWMcUMvbxdC3d1I/ofvRUytdBSdgFlsBUb2bPc22wS2y32yDaeN+it7DWg85SrFYU6OCNG0auFiXerfkmEjlhKBiQVHLySK6W0QQ8MU1HSC0kBjKLvyFnWRIdM4KVHt0I6BvYtOFe7fd0QHQ8fTRvpSGWyI1l1HX0o40jyWj0pK42MZmnd5vBp3Sb+t0RbFz+t+z7Ax0hq7D5JS1a78H/Rec05ZFLMZmgnmUrDsex1Oim76I32IKMj1Ka7OJ3w+ZN/levmGha8VC86ZNtQvZ/IURFj8aaHRJ8TQ14tRD8vBf3muQkjNUaLDCZ0pJ83trQRL9KApLjCxwE4eRMA6dJI068xO4+oROddDPuay9KOvAGV75Tc8kZT6+NkRylhYIHbhYZX4QxUG0/Hpi0YvMxkznqx/E7VXbJcrSp/5OFTPMJFHwLTlRQEk8tMJjQbTwPl9McXhUMgzowAuDtEhtnwpa9UEi9tS02qcMcFK/cY8CrDMM88ASJfKaY168LUcaamN6ojJWPIkqX/JSB4rZ3Ya6IM9yPw5d4YD5Wfx55+4/Fw6b7kZeaRWQ6Fn3r9NLhjsQxbBUFEUtwoDNaewJ2DwW6HyDDJYBXk2SATweTGPtKZwmrraGTrULg6yeyWOcmKhKAoTIEBoTed5gE+bWwNl2W+5l4GykfOQGW7+cCt1hvo5VdVSALKdE7ur4OodhY+WJIZhfYuJGjrXnVhMuxZaLzxvQMv5gdEt70zAnXln/7BTlxvcJ2ir7L5zCpFrFvuvPDCGf1Pss6p8n9HTFZEpXSoDYc0DXCsFDde09cvr9RYIjq8v8TMFQ9gdhSPHh0rRY/gxlbzBcUVPeWdOk3lppuvnb/22nHim/Xt2lL+UKHwipS0Ql/lkWz4RSSDvBbONoUqj3VG32ClWQIxB/YWY6arB/vHK1tKRHKTw8t6C+ebDUp/+GhpKnHAIf2bnZCdG6vt7qClaXqbblJcITgyDqEzaGQaYTZzEbgg83SDizJid72U8U/DzKoEbUPiwD8aLd+/Jqfj2R2SytAp3dyMoUr3L8N/h4b/+rmTV3I8QPenIjwJHB6Lmq4eGoo8bwpHSnUohTpdyQNTUzPpcicmp2INtsr3vl6VNIuig9M33jezenjS8qNKiRotkxJX5fMAgSgyLRZLDttwDnds/9rCumLRbjYolCbUOSqXwc4BJdoJLEMUzGnUmVT1/Da/wLg2ssXfYQ/u6j6rZywHpYY3PYwKPqqJpB5VdGt7SNbs1auRRE6p+zNdyX6SraTZ7dmFXs1/4f9yN09Fb8Ebw3/wn3jhjmr6THrsgn/P+XdXNXGmbc9FtVM1QQ3W4SKhRewg/B3T8FBOct1FBN2zM5Ec6MxnpQmGnR4wSRtiJqO3flTzGZv92TkYjDjrERrDnqwSrG2eBhXarlUXwmHl+QzBLo3Ti/ucuGaoPvzN3SuDrX0G/SiOo4W80ZodzawIDJ77XBPnCR6mVPBsT3KaL75vcI2/kNWthIltoKbQodVrHHUrWUQ1ybDTVPYGTpfm6sF9Tq9mqj78U7VXCtv7jfqCx9tSHDA57L1Gdd7E3LCsSLHgmKqp57H8Kmy4LXar1KW9jiG16lst76b93O84b0wmJq1Bv829J93HfZdruT1x+5uld8CjZJ1oHDj+8C3rZqKE3dXU6O5pCBHTXnzrHYFrmfarH/zYIW0MxKQGsWQBi1CWYE1jUjAq1YfqZxqDWt/wt9E4E+OL3HwtahMLWAq0mL7CUSXqFNFmJJUdyPGJ9aiuVYm4HRijga3jfsdmf8vlfctmf/eNLnXZBjZrIFVGD6HbLkuhHVXirode2f/yu4yv4fJ7tcW7deqGP9ms3amj2he1/9+YEm76KXaY+nKEzws+RnlplxhR20yFnsz2vVu2iAV47wZGQPPKRLw/pRgOqjwoRZLJ/jyXWI/KW9WI3YEx3BLYNmgwjOK48bzPbh8woHVOM9q6BD8LMBUisH4s0DfVigQC7gbLuy+m6C6awidTa7Na9UgkrC10alHEIdmycVqhduI+n9Oj9vm3vM+T2rOBzcJTu8Ro3VLqjXY15hnq0xn8musvST3aBHcUknRXf+BWaZNgs+CFG/gBzn+Npm48mez007EefUAkrm1SFeDu8NatyFKFLSXWdTjCWPK3iYRTXl6OB/Y+mXjyF2GjZDSjXGQmNUBwifV6hQVBHA6MQai9gZnv3vhx9xVTV07tevNH9mj+x5wuiSVHAk9FruD1O7v9iYUtN/955587p2bFzlzcrJ/2PbOlWcGJd4uUbY8+XTiXuIwY1L5QZ87e/tF12yIvWUzp+awYC/X4LzkcnTIjHyj1JreyFzh0nT1yc74wEt2mVwyFu3NJR0tSIaHym7lcA1/QxOWyNi9ZM4vcgoC4livSxxrWVyLHspLrZ3/Va9NXYIwT/Vuc/Vvezg4ynWfg84ajn8b7HPyH/I//v1YwCE2+A1BsmAqZuQW0AhFxNHJ5On4Q2wpduIbATbyDKtpBY8GMbeDAku0yT5PId2GIwVlMh80n3QVRV/HfKXX7KUfjHuS5in060GNLrGKBY9VVEdGwMTi44MBJFZljs7iDqkBCPHMusPhoUBPtQAqGvpd79l7QUY1ePDk1LQuYhjGaZcPeWUXxJ8TTycOvJeZcr77Ooo/FDIgGlfAbAW7BO1UaYpJySxuxsDTGmIdUJ64r2okYschFnqUG2Pec50UmYUrrhGI+EO6imlWjLU0iKS1E5htKQPVwpwVVwY9DmselKiJZgsnYZZ52CwuOI+WjEsdjcPJoOlprXtCTqoJrKAQqv+ntwMwzULPj2fDeRauoMCVDG3CBeQvZjBqxN+useuQgDmdO7uZqxICDYJblzoKCouxg5j1T0iCc2D0J/OszLm33qkqx0whv3rSdeyWP8aLxzLXRR3902MpKwXokc7rxQIpTdnRXVfXUIFK1mB/5M8IN97xfQhUhgKKStZS+MmYQY42DHozXJBSrEaYBnA14kHotGs1RYuwItKCc8usIBK6bHN3ZdZCRmLyM3yBiYOwgYnuYXW1UhoC9h+olXETvAPc8xopVka9NQJwti7Ec48h37X5dpjBZsdQFWK5W0FUJk3XTADTlG1eCyGJj2OBqI3My1DEIdVEtTgeQGbEyzJgNCwNEcxzUYW1WKQbHhJM0Csw087varzlJop0ys6kAVNtzqDdcnAJwe3IBajK+xqpg/qdrdiiiLT6BimnaALmTdInUVOx1XjLLGN1ZkzexJD3Hpl2Oeeytg3F3C9XF0pICTY4dlxvIkNvEGM8ipOc4GfltH3kj5LXZlwx+JIIwZUFNd7Mv6AwlwYAfkS6pNZZfZ9GiKPIGUpI9RG5k24itERIrVR8Ea2G2HPucd6JemEe8frm/u7Yyv7Ww1XdtU5d2LznueFerVWReopJrAMRyaVa+Eb6HCx3kgZk0NHk5wOBPhigV2sQQctjWNVGf+NUcJ6HvOVYvOipWFnSm/GgxvCXkMkfWDpBwd1pspCvQdutxDAv9yVk37nepYijVEY8FbfYfWG+U6FSCRmTQSBhIUtC67LQTjhi8euH74+C6rOuXUgk7fmwgK2uz+I2IqeYzGP+iuWOAqTs8rdy7gKvTPT50KrcKaUrHWGtNJNi/BHeKdM21wy82nKpn2kVaa0rkw+MEQRTIm23Xg6skOMxQI+lzpUF1SoMblbyrAkoUDQgz67WJwG8d/2Kx4l19Cyjm5MmJ/HMQNSgMah3IiZ3bUdgQqTyZk3ZqO1dJ8y3J/K5WMz9J4tBXgiluePM1ch1U9D+X3rUpnBkCPkYC5bC66fgfa8X1yG6YcZaMDQKMmBwwwsT3JQYzsW7+ZJ6tyuOeRrPcXeE5qqiLGA76vTK54XCm3ofK3CLxPmuv4BDgCONcG7fFUC9E3SBmmO+n0zFATNBYltalBM1YAHGkjG3qjgIqhfC1zS4H7wls2eTen0CZvhY8KQQJnaaj0GICxKKsmChZM/joBTZP7mrhWYwbACTsi+n1XIGWcTfA97TqLuXeSAKChVKfAZvaV5WVzyo+BAwbHB8XMsoqqhl9PiANEHLuiRk7gS3Z0CEA6VZuLltaW4xbbaBTZEic4EJHdYfupjQYWgMAgfcP4K7m+7wYbvmdEbY/IODnRKwNAL8P/TgJ8RuLkiUAECIAEPAr6jJ0GgjUqWP2y//fotNgWhG1zTR8xhUTy+o3opLcJjZ9muhAZG5d2jRAWdVzmLOqXT6vWlYDRnXqkY3BC0Jmnb7BEjyDLwBoJ4AaZkYNEa6l3QDgdsXtghAAIQoA/GVbBxBYet8P/wKpuxG6/nIX/uTxrM/dILfeB+Mgg/vqGR+cp2xmrKaQE87HWCZxaOtJM2utFe1R2qOUR4FBpWBWg3glsOeyWdH+DtChN7G7xKHHAF/YrD+rgEJIwb3lbuExNK9MCzps3fNQJ71syIOLpK20tSRySnQWWtz/yePjbMM/1kUD7w8AAA==) format('woff2');
+      }
+      .eyebrow  { font-family:'DMMonoSub',monospace; font-size:27px; font-weight:500;
+                  letter-spacing:5.4px; fill:#1d4ed8; }
+      .h1       { font-family:'BricolageSub',sans-serif; font-size:112px; font-weight:800;
+                  letter-spacing:-2px; fill:#0a0a0f; }
+      .formula  { font-family:'DMMonoSub',monospace; font-size:29px; font-weight:500; fill:#6b6b7a; }
+      .formula tspan.k { fill:#0a0a0f; }
+      .stackhd  { font-family:'DMMonoSub',monospace; font-size:20px; font-weight:500;
+                  letter-spacing:3.4px; fill:#6b6b7a; }
+      .blocklbl { font-family:'BricolageSub',sans-serif; font-size:30px; font-weight:800;
+                  letter-spacing:-0.6px; fill:#0a0a0f; }
+      .colhd    { font-family:'DMMonoSub',monospace; font-size:12px; font-weight:500;
+                  letter-spacing:1.2px; fill:#6b6b7a; text-anchor:middle; }
+      .rowlbl   { font-family:'DMMonoSub',monospace; font-size:18px; font-weight:500; fill:#0a0a0f; }
+      .seclbl   { font-family:'DMMonoSub',monospace; font-size:18px; font-weight:500;
+                  letter-spacing:1px; fill:#6b6b7a; }
+      .seclbl.ask { fill:#1d4ed8; }
+      .field    { fill:#1d4ed8; opacity:0.10; }
+      .mark     { font-family:'DMMonoSub',monospace; font-size:25px; font-weight:500;
+                  letter-spacing:4px; fill:#6b6b7a; }
+      .mark tspan.k { fill:#0a0a0f; }
+    ]]></style>
+
+    <pattern id="grid" width="70" height="70" patternUnits="userSpaceOnUse">
+      <path d="M 70 0 L 0 0 0 70" fill="none" stroke="#e2e1db" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="spine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#4f7ffa"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1400" height="600" fill="#ffffff"/>
+  <rect width="1400" height="600" fill="url(#grid)" opacity="0.34"/>
+
+  <text class="eyebrow" x="92" y="137">BOARD REPORT TEMPLATE</text>
+  <text class="h1" x="92" y="255">Fill in</text>
+  <text class="h1" x="92" y="362">the blanks</text>
+  <rect x="92" y="410" width="132" height="7" rx="3.5" fill="#0a0a0f"/>
+  <text class="formula" x="92" y="482"><tspan class="k">1 blank</tspan> + <tspan class="k">2 filled</tspan> examples</text>
+  <text class="mark" x="92" y="560"><tspan class="k">FINTOIT</tspan> &#183; BLOG</text>
+
+  <rect x="700" y="86" width="1.5" height="474" fill="#e2e1db"/>
+
+  <text class="stackhd" x="744" y="116">THE TEMPLATE &#183; BLANK</text>
+  <text class="blocklbl" x="744" y="170">BY THE NUMBERS</text>
+  <text class="colhd" x="1058" y="196">THIS MONTH</text>
+  <text class="colhd" x="1166" y="196">LAST MONTH</text>
+  <text class="colhd" x="1274" y="196">CHANGE</text>
+  <g>
+    <text class="rowlbl" x="744" y="228">[Revenue]</text>
+    <rect class="field" x="1010" y="219" width="96" height="10" rx="5"/>
+    <rect class="field" x="1118" y="219" width="96" height="10" rx="5"/>
+    <rect class="field" x="1226" y="219" width="96" height="10" rx="5"/>
+    <rect x="744" y="247" width="578" height="1" fill="#e2e1db"/>
+  </g>
+  <g>
+    <text class="rowlbl" x="744" y="266">Net burn</text>
+    <rect class="field" x="1010" y="257" width="96" height="10" rx="5"/>
+    <rect class="field" x="1118" y="257" width="96" height="10" rx="5"/>
+    <rect class="field" x="1226" y="257" width="96" height="10" rx="5"/>
+    <rect x="744" y="285" width="578" height="1" fill="#e2e1db"/>
+  </g>
+  <g>
+    <text class="rowlbl" x="744" y="304">Cash on hand</text>
+    <rect class="field" x="1010" y="295" width="96" height="10" rx="5"/>
+    <rect class="field" x="1118" y="295" width="96" height="10" rx="5"/>
+    <rect class="field" x="1226" y="295" width="96" height="10" rx="5"/>
+    <rect x="744" y="323" width="578" height="1" fill="#e2e1db"/>
+  </g>
+  <g>
+    <text class="rowlbl" x="744" y="342">Runway</text>
+    <rect class="field" x="1010" y="333" width="96" height="10" rx="5"/>
+    <rect class="field" x="1118" y="333" width="96" height="10" rx="5"/>
+    <rect class="field" x="1226" y="333" width="96" height="10" rx="5"/>
+    <rect x="744" y="361" width="578" height="1" fill="#e2e1db"/>
+  </g>
+  <g>
+    <text class="rowlbl" x="744" y="380">[Stage metric]</text>
+    <rect class="field" x="1010" y="371" width="96" height="10" rx="5"/>
+    <rect class="field" x="1118" y="371" width="96" height="10" rx="5"/>
+    <rect class="field" x="1226" y="371" width="96" height="10" rx="5"/>
+    <rect x="744" y="399" width="578" height="1" fill="#e2e1db"/>
+  </g>
+  <g>
+    <text class="seclbl" x="744" y="436">WHAT CHANGED</text>
+    <rect x="1000" y="429" width="322" height="5" rx="2.5" fill="#e2e1db" opacity="1"/>
+  </g>
+  <g>
+    <text class="seclbl" x="744" y="470">WHAT IS NOT WORKING</text>
+    <rect x="1000" y="463" width="322" height="5" rx="2.5" fill="#e2e1db" opacity="1"/>
+  </g>
+  <g>
+    <text class="seclbl" x="744" y="504">WHAT IS NEXT</text>
+    <rect x="1000" y="497" width="322" height="5" rx="2.5" fill="#e2e1db" opacity="1"/>
+  </g>
+  <g>
+    <text class="seclbl ask" x="744" y="538">ASK</text>
+    <rect x="1000" y="531" width="322" height="5" rx="2.5" fill="#1d4ed8" opacity="0.35"/>
+  </g>
+
+  <rect x="0" y="0" width="18" height="600" fill="url(#spine)"/>
+</svg>

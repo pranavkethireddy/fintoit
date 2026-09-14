@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block title %}Pricing — Fintoit{% endblock %}
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap');
+:root{--ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--purple:#7c3aed;--muted:#6b6b7a;--border:#e2e1db;}
+
+.pricing-wrap{font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);max-width:1100px;margin:0 auto;padding:4rem 1.5rem;}
+
+/* Hero */
+.pricing-hero{text-align:center;margin-bottom:3.5rem;}
+.pricing-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-family:'DM Mono',monospace;margin-bottom:.625rem;}
+.pricing-title{font-size:clamp(2.25rem,5vw,3.5rem);font-weight:800;letter-spacing:-.03em;line-height:1.05;color:var(--ink);margin-bottom:.875rem;}
+.pricing-sub{font-size:1rem;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.7;}
+
+/* Cards grid */
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;align-items:start;}
+@media(max-width:860px){.plans-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto;}}
+
+.plan-card{background:white;border:2px solid var(--ink);border-radius:20px;padding:2rem;box-shadow:5px 5px 0 var(--ink);position:relative;transition:transform .18s,box-shadow .18s;}
+.plan-card:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink);}
+
+/* Pro card gets dark treatment */
+.plan-card.featured{background:var(--ink);border-color:var(--ink);}
+.plan-card.featured .plan-name,.plan-card.featured .plan-desc,
+.plan-card.featured .plan-price,.plan-card.featured .price-period,
+.plan-card.featured .feat-item{color:white;}
+.plan-card.featured .feat-item{border-color:rgba(255,255,255,.12);}
+.plan-card.featured .feat-check{color:#4ade80;}
+
+.popular-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--blue);color:white;font-size:.65rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;padding:.3rem .875rem;
+  border-radius:100px;font-family:'DM Mono',monospace;white-space:nowrap;}
+
+.plan-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:.75rem;}
+.plan-card.featured .plan-eyebrow{color:rgba(255,255,255,.4);}
+
+.plan-name{font-size:1.375rem;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:.25rem;}
+
+.plan-price-row{display:flex;align-items:baseline;gap:.25rem;margin-bottom:.25rem;}
+.plan-price{font-size:2.75rem;font-weight:800;letter-spacing:-.04em;color:var(--ink);line-height:1;}
+.price-period{font-size:.875rem;color:var(--muted);}
+
+.plan-desc{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.55;}
+
+.feat-list{list-style:none;padding:0;margin:0 0 1.75rem;display:flex;flex-direction:column;gap:0;}
+.feat-item{font-size:.875rem;color:var(--ink);padding:.55rem 0;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.625rem;}
+.feat-item:last-child{border-bottom:none;}
+.feat-check{color:var(--blue);font-weight:700;font-size:.85rem;flex-shrink:0;}
+
+/* CTA buttons */
+.plan-btn{display:block;text-align:center;padding:.875rem;border-radius:12px;
+  font-size:.95rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;
+  text-decoration:none;transition:all .18s;cursor:pointer;}
+
+.btn-outline-dark{background:white;color:var(--ink);border:2px solid var(--ink);}
+.btn-outline-dark:hover{background:var(--ink);color:white;}
+
+.btn-blue{background:var(--blue);color:white;border:2px solid var(--blue);}
+.btn-blue:hover{background:#1e40af;border-color:#1e40af;transform:translateY(-1px);}
+
+.btn-white{background:white;color:var(--ink);border:2px solid white;}
+.btn-white:hover{background:var(--paper);transform:translateY(-1px);}
+
+.btn-current{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);
+  border:2px solid rgba(255,255,255,.2);cursor:default;}
+.btn-current-light{background:var(--paper);color:var(--muted);
+  border:2px solid var(--border);cursor:default;}
+
+/* Current plan indicator */
+.current-pill{display:inline-block;background:#f0fdf4;color:var(--green);
+  border:1px solid #bbf7d0;border-radius:100px;font-size:.65rem;font-weight:700;
+  padding:.2rem .6rem;font-family:'DM Mono',monospace;margin-left:.5rem;vertical-align:middle;}
+.current-pill-dark{background:rgba(74,222,128,.15);color:#4ade80;border-color:rgba(74,222,128,.25);}
+
+/* FAQ */
+.faq-section{max-width:660px;margin:5rem auto 0;}
+.faq-title{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;color:var(--ink);margin-bottom:2rem;text-align:center;}
+.faq-item{border-bottom:1.5px solid var(--border);padding:1.25rem 0;cursor:pointer;}
+.faq-q{font-size:.95rem;font-weight:700;color:var(--ink);display:flex;justify-content:space-between;align-items:center;gap:1rem;}
+.faq-q::after{content:"+";font-size:1.25rem;font-weight:400;color:var(--muted);transition:transform .2s;flex-shrink:0;}
+.faq-item.open .faq-q::after{transform:rotate(45deg);}
+.faq-a{font-size:.875rem;color:var(--muted);line-height:1.72;margin-top:.75rem;display:none;}
+.faq-item.open .faq-a{display:block;}
+
+/* Guarantee strip */
+.guarantee{background:var(--paper);border:1.5px solid var(--border);border-radius:16px;
+  padding:1.5rem 2rem;text-align:center;margin-top:2.5rem;font-size:.9rem;color:var(--muted);}
+.guarantee strong{color:var(--ink);}
+</style>
+
+<div class="pricing-wrap">
+
+  {% if welcome %}
+  <div style="max-width:1100px;margin:0 auto 2rem;background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:14px;padding:1rem 1.25rem;text-align:center;color:var(--ink);font-weight:600;">
+    🎉 <strong>You're in!</strong> Pick the plan that fits — you can change anytime from Billing.
+  </div>
+  {% endif %}
+
+  <!-- Hero -->
+  <div class="pricing-hero">
+    <div class="pricing-eyebrow">Pricing</div>
+    <h1 class="pricing-title">Simple, honest pricing.</h1>
+    <p class="pricing-sub">Start free. Upgrade when you need more. No hidden fees, no contracts, cancel anytime.</p>
+  </div>
+
+  <!-- Plans -->
+  <div class="plans-grid">
+
+    <!-- Paid plans -->
+    {% for key, plan in plans.items() %}
+    <div class="plan-card {% if plan.name == 'Starter' %}featured{% endif %}">
+      {% if plan.name == 'Starter' %}<div class="popular-badge">Most Popular</div>{% endif %}
+      <div class="plan-eyebrow">{{ plan.description }}</div>
+      <div class="plan-name">
+        {{ plan.name }}
+        {% if user_plan == key %}
+          {% if plan.get('starter') %}
+            <span class="current-pill current-pill-dark">Current plan</span>
+          {% else %}
+            <span class="current-pill">Current plan</span>
+          {% endif %}
+        {% endif %}
+      </div>
+      <div class="plan-price-row">
+        <span class="plan-price">{{ plan.display }}</span>
+        <span class="price-period">{{ plan.period }}</span>
+      </div>
+      <p class="plan-desc">{{ plan.description }}</p>
+      <ul class="feat-list">
+        {% for f in plan.features %}
+        <li class="feat-item"><span class="feat-check">✓</span> {{ f }}</li>
+        {% endfor %}
+      </ul>
+
+      {% if welcome and key == 'free' %}
+        <a href="/dashboard" class="plan-btn btn-blue">Continue with Free →</a>
+      {% elif welcome and current_user.is_authenticated %}
+        <a href="/subscribe/{{ key }}" class="plan-btn {% if plan.name == 'Starter' %}btn-white{% else %}btn-blue{% endif %}">Choose {{ plan.name }} →</a>
+      {% elif user_plan == key %}
+        {# already on this plan #}
+        {% if plan.get('free') %}
+          <span class="plan-btn btn-current">✓ Current plan</span>
+        {% else %}
+          <span class="plan-btn btn-current-light">✓ Current plan</span>
+        {% endif %}
+      {% elif current_user.is_authenticated %}
+        {% if plan.get('starter') %}
+          <a href="/subscribe/{{ key }}" class="plan-btn btn-white">Upgrade to {{ plan.name }} →</a>
+        {% else %}
+          <a href="/subscribe/{{ key }}" class="plan-btn btn-blue">Upgrade to {{ plan.name }} →</a>
+        {% endif %}
+      {% else %}
+        {% if plan.get('pro') %}
+          <a href="/signup" class="plan-btn btn-white">Get Started →</a>
+        {% else %}
+          <a href="/signup" class="plan-btn btn-blue">Get Started →</a>
+        {% endif %}
+      {% endif %}
+    </div>
+    {% endfor %}
+
+  </div><!-- /plans-grid -->
+
+  <!-- Guarantee -->
+  <div class="guarantee">
+    🔒 <strong>No contracts.</strong> Cancel anytime from your billing dashboard. &nbsp;·&nbsp;
+    💳 <strong>Secure payments</strong> by Stripe. &nbsp;·&nbsp;
+    🔄 <strong>Instant access</strong> after checkout.
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <div class="faq-title">Common questions</div>
+    {% for q, a in [
+      ("Can I cancel anytime?",
+       "Yes cancel anytime from your billing dashboard."),
+      ("What happens when I downgrade to Free?",
+       "You keep access to all Free features immediately. Paid features become unavailable."),
+      ("Is there a free trial?",
+       "There is no Trial Period but the Free plan is free forever."),
+      ("How do I manage my subscription?",
+       "Go to Account → Billing. You can upgrade, downgrade, or cancel directly from the billing portal."),
+      ("Is my payment information secure?",
+       "Yes. Fintoit never stores card details. All payment processing is handled by Stripe, which is PCI-DSS Level 1 certified."),
+      ("Can I switch plans?",
+       "Absolutely. Upgrades are instant. Downgrades take effect at the end of your current billing cycle."),
+    ] %}
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">{{ q }}</div>
+      <div class="faq-a">{{ a }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

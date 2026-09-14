@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% block title %}AR Aging - Fintoit{% endblock %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+/* page-local helpers */
+.fp-stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:1.75rem;}
+.fp-stat-box{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:3px 3px 0 var(--ink);padding:1rem 1.2rem;text-align:center;}
+.fp-bucket-head{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:2px solid var(--ink);}
+.fp-bucket-label{display:flex;align-items:center;gap:.55rem;font-weight:700;font-size:.95rem;}
+.fp-bucket-count{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);background:var(--paper);border:1px solid var(--border);border-radius:100px;padding:.15rem .55rem;}
+.fp-bucket-total{font-family:'DM Mono',monospace;font-weight:700;font-size:1rem;}
+.fp-twoCol{display:grid;grid-template-columns:1fr 2fr;gap:1.25rem;margin-bottom:1.75rem;}
+@media(max-width:900px){.fp-twoCol{grid-template-columns:1fr;}}
+.fp-progress-row{margin-bottom:.85rem;}
+.fp-progress-meta{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.4rem;}
+.fp-progress-meta-right{font-family:'DM Mono',monospace;font-weight:700;}
+.fp-progress-pct{font-size:.72rem;color:var(--muted);font-weight:400;margin-left:.35rem;}
+.fp-days-green{color:var(--green);}
+.fp-days-amber{color:var(--amber);}
+.fp-days-red{color:var(--red);}
+.fp-table td.num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-action-link{display:inline-flex;align-items:center;gap:.25rem;font-size:.75rem;font-weight:700;padding:.25rem .6rem;border-radius:8px;border:1.5px solid;text-decoration:none;transition:all .12s;}
+.fp-action-paid{color:var(--green);border-color:var(--green);}
+.fp-action-paid:hover{background:var(--green);color:#fff;}
+.fp-action-remind{color:var(--blue);border-color:var(--blue);}
+.fp-action-remind:hover{background:var(--blue);color:#fff;}
+.fp-bucket-wrap{margin-bottom:1.25rem;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);overflow:hidden;}
+</style>
+
+<div class="fp" style="max-width:72rem;margin:0 auto;padding:1.5rem 1rem;">
+
+    <!-- Header -->
+    <div class="fp-head">
+        <div>
+            <div class="fp-eyebrow">Receivables</div>
+            <h1 class="fp-title">📬 Accounts Receivable Aging</h1>
+            <p class="fp-sub">Track overdue invoices and follow up with customers</p>
+        </div>
+        <div class="fp-actions">
+            <a href="/invoices/add" class="fp-btn fp-btn-dark">+ New Invoice</a>
+            <a href="/invoices" class="fp-btn fp-btn-ghost">← All Invoices</a>
+        </div>
+    </div>
+
+    {% if aging.total_invoices == 0 %}
+    <!-- Empty State -->
+    <div class="fp-empty">
+        <span class="fp-empty-icon">🎉</span>
+        <div class="fp-empty-title">All Caught Up!</div>
+        <p class="fp-empty-sub">You have no outstanding unpaid invoices right now.</p>
+        <a href="/invoices/add" class="fp-btn fp-btn-dark">Create Invoice</a>
+    </div>
+
+    {% else %}
+
+    <!-- Summary Stat Row -->
+    <div class="fp-stats-row">
+        <div class="fp-stat-box">
+            <div class="fp-stat-label">Total Outstanding</div>
+            <div class="fp-stat-val num" style="color:var(--blue);">${{ "{:,.0f}".format(aging.total_outstanding) }}</div>
+            <div class="fp-stat-cap">{{ aging.total_invoices }} invoices</div>
+        </div>
+        {% set bucket_colors = {'current': 'green', 'days_1_30': 'yellow', 'days_31_60': 'orange', 'days_90': 'red'} %}
+        {% for key, bucket in aging.buckets.items() %}
+        <div class="fp-stat-box">
+            <div class="fp-stat-label">{{ bucket.days }} days</div>
+            <div class="fp-stat-val num"
+                 style="color:{% if key == 'current' %}var(--green){% elif key == 'days_1_30' %}var(--amber){% elif key == 'days_31_60' %}var(--amber){% else %}var(--red){% endif %};">
+                ${{ "{:,.0f}".format(bucket.total) }}
+            </div>
+            <div class="fp-stat-cap">{{ bucket.invoices|length }} inv.</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Chart + Progress Breakdown Row -->
+    <div class="fp-twoCol" style="margin-bottom:1.75rem;">
+
+        <!-- Aging Chart -->
+        <div class="fp-card">
+            <div class="fp-stat-label" style="margin-bottom:1rem;">Aging Breakdown</div>
+            <div style="position:relative;height:260px;">
+                <canvas id="agingChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Aging Detail Progress Bars -->
+        <div class="fp-card">
+            <div class="fp-stat-label" style="margin-bottom:1rem;">Outstanding by Bucket</div>
+            {% for key, bucket in aging.buckets.items() %}
+            {% if bucket.total > 0 %}
+            {% set pct = (bucket.total / aging.total_outstanding * 100) if aging.total_outstanding > 0 else 0 %}
+            <div class="fp-progress-row">
+                <div class="fp-progress-meta">
+                    <span style="font-weight:600;">{{ bucket.label }}</span>
+                    <span class="fp-progress-meta-right">
+                        ${{ "{:,.0f}".format(bucket.total) }}<span class="fp-progress-pct">({{ "{:.0f}".format(pct) }}%)</span>
+                    </span>
+                </div>
+                <div class="fp-progress">
+                    <div class="fp-progress-fill"
+                         style="width:{{ pct }}%;background:{% if key == 'current' %}var(--green){% elif key == 'days_1_30' %}var(--amber){% elif key == 'days_31_60' %}var(--amber){% else %}var(--red){% endif %};"></div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Invoice Detail per Bucket -->
+    {% for key, bucket in aging.buckets.items() %}
+    {% if bucket.invoices %}
+    <div class="fp-bucket-wrap">
+        <div class="fp-bucket-head">
+            <div class="fp-bucket-label">
+                <span>
+                    {% if key == 'current' %}✅
+                    {% elif key == 'days_1_30' %}⚠️
+                    {% elif key == 'days_31_60' %}🔶
+                    {% else %}🔴{% endif %}
+                </span>
+                <span>{{ bucket.label }}</span>
+                <span class="fp-bucket-count">{{ bucket.invoices|length }} invoice{{ 's' if bucket.invoices|length != 1 }}</span>
+            </div>
+            <span class="fp-bucket-total num">${{ "{:,.0f}".format(bucket.total) }}</span>
+        </div>
+        <div style="overflow-x:auto;">
+            <table class="fp-table">
+                <thead>
+                    <tr>
+                        <th>Invoice #</th>
+                        <th>Customer</th>
+                        <th>Due Date</th>
+                        <th style="text-align:right;">Days Overdue</th>
+                        <th style="text-align:right;">Balance</th>
+                        <th style="text-align:center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inv in bucket.invoices %}
+                    <tr>
+                        <td><span class="num" style="font-weight:700;color:var(--blue);">{{ inv.invoice_number }}</span></td>
+                        <td>
+                            <div style="font-weight:600;">{{ inv.customer_name }}</div>
+                            {% if inv.customer_email %}
+                            <div style="font-size:.78rem;color:var(--muted);">{{ inv.customer_email }}</div>
+                            {% endif %}
+                        </td>
+                        <td>{{ inv.due_date }}</td>
+                        <td style="text-align:right;">
+                            <span class="num" style="font-weight:700;color:{% if inv.days_overdue <= 0 %}var(--green){% elif inv.days_overdue <= 30 %}var(--amber){% elif inv.days_overdue <= 60 %}var(--amber){% else %}var(--red){% endif %};">
+                                {% if inv.days_overdue <= 0 %}
+                                    Due in {{ inv.days_overdue|abs }} days
+                                {% else %}
+                                    {{ inv.days_overdue }} days
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td style="text-align:right;">
+                            <span class="num" style="font-weight:700;">${{ "{:,.2f}".format(inv.balance) }}</span>
+                        </td>
+                        <td style="text-align:center;">
+                            <div style="display:flex;align-items:center;justify-content:center;gap:.5rem;">
+                                <a href="/invoices/mark-paid/{{ inv.id }}"
+                                   class="fp-action-link fp-action-paid">
+                                    ✓ Paid
+                                </a>
+                                {% if inv.customer_email %}
+                                <a href="mailto:{{ inv.customer_email }}?subject=Invoice {{ inv.invoice_number }} - Payment Reminder&body=Hi {{ inv.customer_name }},%0A%0AThis is a friendly reminder that invoice {{ inv.invoice_number }} for ${{ inv.total_amount }} was due on {{ inv.due_date }}.%0A%0APlease let us know if you have any questions.%0A%0AThank you!"
+                                   class="fp-action-link fp-action-remind">
+                                    📧 Remind
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    {% endif %}
+</div>
+
+<script>
+{% if aging.total_invoices > 0 %}
+const bucketData = {
+    labels: ['Current', '1-30 days', '31-60 days', '61-90 days', '90+ days'],
+    values: [
+        {{ aging.buckets.current.total }},
+        {{ aging.buckets.days_1_30.total }},
+        {{ aging.buckets.days_31_60.total }},
+        {{ aging.buckets.days_61_90.total }},
+        {{ aging.buckets.days_90.total }}
+    ],
+    colors: [
+        'rgba(34,197,94,0.8)',
+        'rgba(234,179,8,0.8)',
+        'rgba(249,115,22,0.8)',
+        'rgba(239,68,68,0.8)',
+        'rgba(185,28,28,0.8)'
+    ]
+};
+
+new Chart(document.getElementById('agingChart'), {
+    type: 'doughnut',
+    data: {
+        labels: bucketData.labels,
+        datasets: [{
+            data: bucketData.values,
+            backgroundColor: bucketData.colors,
+            borderWidth: 2,
+            borderColor: '#fff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10, usePointStyle: true }},
+            tooltip: {
+                callbacks: {
+                    label: ctx => ctx.label + ': $' + ctx.parsed.toLocaleString()
+                }
+            }
+        }
+    }
+});
+{% endif %}
+</script>
+{% endblock %}

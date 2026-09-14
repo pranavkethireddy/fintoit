@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block title %}What Is Burn Rate? How to Calculate It (With Examples){% endblock %}
+
+{% block head %}
+<meta name="description" content="Learn what burn rate means, how to calculate gross vs net burn, and what it tells you about your runway. Includes formulas, examples, and a free calculator.">
+<link rel="canonical" href="https://fintoit.com/burn-rate-guide">
+<meta name="robots" content="index,follow">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="What Is Burn Rate? How to Calculate It (With Examples)">
+<meta property="og:description" content="Gross vs net burn, the formulas, worked examples, and the mistakes that make founders misjudge their runway.">
+<meta property="og:url" content="https://fintoit.com/burn-rate-guide">
+<meta property="og:image" content="https://fintoit.com/static/images/logo 6.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What Is Burn Rate? How to Calculate It">
+<meta name="twitter:description" content="Gross vs net burn, formulas, examples, and how burn rate determines your runway.">
+
+<!-- Structured data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "What Is Burn Rate? How to Calculate It",
+  "description": "Learn what burn rate means, how to calculate gross vs net burn, and what it tells you about your runway. Includes formulas, examples, and a free calculator.",
+  "author": { "@type": "Organization", "name": "Fintoit" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Fintoit",
+    "logo": { "@type": "ImageObject", "url": "https://fintoit.com/static/images/logo 6.png" }
+  },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://fintoit.com/burn-rate-guide" },
+  "url": "https://fintoit.com/burn-rate-guide"
+}
+</script>
+
+<!-- Structured data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is burn rate in simple terms?",
+      "acceptedAnswer": { "@type": "Answer", "text": "How much cash your company spends per month. Net burn subtracts revenue, showing how fast your bank balance is actually shrinking." }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between gross and net burn rate?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Gross burn is total monthly spend. Net burn is spend minus revenue collected. Runway is calculated from net burn." }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I calculate runway from burn rate?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Divide cash in the bank by net monthly burn. $300,000 divided by $25,000 equals 12 months." }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a good burn rate for a startup?",
+      "acceptedAnswer": { "@type": "Answer", "text": "There's no universal figure. The practical benchmark is runway: most investors want 18 to 24 months after a raise, and under six months is a warning sign." }
+    },
+    {
+      "@type": "Question",
+      "name": "What does \"default alive\" mean?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A company is default alive if it would reach profitability on its current trajectory without raising again, meaning revenue growth outpaces burn." }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;1,400&display=swap");
+  .gd{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+       font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);max-width:44rem;margin:0 auto;padding:3rem 1.25rem 4rem;}
+  .gd-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.75rem;}
+  .gd h1{font-size:clamp(2rem,4.5vw,2.9rem);font-weight:800;letter-spacing:-.03em;line-height:1.07;margin:0 0 1rem;}
+  .gd-lede{font-size:1.08rem;line-height:1.7;color:var(--ink);margin:0 0 .9rem;}
+  .gd h2{font-size:clamp(1.3rem,2.6vw,1.6rem);font-weight:800;letter-spacing:-.02em;margin:2.75rem 0 .85rem;line-height:1.2;}
+  .gd h3{font-size:1.02rem;font-weight:800;margin:1.75rem 0 .5rem;letter-spacing:-.01em;}
+  .gd p{font-size:1rem;line-height:1.78;color:#33333d;margin:0 0 1.05rem;}
+  .gd a{color:var(--blue);font-weight:600;text-decoration:underline;text-underline-offset:2px;}
+  .gd strong{color:var(--ink);font-weight:700;}
+  .gd ul,.gd ol{margin:0 0 1.15rem;padding-left:1.15rem;}
+  .gd li{font-size:1rem;line-height:1.75;color:#33333d;margin-bottom:.5rem;}
+  .formula{font-family:'DM Mono',monospace;font-size:.9rem;line-height:1.9;background:var(--paper);border:1.5px solid var(--border);
+           border-left:4px solid var(--ink);border-radius:10px;padding:1rem 1.15rem;margin:0 0 1.25rem;white-space:pre-wrap;color:var(--ink);}
+  .example{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--ink);padding:1.15rem 1.35rem;margin:0 0 1.5rem;}
+  .example-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+  .example p{margin:0 0 .4rem;}
+  .example ul{margin:.5rem 0 0;}
+  .cta{background:var(--ink);color:#fff;border-radius:18px;padding:1.75rem;margin:2.5rem 0;}
+  .cta h3{color:#fff;margin:0 0 .5rem;font-size:1.15rem;}
+  .cta p{color:rgba(255,255,255,.72);margin:0 0 1.15rem;font-size:.95rem;line-height:1.7;}
+  .cta a.btn{display:inline-block;background:#fff;color:var(--ink);border-radius:11px;padding:.75rem 1.25rem;font-weight:700;
+             text-decoration:none;font-size:.93rem;transition:transform .15s;}
+  .cta a.btn:hover{transform:translateY(-1px);}
+  .faq-q{font-weight:800;font-size:1rem;margin:1.4rem 0 .35rem;letter-spacing:-.01em;}
+  .faq-a{font-size:1rem;line-height:1.75;color:#33333d;margin:0;}
+  .nextup{border-top:1.5px solid var(--border);margin-top:2.75rem;padding-top:1.25rem;font-size:.95rem;color:var(--muted);}
+</style>
+
+<article class="gd">
+  <div class="gd-eyebrow">Guide</div>
+  <h1>What Is Burn Rate? How to Calculate It</h1>
+
+  <p class="gd-lede">Burn rate is how fast your company spends cash. It's the single most important number in an early-stage startup, because it determines the only deadline that really matters: the date you run out of money.</p>
+
+  <p>Running out of cash is consistently cited as one of the leading reasons startups fail. Yet most early founders track burn in a spreadsheet updated once a month, if at all.</p>
+
+  <p>This guide covers what burn rate is, how to calculate it correctly, and the mistakes that cause founders to misjudge how much time they have.</p>
+
+  <h2>Gross burn vs. net burn (the distinction most people miss)</h2>
+  <p>There are two burn rates, and confusing them is the most common error in startup finance.</p>
+  <p><strong>Gross burn</strong> = total cash out per month. Everything: salaries, rent, software, contractors, ads.<br>
+     <strong>Net burn</strong> = cash out minus cash in.</p>
+
+  <div class="formula">Gross burn = total monthly operating expenses
+Net burn   = monthly expenses − monthly revenue</div>
+
+  <p><strong>Why it matters:</strong> gross burn tells you your cost base. Net burn tells you how fast your bank balance actually shrinks, and net burn is what runway is calculated from.</p>
+
+  <div class="example">
+    <div class="example-label">Example</div>
+    <p>You spend $60,000/month and collect $20,000/month in revenue.</p>
+    <ul>
+      <li>Gross burn: <strong>$60,000</strong></li>
+      <li>Net burn: <strong>$40,000</strong></li>
+    </ul>
+  </div>
+
+  <p>Use gross burn to understand your cost structure. Use net burn to know your deadline.</p>
+
+  <h2>How to calculate burn rate</h2>
+  <p><strong>Step 1: pick a period.</strong> One month is standard. Use a typical month, not your cheapest one.</p>
+  <p><strong>Step 2: add up all cash out.</strong> Payroll and payroll taxes, contractors, rent, software, infrastructure, marketing, legal and accounting, insurance, hardware.</p>
+  <p><strong>Step 3: subtract cash actually collected.</strong> Cash received, not invoiced. Revenue you've billed but not been paid for doesn't pay your bills.</p>
+  <p><strong>Step 4: smooth the lumpy items.</strong> Annual renewals, tax payments, and insurance don't hit evenly. Divide annual costs by 12 and include a monthly share, or you'll be surprised the month three of them land together.</p>
+
+  <h2>Burn rate and runway are the same question</h2>
+  <p>Runway is burn rate expressed as time:</p>
+  <div class="formula">Runway (months) = cash in bank ÷ net monthly burn</div>
+  <p>With $480,000 in the bank and $40,000 net burn, you have 12 months of runway.</p>
+  <p>If revenue exceeds expenses, net burn is negative: you're what Paul Graham called "default alive," and your runway is effectively unlimited.</p>
+  <p>You can <a href="/runway-calculator">calculate your runway with our free calculator</a>, no signup needed.</p>
+
+  <h2>What's a "good" burn rate?</h2>
+  <p>There's no universal number: it depends entirely on what the spending buys you. Useful reference points:</p>
+  <p><strong>Runway, not burn, is the benchmark.</strong> Most investors expect a company to hold 18–24 months of runway after a raise. That's enough time to hit a milestone that justifies the next round.</p>
+  <p><strong>Efficiency beats absolute size.</strong> A common framework is the burn multiple: net burn divided by net new recurring revenue added in the same period. Lower is better; it asks how much cash you consume to create a dollar of growth.</p>
+  <p><strong>Below ~6 months of runway is a red flag.</strong> Fundraising typically takes 3–6 months, so under six months means raising from a position of weakness.</p>
+
+  <h2>Five mistakes that cause founders to misjudge burn</h2>
+  <p><strong>1. Treating runway as static.</strong> "We have 14 months" is only true at last month's burn. Every hire and every new subscription changes it. Recompute continuously.</p>
+  <p><strong>2. Averaging lumpy expenses.</strong> Annual renewals and tax payments cluster. An averaged burn rate hides the month where cash gets tight.</p>
+  <p><strong>3. Underestimating the cost of a hire.</strong> Salary is not the cost. Payroll taxes, benefits, equipment, and software typically add 25–30% on top. Model fully-loaded cost before you sign.</p>
+  <p><strong>4. Counting invoiced revenue as collected.</strong> Net burn uses cash actually received. A big invoice on 60-day terms doesn't help this month's runway.</p>
+  <p><strong>5. Confusing cash in the bank with cash available.</strong> Money already committed to payroll, invoices, and renewals isn't spendable. What matters is what's uncommitted.</p>
+
+  <h2>How to track burn without a CFO</h2>
+  <p>A spreadsheet works, until it doesn't. It's accurate the day you build it and stale the day after, and rebuilding it monthly is exactly the task that gets skipped when you're busy.</p>
+
+  <div class="cta">
+    <h3>See your runway update itself</h3>
+    <p>Fintoit keeps burn and runway current automatically, forecasts cash flow six months out, and generates board-ready investor reports in one click: the CFO function without the hire.</p>
+    <a class="btn" href="/runway-calculator">See your runway live →</a>
+  </div>
+
+  <h2>Frequently asked questions</h2>
+
+  <div class="faq-q">What is burn rate in simple terms?</div>
+  <p class="faq-a">How much cash your company spends per month. Net burn subtracts revenue, showing how fast your bank balance is actually shrinking.</p>
+
+  <div class="faq-q">What's the difference between gross and net burn rate?</div>
+  <p class="faq-a">Gross burn is total monthly spend. Net burn is spend minus revenue collected. Runway is calculated from net burn.</p>
+
+  <div class="faq-q">How do I calculate runway from burn rate?</div>
+  <p class="faq-a">Divide cash in the bank by net monthly burn. $300,000 ÷ $25,000 = 12 months.</p>
+
+  <div class="faq-q">What is a good burn rate for a startup?</div>
+  <p class="faq-a">There's no universal figure. The practical benchmark is runway: most investors want 18–24 months after a raise, and under six months is a warning sign.</p>
+
+  <div class="faq-q">What does "default alive" mean?</div>
+  <p class="faq-a">A company is default alive if it would reach profitability on its current trajectory without raising again, meaning revenue growth outpaces burn.</p>
+
+  <p class="nextup">Next: <a href="/investor-update-template">how to write an investor update</a> that reports burn credibly.</p>
+</article>
+{% endblock %}

@@ -1,0 +1,936 @@
+{% extends "base.html" %}
+{% block title %}Features — Fintoit{% endblock %}
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap');
+:root {
+  --ink: #0a0a0f;
+  --paper: #f7f6f2;
+  --blue: #1d4ed8;
+  --green: #16a34a;
+  --purple: #7c3aed;
+  --amber: #d97706;
+  --red: #dc2626;
+  --teal: #0d9488;
+  --muted: #6b6b7a;
+  --border: #e2e1db;
+}
+.fw { font-family: 'Bricolage Grotesque', sans-serif; color: var(--ink); overflow-x: hidden; }
+
+/* ── HERO ── */
+.feat-hero {
+  background: var(--ink);
+  padding: 5rem 1.5rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 24px 24px;
+}
+.feat-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.hero-orb { position: absolute; border-radius: 50%; pointer-events: none; }
+.hero-orb-1 { width: 600px; height: 600px; top: -150px; right: -150px; background: radial-gradient(circle, rgba(29,78,216,.22) 0%, transparent 70%); }
+.hero-orb-2 { width: 400px; height: 400px; bottom: -80px; left: -100px; background: radial-gradient(circle, rgba(124,58,237,.18) 0%, transparent 70%); }
+
+.feat-hero-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+.feat-eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.35); font-family: 'DM Mono', monospace; margin-bottom: 1rem; }
+.feat-hero-title { font-size: clamp(2.5rem,6vw,4.5rem); font-weight: 800; letter-spacing: -.04em; line-height: 1; color: white; margin-bottom: 1.25rem; }
+.feat-hero-title span { background: linear-gradient(135deg,#60a5fa,#a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.feat-hero-sub { font-size: 1.05rem; color: rgba(255,255,255,.5); line-height: 1.72; max-width: 540px; margin: 0 auto 2.5rem; }
+.feat-hero-btns { display: flex; gap: .875rem; justify-content: center; flex-wrap: wrap; }
+.btn-white { display: inline-flex; align-items: center; gap: .4rem; background: white; color: var(--ink); padding: .85rem 2rem; border-radius: 12px; font-weight: 700; font-size: .95rem; text-decoration: none; font-family: 'Bricolage Grotesque', sans-serif; transition: all .2s; }
+.btn-white:hover { background: var(--paper); transform: translateY(-2px); }
+.btn-ghost { display: inline-flex; align-items: center; gap: .4rem; background: transparent; color: rgba(255,255,255,.6); padding: .85rem 2rem; border-radius: 12px; font-weight: 600; font-size: .95rem; text-decoration: none; border: 1.5px solid rgba(255,255,255,.18); font-family: 'Bricolage Grotesque', sans-serif; transition: all .2s; }
+.btn-ghost:hover { color: white; border-color: rgba(255,255,255,.45); }
+
+/* ── STATS STRIP ── */
+.stats-strip { background: var(--paper); border-bottom: 1.5px solid var(--border); padding: 1.5rem; }
+.stats-inner { max-width: 900px; margin: 0 auto; display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; }
+.stat-item { text-align: center; }
+.stat-num { font-size: 1.75rem; font-weight: 800; color: var(--ink); letter-spacing: -.04em; display: block; }
+.stat-lbl { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-family: 'DM Mono', monospace; }
+
+/* ── CATEGORY TABS ── */
+.cats-nav { background: white; border-bottom: 1.5px solid var(--border); position: sticky; top: 0; z-index: 30; }
+.cats-inner { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
+.cats-inner::-webkit-scrollbar { display: none; }
+.cat-tab { display: flex; align-items: center; gap: .4rem; padding: 1rem 1.25rem; font-size: .82rem; font-weight: 700; color: var(--muted); text-decoration: none; border-bottom: 2.5px solid transparent; white-space: nowrap; transition: all .15s; font-family: 'Bricolage Grotesque', sans-serif; }
+.cat-tab:hover { color: var(--ink); }
+.cat-tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ── SECTIONS ── */
+.feat-section { padding: 5rem 1.5rem; }
+.feat-section:nth-child(odd) { background: white; }
+.feat-section:nth-child(even) { background: var(--paper); }
+
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-header { margin-bottom: 3rem; }
+.section-label { font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-family: 'DM Mono', monospace; margin-bottom: .5rem; }
+.section-title { font-size: clamp(1.75rem,4vw,2.75rem); font-weight: 800; letter-spacing: -.03em; color: var(--ink); line-height: 1.1; margin-bottom: .75rem; }
+.section-desc { font-size: .975rem; color: var(--muted); line-height: 1.72; max-width: 560px; }
+
+/* ── FEATURE CARDS ── */
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+@media(max-width:900px){ .feat-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:560px){ .feat-grid { grid-template-columns: 1fr; } }
+
+.feat-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 1.75rem;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  position: relative;
+  overflow: hidden;
+}
+.feat-card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(0,0,0,.08); border-color: #c4c3bc; }
+.feat-card.dark { background: var(--ink); border-color: transparent; }
+.feat-card.dark .feat-card-title { color: white; }
+.feat-card.dark .feat-card-desc { color: rgba(255,255,255,.5); }
+.feat-card.dark .feat-badge { background: rgba(255,255,255,.1); color: rgba(255,255,255,.6); }
+
+.feat-card-icon { font-size: 1.75rem; margin-bottom: 1rem; display: block; }
+.feat-card-title { font-size: 1.05rem; font-weight: 800; color: var(--ink); letter-spacing: -.02em; margin-bottom: .5rem; }
+.feat-card-desc { font-size: .875rem; color: var(--muted); line-height: 1.68; margin-bottom: 1rem; }
+.feat-badge { display: inline-flex; align-items: center; gap: .3rem; font-size: .65rem; font-weight: 700; padding: .22rem .65rem; border-radius: 100px; font-family: 'DM Mono', monospace; }
+.badge-free { background: #f0fdf4; color: var(--green); border: 1px solid #bbf7d0; }
+.badge-starter { background: #eff6ff; color: var(--blue); border: 1px solid #bfdbfe; }
+.badge-pro { background: #faf5ff; color: var(--purple); border: 1px solid #e9d5ff; }
+
+/* ── WIDE CARDS (2-col span) ── */
+.feat-card-wide { grid-column: span 2; }
+@media(max-width:560px){ .feat-card-wide { grid-column: span 1; } }
+
+/* ── HIGHLIGHT ROW ── */
+.highlight-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+@media(max-width:700px){ .highlight-row { grid-template-columns: 1fr; } }
+
+/* ── FEATURE LIST INSIDE CARD ── */
+.feat-list { list-style: none; padding: 0; margin: .75rem 0 0; display: flex; flex-direction: column; gap: .4rem; }
+.feat-list li { font-size: .8rem; color: var(--muted); display: flex; align-items: flex-start; gap: .4rem; line-height: 1.5; }
+.feat-list li::before { content: "✓"; color: var(--green); font-weight: 700; font-size: .75rem; flex-shrink: 0; margin-top: .05rem; }
+.feat-card.dark .feat-list li { color: rgba(255,255,255,.45); }
+.feat-card.dark .feat-list li::before { color: #4ade80; }
+
+/* ── CTA FOOTER ── */
+.feat-cta { background: var(--ink); padding: 5rem 1.5rem; text-align: center; position: relative; overflow: hidden; }
+.feat-cta::before { content: ''; position: absolute; width: 700px; height: 700px; top: 50%; left: 50%; transform: translate(-50%,-50%); background: radial-gradient(circle, rgba(29,78,216,.18) 0%, transparent 70%); pointer-events: none; }
+.cta-inner { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; }
+.cta-title { font-size: clamp(2rem,5vw,3.25rem); font-weight: 800; letter-spacing: -.04em; color: white; line-height: 1.05; margin-bottom: 1rem; }
+.cta-sub { color: rgba(255,255,255,.45); font-size: .975rem; line-height: 1.72; margin-bottom: 2.5rem; }
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal.d1 { transition-delay: .08s; }
+.reveal.d2 { transition-delay: .16s; }
+.reveal.d3 { transition-delay: .24s; }
+</style>
+
+<div class="fw">
+
+  <!-- ── HERO ── -->
+  <section class="feat-hero">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="feat-hero-inner">
+      <div class="feat-eyebrow">Every Feature. Explained.</div>
+      <h1 class="feat-hero-title">The complete <span>financial OS </span><br>for your startup.</h1>
+      <p class="feat-hero-sub">20+ tools built for founders who need CFO-level intelligence without the CFO price tag. From day one to Series A.</p>
+      <div class="feat-hero-btns">
+        <a href="/signup" class="btn-white">Get Started Free →</a>
+        <a href="/pricing" class="btn-ghost">View Pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STATS ── -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item"><span class="stat-num">20+</span><span class="stat-lbl">Features</span></div>
+      <div class="stat-item"><span class="stat-num">6</span><span class="stat-lbl">AI Tools</span></div>
+      <div class="stat-item"><span class="stat-num">3</span><span class="stat-lbl">Report Types</span></div>
+      <div class="stat-item"><span class="stat-num">$0</span><span class="stat-lbl">to start</span></div>
+    </div>
+  </div>
+
+  <!-- ── CATEGORY NAV ── -->
+  <nav class="cats-nav">
+    <div class="cats-inner">
+      <a href="#core" class="cat-tab active">📊 Core</a>
+      <a href="#ai" class="cat-tab">🤖 AI</a>
+      <a href="#accounting" class="cat-tab">🏦 Accounting</a>
+      <a href="#planning" class="cat-tab">🔭 Planning</a>
+      <a href="#people" class="cat-tab">👥 People</a>
+      <a href="#reports" class="cat-tab">📑 Reports</a>
+      <a href="#security" class="cat-tab">🔐 Security</a>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- CORE FEATURES                           -->
+  <!-- ════════════════════════════════════════ -->
+  <section class="feat-section" id="core">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-label" style="color:var(--blue);">Core Features</div>
+        <h2 class="section-title">The financial dashboard<br>every startup needs.</h2>
+        <p class="section-desc">Real-time visibility into the numbers that matter most. Always live, no manual spreadsheet updates required.</p>
+      </div>
+
+      <div class="highlight-row">
+        <!-- Big dashboard card -->
+        <div class="feat-card dark reveal">
+          <span class="feat-card-icon">📊</span>
+          <div class="feat-card-title">Real-Time Dashboard</div>
+          <div class="feat-card-desc">Your complete financial health at a glance. Every metric updates the moment you add a transaction. No refresh needed, no stale data.</div>
+          <ul class="feat-list">
+            <li>Current cash balance: always live</li>
+            <li>Monthly burn rate (3-month rolling avg)</li>
+            <li>Runway in months with color-coded status</li>
+            <li>Monthly Recurring Revenue (MRR)</li>
+            <li>Revenue vs expenses chart</li>
+            <li>Cash balance over time</li>
+            <li>Top expense categories breakdown</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+
+        <!-- Transactions card -->
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">💳</span>
+          <div class="feat-card-title">Transaction Tracking</div>
+          <div class="feat-card-desc">Log every dollar in and out. Add transactions manually, import from CSV, or let AI auto-categorize them as you type.</div>
+          <ul class="feat-list">
+            <li>Income & expense logging</li>
+            <li>Recurring transactions (weekly / monthly / yearly)</li>
+            <li>AI auto-categorization from description</li>
+            <li>Bulk CSV import & export</li>
+            <li>Search, filter by type and category</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+      </div>
+
+      <div class="feat-grid">
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">🔍</span>
+          <div class="feat-card-title">Anomaly Detection</div>
+          <div class="feat-card-desc">Fintoit automatically scans your transactions for unusual patterns and flags them before they become problems, even for brand-new accounts.</div>
+          <ul class="feat-list">
+            <li>Expense spikes by category</li>
+            <li>Revenue drops month-over-month</li>
+            <li>Burn rate surges</li>
+            <li>Zero-revenue months with expenses</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">📈</span>
+          <div class="feat-card-title">KPI Dashboard</div>
+          <div class="feat-card-desc">The metrics investors actually ask about, calculated automatically from your real transaction data. No manual entry needed.</div>
+          <ul class="feat-list">
+            <li>ARR & MRR</li>
+            <li>Month-over-month revenue growth</li>
+            <li>Gross margin</li>
+            <li>Burn multiple</li>
+            <li>CAC, LTV, LTV:CAC ratio</li>
+            <li>Net revenue retention (NRR)</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">🔮</span>
+          <div class="feat-card-title">6-Month Cash Forecast</div>
+          <div class="feat-card-desc">AI projects your cash balance 6 months out based on your actual spending trends. See where you'll land before you get there.</div>
+          <ul class="feat-list">
+            <li>Revenue trend projection</li>
+            <li>Expense growth modeling</li>
+            <li>Side-by-side vs actual chart</li>
+            <li>Projected average revenue & burn</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">🎯</span>
+          <div class="feat-card-title">Budget Tracking</div>
+          <div class="feat-card-desc">Set spending limits by category or department and see real-time progress against them. Get alerted before you go over.</div>
+          <ul class="feat-list">
+            <li>Category & overall budgets</li>
+            <li>Department-level budgets</li>
+            <li>Live actual vs budget tracking</li>
+            <li>Alerts at 75%, 90%, 100%</li>
+            <li>Budget owner assignment</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">🏆</span>
+          <div class="feat-card-title">Financial Goals</div>
+          <div class="feat-card-desc">Set targets for cash, revenue, expenses, or runway. Track progress visually with charts that show you exactly how close you are.</div>
+          <ul class="feat-list">
+            <li>Cash balance goals</li>
+            <li>MRR / revenue targets</li>
+            <li>Expense control goals</li>
+            <li>Runway targets</li>
+            <li>Deadline tracking with progress charts</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">📁</span>
+          <div class="feat-card-title">CSV Import & Export</div>
+          <div class="feat-card-desc">Bring your existing data in from any spreadsheet and take it back out any time. Download a template to get started in seconds.</div>
+          <ul class="feat-list">
+            <li>Bulk CSV transaction import</li>
+            <li>Export full transaction history</li>
+            <li>PDF financial report export</li>
+            <li>Downloadable CSV template</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- AI FEATURES                             -->
+  <!-- ════════════════════════════════════════ -->
+  <section class="feat-section" id="ai">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-label" style="color:var(--purple);">AI Features</div>
+        <h2 class="section-title">Your AI CFO. Ask it<br>anything about your finances.</h2>
+        <p class="section-desc">Six AI-powered tools that give you insights, answers, and reports that used to require a full-time finance team.</p>
+      </div>
+
+      <div class="highlight-row">
+        <div class="feat-card reveal" style="border-color:rgba(124,58,237,.3); background: linear-gradient(135deg,#faf5ff 0%,white 65%);">
+          <span class="feat-card-icon">🤖</span>
+          <div class="feat-card-title">AI CFO Chat</div>
+          <div class="feat-card-desc">Ask your finances anything in plain English. The AI knows your exact numbers and answers instantly. No dashboards to click through.</div>
+          <ul class="feat-list">
+            <li>"What's my runway if I hire 2 engineers?"</li>
+            <li>"Where am I spending the most?"</li>
+            <li>"How is my revenue trending?"</li>
+            <li>"Am I on track to hit my goals?"</li>
+            <li>7-day chat history preserved</li>
+            <li>Powered by Llama 3.3 70B via Groq</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal d1" style="border-color:rgba(124,58,237,.3); background: linear-gradient(135deg,#faf5ff 0%,white 65%);">
+          <span class="feat-card-icon">💡</span>
+          <div class="feat-card-title">AI Financial Insights</div>
+          <div class="feat-card-desc">Get a full financial health analysis generated by AI from your real data: health score, warnings, cost savings, and growth recommendations.</div>
+          <ul class="feat-list">
+            <li>Financial health score (1–10)</li>
+            <li>Key insights from your data</li>
+            <li>Urgent warnings & red flags</li>
+            <li>Cost optimization opportunities</li>
+            <li>Growth recommendations</li>
+            <li>Concrete next steps for this week</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+      </div>
+
+      <div class="feat-grid">
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">🏷️</span>
+          <div class="feat-card-title">AI Auto-Categorization</div>
+          <div class="feat-card-desc">Start typing a transaction description and AI suggests the right category instantly. No more manual tagging of every line item.</div>
+          <ul class="feat-list">
+            <li>Works for both income & expenses</li>
+            <li>Learns from your description as you type</li>
+            <li>Covers 20+ standard categories</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">📝</span>
+          <div class="feat-card-title">AI Board Report Narrative</div>
+          <div class="feat-card-desc">Enter your highlights, challenges, and next quarter plan. AI writes a professional 2-paragraph board narrative using your real financial data.</div>
+          <ul class="feat-list">
+            <li>Data-driven, specific to your numbers</li>
+            <li>Ready for board of directors</li>
+            <li>Exports to polished PDF instantly</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">📊</span>
+          <div class="feat-card-title">AI Investor Report</div>
+          <div class="feat-card-desc">Enter your tagline, stage, and use of funds. AI writes a 3-paragraph professional investor narrative backed by your real metrics.</div>
+          <ul class="feat-list">
+            <li>Professional financial narrative</li>
+            <li>Revenue trends & growth analysis</li>
+            <li>Use of funds & path to milestones</li>
+            <li>Exports to investor-ready PDF</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- ACCOUNTING                              -->
+  <!-- ════════════════════════════════════════ -->
+  <section class="feat-section" id="accounting">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-label" style="color:var(--teal);">Accounting Suite</div>
+        <h2 class="section-title">Full accounting without<br>an accountant.</h2>
+        <p class="section-desc">Financial statements, invoices, bills, tax docs, and vendor management: everything a growing startup needs in one place.</p>
+      </div>
+
+      <div class="feat-grid">
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">📈</span>
+          <div class="feat-card-title">Income Statement (P&L)</div>
+          <div class="feat-card-desc">Revenue and expense breakdown by category for any date range. Select a quarter, year, or custom period with one click.</div>
+          <ul class="feat-list">
+            <li>Revenue by category</li>
+            <li>Expenses by category</li>
+            <li>Net income & profit margin</li>
+            <li>Custom date range selector</li>
+            <li>Q1–Q4 quick-select buttons</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">⚖️</span>
+          <div class="feat-card-title">Balance Sheet</div>
+          <div class="feat-card-desc">A complete snapshot of your assets, liabilities, and equity at any point in time. Verifies that everything balances automatically.</div>
+          <ul class="feat-list">
+            <li>Current assets (cash, AR)</li>
+            <li>Liabilities (AP, loans)</li>
+            <li>Owner equity & retained earnings</li>
+            <li>Auto-balance verification</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">💵</span>
+          <div class="feat-card-title">Cash Flow Statement</div>
+          <div class="feat-card-desc">Track exactly how cash moves in and out of your business. See beginning cash, net change, and ending cash for any period.</div>
+          <ul class="feat-list">
+            <li>Cash inflows by category</li>
+            <li>Cash outflows by category</li>
+            <li>Net operating cash flow</li>
+            <li>Beginning to ending cash bridge</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">📉</span>
+          <div class="feat-card-title">P&L Year-Over-Year Comparison</div>
+          <div class="feat-card-desc">Compare this year to last year, month by month. See exactly where revenue grew or expenses increased with percentage change indicators.</div>
+          <ul class="feat-list">
+            <li>Month-by-month comparison table</li>
+            <li>YoY revenue & expense change %</li>
+            <li>Side-by-side bar chart</li>
+            <li>Gross margin per month</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">🧾</span>
+          <div class="feat-card-title">Invoices</div>
+          <div class="feat-card-desc">Create professional invoices and email them to customers automatically. Track paid vs outstanding and follow up with one click.</div>
+          <ul class="feat-list">
+            <li>Create & send invoices by email</li>
+            <li>Mark paid / outstanding tracking</li>
+            <li>Outstanding invoice summary</li>
+            <li>AR Aging report (0–90+ days)</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">📋</span>
+          <div class="feat-card-title">Bills</div>
+          <div class="feat-card-desc">Track what you owe to vendors. Log bills, set due dates, categorize them, and see total outstanding payables at a glance.</div>
+          <ul class="feat-list">
+            <li>Vendor bill tracking</li>
+            <li>Due date management</li>
+            <li>Category tagging</li>
+            <li>Outstanding payables summary</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">🏢</span>
+          <div class="feat-card-title">Vendor Management</div>
+          <div class="feat-card-desc">A complete directory of every supplier, contractor, and service provider your company uses, with contact details and total spend tracked.</div>
+          <ul class="feat-list">
+            <li>Contact name, email, phone, website</li>
+            <li>Payment terms per vendor</li>
+            <li>Total spend calculated from bills</li>
+            <li>Category tagging</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">🧾</span>
+          <div class="feat-card-title">Tax Summary</div>
+          <div class="feat-card-desc">Annual tax documentation for any year. See gross revenue, deductions by category, quarterly breakdown, and estimated tax liability.</div>
+          <ul class="feat-list">
+            <li>Gross revenue & total deductions</li>
+            <li>Q1–Q4 quarterly breakdown</li>
+            <li>Estimated self-employment tax</li>
+            <li>Estimated income tax</li>
+            <li>Tax document storage (1099s, receipts)</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">📚</span>
+          <div class="feat-card-title">Chart of Accounts</div>
+          <div class="feat-card-desc">Standard double-entry bookkeeping chart of accounts, auto-created for every company. Assets, liabilities, equity, revenue, and expenses, all organized.</div>
+          <ul class="feat-list">
+            <li>25 standard accounts pre-created</li>
+            <li>Assets, liabilities, equity, revenue, expenses</li>
+            <li>Account codes for organization</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- PLANNING                                -->
+  <!-- ════════════════════════════════════════ -->
+  <section class="feat-section" id="planning">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-label" style="color:var(--amber);">Planning & Forecasting</div>
+        <h2 class="section-title">Model your future.<br>Make decisions with confidence.</h2>
+        <p class="section-desc">Five planning tools to help you answer "what if" before it becomes "what happened."</p>
+      </div>
+
+      <div class="feat-grid">
+        <div class="feat-card feat-card-wide reveal" style="background: linear-gradient(135deg,#fffbeb 0%,white 65%); border-color:rgba(217,119,6,.25);">
+          <span class="feat-card-icon">🔭</span>
+          <div class="feat-card-title">Scenario Planning</div>
+          <div class="feat-card-desc">Model "what if" situations and instantly see the impact on runway, burn rate, and cash balance, compared side-by-side against your baseline. Comes with 6 one-click presets.</div>
+          <ul class="feat-list" style="column-count:2; column-gap:1rem;">
+            <li>Revenue change (% per month)</li>
+            <li>Monthly expense change ($)</li>
+            <li>One-time costs</li>
+            <li>Project 6–24 months ahead</li>
+            <li>Baseline vs scenario chart</li>
+            <li>New runway calculation</li>
+            <li>Preset: "Hire an Engineer"</li>
+            <li>Preset: "Revenue +20%"</li>
+            <li>Preset: "Cut Costs 20%"</li>
+            <li>Preset: "Raise $500k Seed"</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">📈</span>
+          <div class="feat-card-title">12-Month Projections</div>
+          <div class="feat-card-desc">Set revenue growth, expense growth, one-time investments, and fundraise timing, then see month-by-month cash, revenue, and expenses projected out a full year.</div>
+          <ul class="feat-list">
+            <li>Configurable growth assumptions</li>
+            <li>Fundraise timing & amount</li>
+            <li>Month-by-month table</li>
+            <li>Projected runway detection</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">🛫</span>
+          <div class="feat-card-title">Runway Planner</div>
+          <div class="feat-card-desc">See exactly how much runway different raise amounts give you. Enter a custom scenario with new burn and headcount costs to build a month-by-month cash timeline.</div>
+          <ul class="feat-list">
+            <li>4 pre-built raise scenarios ($500K–$5M)</li>
+            <li>Custom raise amount & new burn</li>
+            <li>Headcount cost modeling</li>
+            <li>Month-by-month cash timeline chart</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">👥</span>
+          <div class="feat-card-title">Headcount Planning</div>
+          <div class="feat-card-desc">Plan future hires with a start month and salary. See the cumulative monthly payroll impact of all planned roles in a running chart.</div>
+          <ul class="feat-list">
+            <li>Role, department, type, salary</li>
+            <li>Start month selector</li>
+            <li>Cumulative payroll impact chart</li>
+            <li>Current vs planned payroll summary</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">🔬</span>
+          <div class="feat-card-title">Cohort Analysis</div>
+          <div class="feat-card-desc">Track monthly revenue cohorts and retention over time. See which months performed best and how revenue retention trends compared to your first month.</div>
+          <ul class="feat-list">
+            <li>Monthly revenue by cohort</li>
+            <li>Retention % vs first month</li>
+            <li>Revenue trend line chart</li>
+            <li>Avg revenue, peak month, avg retention</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">🔧</span>
+          <div class="feat-card-title">Custom Reports</div>
+          <div class="feat-card-desc">Filter and group your transactions any way you want. Build a custom report by date range, type, category, and group by month, category, type, or year.</div>
+          <ul class="feat-list">
+            <li>Date range filter</li>
+            <li>Income / expense filter</li>
+            <li>Category multi-select</li>
+            <li>Group by month, category, type, year</li>
+            <li>Optional bar chart view</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- PEOPLE                                  -->
+  <!-- ════════════════════════════════════════ -->
+  <section class="feat-section" id="people">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-label" style="color:var(--green);">People & Equity</div>
+        <h2 class="section-title">Payroll, contracts,<br>and cap table, all in one.</h2>
+        <p class="section-desc">Everything you need to manage your team's compensation, equity, and documentation as you hire and grow.</p>
+      </div>
+
+      <div class="feat-grid">
+        <div class="feat-card feat-card-wide reveal">
+          <span class="feat-card-icon">💰</span>
+          <div class="feat-card-title">Payroll Management</div>
+          <div class="feat-card-desc">Track every employee's salary, equity, employment type, and department. Record pay runs and automatically create salary expense transactions. Generate and e-sign employment contracts without leaving Fintoit.</div>
+          <ul class="feat-list" style="column-count:2; column-gap:1rem;">
+            <li>Employee profiles (title, dept, type)</li>
+            <li>Salary & pay frequency tracking</li>
+            <li>Equity % per employee</li>
+            <li>Pay run recording</li>
+            <li>Auto salary transactions on pay run</li>
+            <li>Department payroll grouping</li>
+            <li>Contract generation (PDF)</li>
+            <li>E-signature workflow (company + employee)</li>
+            <li>Resume & contract file upload</li>
+            <li>Contract token-based signing link</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">📊</span>
+          <div class="feat-card-title">Cap Table</div>
+          <div class="feat-card-desc">Track equity ownership across founders, investors, employees, and advisors. See ownership percentages, share classes, vesting schedules, and total capital raised.</div>
+          <ul class="feat-list">
+            <li>Shareholders: founders, investors, employees, advisors</li>
+            <li>Common, preferred, option, warrant classes</li>
+            <li>Price per share & investment amount</li>
+            <li>Vesting schedules</li>
+            <li>Ownership % pie chart</li>
+            <li>By-type breakdown (founders vs investors)</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-pro">Pro</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- REPORTS                                 -->
+  <!-- ════════════════════════════════════════ -->
+  <section class="feat-section" id="reports">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-label" style="color:var(--red);">Reports & Exports</div>
+        <h2 class="section-title">Investor-ready reports<br>in under 30 seconds.</h2>
+        <p class="section-desc">Three types of professional PDF reports generated by AI from your real financial data. No design tools, no formatting, no templates to fill.</p>
+      </div>
+
+      <div class="feat-grid">
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">📑</span>
+          <div class="feat-card-title">Investor Report PDF</div>
+          <div class="feat-card-desc">A polished, investor-ready PDF with key metrics table, AI-written 3-paragraph financial narrative, monthly breakdown, and top expense categories.</div>
+          <ul class="feat-list">
+            <li>Cover page with company name & date</li>
+            <li>Key metrics table (cash, burn, runway, MRR)</li>
+            <li>AI-written financial narrative</li>
+            <li>6-month breakdown table</li>
+            <li>Top expense categories</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">📋</span>
+          <div class="feat-card-title">Board Report PDF</div>
+          <div class="feat-card-desc">A complete board of directors report with KPI highlights, AI executive summary, and sections for highlights, challenges, next quarter plan, and the ask.</div>
+          <ul class="feat-list">
+            <li>KPI grid (8 key metrics)</li>
+            <li>AI-written 2-paragraph summary</li>
+            <li>Highlights & challenges sections</li>
+            <li>Next quarter plan</li>
+            <li>The Ask section for board decisions</li>
+            <li>Monthly performance table</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-starter">Starter</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">📄</span>
+          <div class="feat-card-title">Financial Report PDF</div>
+          <div class="feat-card-desc">A full financial report with executive summary, monthly breakdown table, and recent transaction history, ready to send to stakeholders or advisors.</div>
+          <ul class="feat-list">
+            <li>Executive summary with all key metrics</li>
+            <li>Monthly revenue, expenses, burn, cash</li>
+            <li>Last 15 transactions listed</li>
+            <li>Auto-formatted with company name</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- SECURITY                                -->
+  <!-- ════════════════════════════════════════ -->
+  <section class="feat-section" id="security">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-label" style="color:var(--ink);">Security & Account</div>
+        <h2 class="section-title">Enterprise-grade security<br>for every account.</h2>
+        <p class="section-desc">Your financial data deserves the best protection. Every account gets the same security features regardless of plan.</p>
+      </div>
+
+      <div class="feat-grid">
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">🔐</span>
+          <div class="feat-card-title">Two-Factor Authentication</div>
+          <div class="feat-card-desc">Add a second layer of protection to your account. Choose email codes or a TOTP authenticator app like Google Authenticator or Authy.</div>
+          <ul class="feat-list">
+            <li>Email OTP (6-digit code)</li>
+            <li>Authenticator app (TOTP / QR code)</li>
+            <li>Auto-send code on login</li>
+            <li>10-minute code expiry</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">⏱️</span>
+          <div class="feat-card-title">Session Inactivity Timeout</div>
+          <div class="feat-card-desc">Your session automatically times out after 15 minutes of inactivity with a 2-minute warning. Financial data never stays exposed on an unattended screen.</div>
+          <ul class="feat-list">
+            <li>13-minute inactivity warning modal</li>
+            <li>Countdown timer with red progress bar</li>
+            <li>"Keep me signed in" button</li>
+            <li>Auto-logout at 15 minutes</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+
+        <div class="feat-card reveal d2">
+          <span class="feat-card-icon">🔑</span>
+          <div class="feat-card-title">Password Reset</div>
+          <div class="feat-card-desc">Secure password reset via email with 1-hour expiring tokens. Passwords are stored as bcrypt hashes, never in plain text.</div>
+          <ul class="feat-list">
+            <li>Secure email reset link</li>
+            <li>1-hour token expiry</li>
+            <li>bcrypt password hashing</li>
+            <li>8+ character enforcement</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+
+        <div class="feat-card reveal">
+          <span class="feat-card-icon">🖼️</span>
+          <div class="feat-card-title">Profile & Avatar</div>
+          <div class="feat-card-desc">Personalize your Fintoit account with a profile photo, update your company name, and manage your contact information, all from one place.</div>
+          <ul class="feat-list">
+            <li>Profile photo upload (up to 5MB)</li>
+            <li>Full name, email, phone</li>
+            <li>Company name</li>
+            <li>Password change</li>
+            <li>Account deletion</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+
+        <div class="feat-card reveal d1">
+          <span class="feat-card-icon">🔄</span>
+          <div class="feat-card-title">Recurring Transactions</div>
+          <div class="feat-card-desc">Mark any transaction as recurring and Fintoit automatically creates it on schedule (weekly, monthly, or yearly), so your burn rate always stays accurate.</div>
+          <ul class="feat-list">
+            <li>Weekly, monthly, or yearly schedule</li>
+            <li>Runs automatically at midnight</li>
+            <li>Duplicate prevention built-in</li>
+            <li>Manual trigger available</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge badge-free">Free</span></div>
+        </div>
+
+        <div class="feat-card dark reveal d2">
+          <span class="feat-card-icon">🚀</span>
+          <div class="feat-card-title">Demo Mode</div>
+          <div class="feat-card-desc">Try every feature of Fintoit before signing up. The demo account comes pre-loaded with sample startup data and is fully read-only so nothing can be changed.</div>
+          <ul class="feat-list">
+            <li>6 months of sample transactions pre-loaded</li>
+            <li>All dashboards, charts, and reports visible</li>
+            <li>Read-only: no writes allowed</li>
+            <li>No signup required to explore</li>
+          </ul>
+          <div style="margin-top:1.25rem;"><span class="feat-badge" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);">Free</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PLAN COMPARISON STRIP ── -->
+  <section style="padding: 4rem 1.5rem; background: white;">
+    <div style="max-width: 800px; margin: 0 auto; text-align: center;" class="reveal">
+      <div class="feat-eyebrow" style="color:var(--muted);">Plan Comparison</div>
+      <h2 style="font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;letter-spacing:-.03em;margin-bottom:2rem;">Which plan gets which features?</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;text-align:left;">
+        <div style="background:var(--paper);border:2px solid var(--border);border-radius:16px;padding:1.5rem;">
+          <div style="font-size:1.1rem;font-weight:800;margin-bottom:.25rem;">Free</div>
+          <div style="font-size:1.75rem;font-weight:800;color:var(--muted);margin-bottom:1rem;">$0</div>
+          <ul class="feat-list">
+            <li>Dashboard & burn rate</li>
+            <li>Runway tracking</li>
+            <li>Transaction tracking</li>
+            <li>CSV import & export</li>
+            <li>Income statement</li>
+            <li>AI auto-categorization</li>
+            <li>2FA & security</li>
+            <li>Recurring transactions</li>
+          </ul>
+          <a href="/signup" style="display:block;text-align:center;margin-top:1.25rem;padding:.75rem;background:var(--ink);color:white;border-radius:10px;font-weight:700;text-decoration:none;font-size:.875rem;">Get Started Free</a>
+        </div>
+        <div style="background:var(--ink);border:2px solid var(--ink);border-radius:16px;padding:1.5rem;">
+          <div style="font-size:1.1rem;font-weight:800;color:white;margin-bottom:.25rem;">Starter</div>
+          <div style="font-size:1.75rem;font-weight:800;color:rgba(255,255,255,.5);margin-bottom:1rem;">$49/mo</div>
+          <ul class="feat-list">
+            <li>Everything in Free</li>
+            <li>Unlimited AI chat</li>
+            <li>AI financial insights</li>
+            <li>6-month cash forecast</li>
+            <li>Scenario planning</li>
+            <li>Projections & runway planner</li>
+            <li>Budget alerts & goals</li>
+            <li>Cohort analysis</li>
+            <li>Custom reports</li>
+            <li>Investor & board report PDFs</li>
+            <li>Anomaly detection</li>
+            <li>P&L comparison</li>
+          </ul>
+          <a href="/signup" style="display:block;text-align:center;margin-top:1.25rem;padding:.75rem;background:white;color:var(--ink);border-radius:10px;font-weight:700;text-decoration:none;font-size:.875rem;">Start Starter</a>
+        </div>
+        <div style="background:var(--paper);border:2px solid var(--border);border-radius:16px;padding:1.5rem;">
+          <div style="font-size:1.1rem;font-weight:800;margin-bottom:.25rem;">Pro</div>
+          <div style="font-size:1.75rem;font-weight:800;color:var(--purple);margin-bottom:1rem;">$149/mo</div>
+          <ul class="feat-list">
+            <li>Everything in Starter</li>
+            <li>Balance sheet</li>
+            <li>Cash flow statement</li>
+            <li>Full accounting suite</li>
+            <li>Invoices & bills</li>
+            <li>Vendor management</li>
+            <li>Tax summary & docs</li>
+            <li>Payroll + e-sign contracts</li>
+            <li>Cap table</li>
+            <li>Headcount planning</li>
+            <li>Chart of accounts</li>
+            <li>Priority support</li>
+          </ul>
+          <a href="/signup" style="display:block;text-align:center;margin-top:1.25rem;padding:.75rem;background:var(--purple);color:white;border-radius:10px;font-weight:700;text-decoration:none;font-size:.875rem;">Start Pro</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <div class="feat-cta">
+    <div class="cta-inner reveal">
+      <div class="feat-eyebrow" style="color:rgba(255,255,255,.3);">Get Started</div>
+      <h2 class="cta-title">Every feature.<br>One platform.</h2>
+      <p class="cta-sub">Start free and upgrade when you need more. No contracts, no setup fees, cancel anytime.</p>
+      <div class="feat-hero-btns">
+        <a href="/signup" class="btn-white">Create Free Account →</a>
+        <a href="/pricing" class="btn-ghost">See Pricing</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 55);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+const tabs = document.querySelectorAll('.cat-tab');
+const sections = document.querySelectorAll('.feat-section');
+
+const secObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      tabs.forEach(t => {
+        t.classList.toggle('active', t.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => secObs.observe(s));
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', e => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+</script>
+
+{% endblock %}

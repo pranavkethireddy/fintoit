@@ -1,0 +1,588 @@
+{% extends "base.html" %} {% block title %}Sign Up Fintoit{% endblock %} {%
+block content %}
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f7f6f2;
+    --blue: #1d4ed8;
+    --green: #16a34a;
+    --muted: #6b6b7a;
+    --border: #e2e1db;
+  }
+
+  .signup-page {
+  font-family: "Bricolage Grotesque", sans-serif;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: white;
+  }
+
+  @media (max-width: 768px) {
+    .signup-page {
+      grid-template-columns: 1fr;
+    }
+    .sl-left {
+      display: none;
+    }
+    .sl-right {
+      overflow-y: auto;
+    }
+  }
+
+  /* LEFT */
+  .sl-left {
+    background: var(--ink);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sl-left::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: -80px;
+    right: -130px;
+    background: radial-gradient(
+      circle,
+      rgba(22, 163, 74, 0.2) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .sl-left::after {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    bottom: -80px;
+    left: -80px;
+    background: radial-gradient(
+      circle,
+      rgba(29, 78, 216, 0.2) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .sl-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.03em;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+  }
+
+  .sl-center {
+    position: relative;
+    z-index: 1;
+  }
+
+  .sl-headline {
+    font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+  }
+
+  .sl-headline span {
+    background: linear-gradient(135deg, #4ade80, #22d3ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .sl-sub {
+    color: rgba(255, 255, 255, 0.42);
+    font-size: 0.9rem;
+    line-height: 1.72;
+    margin-bottom: 2.5rem;
+    max-width: 300px;
+  }
+
+  /* Feature checklist */
+  .sl-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .sl-feat {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .sl-feat-dot {
+    width: 22px;
+    height: 22px;
+    background: rgba(74, 222, 128, 0.15);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    color: #4ade80;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .sl-footer {
+    position: relative;
+    z-index: 1;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.22);
+    font-family: "DM Mono", monospace;
+  }
+
+  /* RIGHT */
+  .sl-right {
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sl-right::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.5;
+  }
+
+  .form-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+    background: white;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    padding: 2.25rem;
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+
+  .form-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--green);
+    font-family: "DM Mono", monospace;
+    margin-bottom: 0.4rem;
+  }
+
+  .form-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+    line-height: 1.1;
+  }
+
+  .form-sub {
+    font-size: 0.845rem;
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+    line-height: 1.6;
+  }
+
+  .error-box {
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: #dc2626;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  @media (max-width: 500px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 0.875rem;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-family: "DM Mono", monospace;
+    margin-bottom: 0.35rem;
+  }
+
+  .form-label .opt {
+    color: var(--muted);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: "Bricolage Grotesque", sans-serif;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 0.72rem 0.875rem;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: "Bricolage Grotesque", sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    transition:
+      border-color 0.18s,
+      background 0.18s,
+      box-shadow 0.18s;
+    outline: none;
+    box-sizing: border-box;
+  }
+  .form-input:focus {
+    border-color: var(--ink);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(10, 10, 15, 0.06);
+  }
+  .form-input::placeholder {
+    color: #a1a1aa;
+  }
+  select.form-input {
+    cursor: pointer;
+  }
+
+  .phone-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0.5rem;
+  }
+
+  .terms-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    margin: 1rem 0 0.5rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .terms-row input {
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+    accent-color: var(--ink);
+  }
+  .terms-row a {
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .btn-submit {
+    width: 100%;
+    background: var(--ink);
+    color: white;
+    padding: 0.9rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: "Bricolage Grotesque", sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+  }
+  .btn-submit:hover {
+    background: #1e1e2e;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(10, 10, 15, 0.2);
+  }
+
+  .form-footer {
+    text-align: center;
+    margin-top: 1.25rem;
+    font-size: 0.845rem;
+    color: var(--muted);
+  }
+  .form-footer a {
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 2px solid var(--ink);
+    transition: opacity 0.15s;
+  }
+  .form-footer a:hover {
+    opacity: 0.6;
+  }
+
+/* ── Social sign-in ──────────────────────────────────────────────────
+   Neutral white button with a hairline border, so the coloured Google
+   mark is the only saturated thing in the card and the dark primary
+   button stays the obvious default action. */
+.social-auth { display: flex; flex-direction: column; gap: 0.6rem; }
+.btn-social {
+  display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+  width: 100%; box-sizing: border-box;
+  background: white; color: var(--ink);
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font-size: 0.95rem; font-weight: 600;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  text-decoration: none; cursor: pointer; transition: all 0.18s;
+}
+.btn-social:hover {
+  border-color: var(--ink); transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(10,10,15,0.08);
+}
+.btn-social svg { flex-shrink: 0; }
+.social-divider {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin: 1.25rem 0 1rem;
+  font-family: 'DM Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.social-divider::before, .social-divider::after {
+  content: ""; flex: 1; height: 1px; background: var(--border);
+}
+</style>
+
+<div class="signup-page">
+  <!-- LEFT -->
+  <div class="sl-left">
+    <a href="/" class="sl-logo">Fintoit</a>
+
+    <div class="sl-center">
+      <h2 class="sl-headline">Start knowing<br />your <span>numbers.</span></h2>
+      <p class="sl-sub">
+        Join the other businesses using Fintoit.
+      </p>
+      <div class="sl-features">
+        {% for feat in [ 'Real-time burn rate & runway dashboard', 'AI chat
+        assistant for your finances', '6-month cash flow forecasting',
+        'Investor-ready PDF reports in 1 click', 'Payroll, cap table &
+        accounting suite', 'Completely free to sign up' ] %}
+        <div class="sl-feat">
+          <span class="sl-feat-dot">✓</span>
+          <span>{{ feat }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="sl-right">
+    <div class="form-card">
+      <h1 class="form-title">Create your account</h1>
+
+      {% if error %}
+      <div class="error-box">✗ {{ error }}</div>
+      {% endif %}
+
+      {# Google still routes through the same details + phone verification step
+         afterwards — it saves typing an email and a password, not the checks. #}
+      {% if google_login_enabled or apple_login_enabled %}
+      <div class="social-auth">
+        {% if google_login_enabled %}
+        <a href="{{ url_for('google_login') }}" class="btn-social">
+          <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
+            <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62z"/>
+            <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/>
+            <path fill="#FBBC05" d="M3.97 10.72a5.41 5.41 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/>
+            <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/>
+          </svg>
+          <span>Sign up with Google</span>
+        </a>
+        {% endif %}
+      </div>
+      <div class="social-divider"><span>or use your email</span></div>
+      {% endif %}
+
+      <form method="POST" action="/signup">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input
+              type="text"
+              name="full_name"
+              required
+              placeholder="Jane Smith"
+              class="form-input"
+              autofocus
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Company *</label>
+            <input
+              type="text"
+              name="company_name"
+              required
+              placeholder="My Startup Inc."
+              class="form-input"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="you@startup.com"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password *</label>
+          <input
+            type="password"
+            name="password"
+            required
+            minlength="6"
+            placeholder="Min. 6 characters"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" 
+            >Phone *</label
+          >
+          <div class="phone-row">
+            <select name="phone_code" id="phoneCode" class="form-input" required>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+1-CA">🇨🇦 +1 CA</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+91">🇮🇳 +91</option>
+              <option value="+61">🇦🇺 +61</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+81">🇯🇵 +81</option>
+              <option value="+86">🇨🇳 +86</option>
+              <option value="+55">🇧🇷 +55</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+65">🇸🇬 +65</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+234">🇳🇬 +234</option>
+              <option value="+64">🇳🇿 +64</option>
+            </select>
+            <input
+              type="tel"
+              name="phone_number"
+              id="phoneNumber"
+              placeholder="555 000 0000"
+              class="form-input"
+            />
+            <input type="hidden" name="phone" id="phoneHidden" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"
+            >Starting Cash Balance <span class="opt">(optional)</span></label
+          >
+          <input
+            type="number"
+            name="starting_cash"
+            step="0.01"
+            min="0"
+            placeholder="0.00"
+            class="form-input"
+          />
+          <div
+            style="
+              font-size: 0.7rem;
+              color: var(--muted);
+              margin-top: 0.3rem;
+              font-family: &quot;DM Mono&quot;, monospace;
+            "
+          >
+            Your current bank balance — you can update this later
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"
+            >Refferal Code <span class="opt">(optional)</span></label
+          >
+          <input
+            type="text"
+            value="{{ ref_code }}" 
+            name="referral"
+            placeholder="Code"
+            class="form-input"
+          />
+        </div>
+
+        <div class="terms-row">
+          <input type="checkbox" required />
+          <span
+            >I agree to the <a href="/terms">Terms of Service</a> and
+            <a href="/privacy">Privacy Policy</a></span
+          >
+        </div>
+
+        <div class="terms-row">
+          <input type="checkbox" required />
+          <span
+            >I allow promotional emails from Fintoit</span
+          >
+        </div>
+
+        <button type="submit" class="btn-submit">Create Account →</button>
+      </form>
+
+      <div class="form-footer">
+        Already have an account? <a href="/login">Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelector("form").addEventListener("submit", function () {
+    const code = document.getElementById("phoneCode").value.replace("-CA", "");
+    const number = document.getElementById("phoneNumber").value.trim();
+    document.getElementById("phoneHidden").value = number
+      ? `${code} ${number}`
+      : "";
+  });
+</script>
+
+{% endblock %}

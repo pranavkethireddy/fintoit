@@ -1,0 +1,139 @@
+{% extends "post_base.html" %}
+{% block title %}How Much Should You Raise | Fintoit Blog{% endblock %}
+
+{% block post_title %}How Much Should You Raise, and How Much Runway Do You Need Before Raising Again?{% endblock %}
+{% block post_subtitle %}Most founders copy the market to pick a round size. It is derivable instead, from four inputs you already have. Here is the arithmetic, on a worked example.{% endblock %}
+
+{% block toc %}
+<li><a href="#what-companies-raise">What companies actually raise</a></li>
+<li><a href="#the-number">The number that should actually change your plan</a></li>
+<li><a href="#raise-eats-runway">The raise eats runway you already counted</a></li>
+<li><a href="#arithmetic">Working backwards: the arithmetic</a></li>
+<li><a href="#disagree">When your number and the market's number disagree</a></li>
+<li><a href="#milestone">What the milestone has to be</a></li>
+<li><a href="#running-out">What running out actually looks like</a></li>
+<li><a href="#short-version">The short version</a></li>
+{% endblock %}
+
+{% block post_content %}
+
+<p><em>This is general financial education for founders, not personalized investment, legal, or tax advice, and it does not create an advisory or client relationship. Your numbers, milestone, and market will differ from the invented example below.</em></p>
+
+<p>Most founders pick a round size the same way. You hear what companies like yours raised, you round it to something that sounds credible on a call, and you put that number in the deck. Two million. Three. Whatever does not get you laughed at.</p>
+
+<p>That is backwards, and the cost of getting it wrong is not abstract. Raise too little and you spend the money reaching a milestone that was never fundable, then go back out with worse numbers and less leverage. Raise too much at the wrong valuation and you have sold a chunk of the company to buy runway you did not need.</p>
+
+<p>The number is derivable. It takes about ten minutes and four inputs you should already have.</p>
+
+<h2 id="what-companies-raise">What companies actually raise</h2>
+
+<p>Start with where the market is, not because it tells you your answer, but because it tells you when your answer is strange enough to need explaining.</p>
+
+<p>Carta's data on 2024 rounds, drawn from companies using its cap table platform:</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Round</th><th>Median raise</th><th>Median valuation</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Pre-seed on a SAFE</td><td>$1.0M</td><td>$10M post-money cap</td></tr>
+    <tr><td>Seed on a SAFE</td><td>$2.8M</td><td>$18M post-money cap</td></tr>
+    <tr><td>Priced seed</td><td>$3.7M</td><td>$19.2M post-money</td></tr>
+  </tbody>
+</table>
+
+<p>Sources: Carta's <a href="https://carta.com/data/state-of-pre-seed-2024/" target="_blank" rel="noopener noreferrer">State of Pre-Seed 2024</a> and its <a href="https://carta.com/data/linkedin-fundraising-cheatsheet-q4-2024/" target="_blank" rel="noopener noreferrer">Q4 2024 fundraising cheatsheet</a>.</p>
+
+<p>Notice the relationship in the bottom row. A $3.7M raise at a $19.2M post-money valuation is 19.3% of the company, which lines up almost exactly with the roughly <a href="https://carta.com/data/dilution-q1-2024/" target="_blank" rel="noopener noreferrer">20% median dilution</a> Carta reports on priced seed rounds. That 20% has not dropped below 20% in any quarter since early 2019. It is the closest thing to a fixed constraint in this whole exercise: whatever you raise at seed, the market expects to buy about a fifth of your company for it.</p>
+
+<p>Two caveats before you lean on that table. It reflects startups that manage their equity on Carta, which skews toward software, so a hardware or biotech company should expect different numbers. And it is 2024 data. Round sizes rose through 2025, and the medians published for any given quarter describe companies that already closed, not the market you are walking into. Treat it as the shape of the market rather than a price list, and ask two or three founders who raised in the last six months what they actually saw.</p>
+
+<h2 id="the-number">The number that should actually change your plan</h2>
+
+<p>Here is the figure that matters more than any round size, and it is the one founders have not updated since 2021.</p>
+
+<p>Among startups that raised a Series A on Carta in Q4 2024, the median company had waited <strong>774 days since its seed round</strong>. That is 25 months, or about 2.1 years. In Q4 2021 the same figure was 420 days, under 14 months. The gap <a href="https://carta.com/data/time-between-VC-rounds-2024/" target="_blank" rel="noopener noreferrer">grew 84% in three years</a>.</p>
+
+<p>It has since come in a little. Carta's <a href="https://carta.com/data/linkedin-time-between-startup-rounds-improving/" target="_blank" rel="noopener noreferrer">February 2026 update</a> put the median seed-to-Series A interval at 1.9 years, around 23 months, and called the trend genuinely improving.</p>
+
+<p>Now hold that against the advice everyone gives you, which is to raise 18 to 24 months of runway.</p>
+
+<p>I went looking for the study behind "18 to 24 months" and could not find one. It is convention. Carta's own charts label that band as the "standard advice" zone for traditional venture, which is an honest way of putting it: this is what the industry says, not what anyone measured. If someone quotes you a statistic about founders with 18 months of runway closing rounds at some multiple of the rate, ask them for the source. I chased one such claim and it dead-ended in aggregator sites citing each other.</p>
+
+<p>But the convention is now testable against the interval data, and the bottom half of it fails. Fund 18 months of runway in a market where the median company takes 23 to 25 months to reach its Series A, and you are planning to run out of money about seven months before the median company closes its next round. Twenty-four months is not the cautious end of the range anymore. It is the floor.</p>
+
+<h2 id="raise-eats-runway">The raise eats runway you already counted</h2>
+
+<p>The second thing founders underestimate: the fundraise itself is a line item.</p>
+
+<p>DocSend's 2024 analysis of pre-seed and seed companies found the average pre-seed raise took about <a href="https://www.prnewswire.com/news-releases/vcs-prioritize-people-in-an-ai-heavy-landscape-according-to-new-dropbox-docsend-report-302334444.html" target="_blank" rel="noopener noreferrer">12 weeks</a>, with most successful seed rounds also closing inside 12 weeks. Three months, which sounds manageable.</p>
+
+<p>Read the methodology before you plan around it. DocSend measures from the moment a founder starts sharing a deck to the moment the round closes, using data from founders who were actively in process on its platform and who succeeded. It does not count the weeks spent building a target list, getting warm intros, or writing the deck in the first place. It does not count the founders who tried for six months and gave up. Twelve weeks is close to a best case for a raise that worked.</p>
+
+<p>Budget the real thing: four to eight weeks of preparation, twelve weeks of process if it goes well, and two to six weeks between a signed term sheet and money actually landing. Five to six months, and the whole time you are burning cash at your normal rate while doing a second full-time job.</p>
+
+<h2 id="arithmetic">Working backwards: the arithmetic</h2>
+
+<p>Everything above is input. This is the calculation.</p>
+
+<div class="formula">
+  Round size = (months to your milestone + months to run the next raise) &#215; average net burn over that period &#8722; cash you will have at close
+</div>
+
+<p>The parts founders get wrong are the last two. Average net burn is not today's burn, because you are raising in order to spend more. And cash at close is not cash today, because the raise burns some of it.</p>
+
+<p>Here it is worked through. Cedarline is invented, and so is every number attached to it.</p>
+
+<p>Cedarline has <strong>$310,000</strong> in the bank and is burning <strong>$41,000</strong> a month net. Current runway is 7.6 months. They want to hire two engineers and a first salesperson, which pushes burn toward $80,000 by the end of the plan, averaging about <strong>$62,000</strong> a month across the next two years.</p>
+
+<p><strong>Step one: what does the raise cost them in cash?</strong> Six months of process at $41,000 a month is $246,000. They have $310,000. So they close with <strong>$64,000</strong> left, and they started the raise with 1.6 months of margin on top of the six they need. That is uncomfortably tight, and it is the real finding of the exercise. Cedarline is not too early to raise. They are almost too late.</p>
+
+<p><strong>Step two: how much runway do they need?</strong> Eighteen months to hit the milestone, plus six months to run the next raise. <strong>24 months.</strong></p>
+
+<p><strong>Step three: what does 24 months cost?</strong> 24 &#215; $62,000 = <strong>$1,488,000.</strong></p>
+
+<p><strong>Step four: subtract what they will have.</strong> $1,488,000 &#8722; $64,000 = <strong>$1,424,000.</strong> Call it <strong>$1.5 million</strong> with a little slack.</p>
+
+<p>So the arithmetic says $1.5M. The median priced seed is $3.7M. Cedarline's honest number is about 40% of it.</p>
+
+<h2 id="disagree">When your number and the market's number disagree</h2>
+
+<p>That gap is informative rather than embarrassing, but you have to read it correctly.</p>
+
+<p>A $1.5M round does not price like a seed. At the market's 20% dilution, $1.5M implies a $7.5M post-money valuation, well under Carta's $19.2M median. So this is a pre-seed or a SAFE round, priced against Carta's $10M median pre-seed cap, where $1.5M is about 15% of the company. That is a coherent round. It is just not the round Cedarline would have put in the deck if they had picked a number that sounded normal.</p>
+
+<p>Run it the other way and the problem is clearer. If Cedarline raised the median $3.7M against the same spending plan, that is 61 months of runway. Five years. No investor is funding five years of runway at seed, so one of two things is actually true: the plan is far too small for the round, or the round is too big for the plan and burn would quietly rise to fill it. Neither is a good position to negotiate from, and the second is how companies end up with a burn rate they cannot justify at the Series A.</p>
+
+<p>Where raising more genuinely earns its dilution is when it buys <strong>time to the milestone</strong>, not padding. If $1.5M gets Cedarline 24 months and $2.5M gets them 30 months with a hire that pulls the milestone meaningfully closer, the extra roughly 10 points of dilution may be the right trade. If the extra million just extends the same plan, you have paid equity for calendar.</p>
+
+<p>Our post on <a href="/blog/scenario-planning-hiring-cashflow">scenario planning</a> works through how a specific hire moves burn and runway, which is the input this calculation depends on most, and the <a href="/blog/burn-rate-and-runway">burn rate and runway</a> post covers getting those two numbers right in the first place.</p>
+
+<h2 id="milestone">What the milestone has to be</h2>
+
+<p>Every step above rests on "months to your milestone," and that is the part no benchmark can give you.</p>
+
+<p>Nobody publishes a Series A revenue bar, because there isn't one. It varies by sector, by round size, by how the market feels that quarter. Anyone who tells you the number with confidence is describing their own portfolio.</p>
+
+<p>What the data does say is that reaching an A at all is hard. Of companies that raised a seed on Carta in Q1 2021, <a href="https://carta.com/data/linkedin-seed-to-series-a-getting-harder-2024/" target="_blank" rel="noopener noreferrer">32.9% had raised a Series A within two years</a>. Of the Q2 2024 seed cohort, 9% had reached an A inside one year, which Carta noted as the best one-year rate since 2021. That is not the same as a final graduation rate, since cohorts keep converting for years, but the direction is unambiguous.</p>
+
+<p>So define the milestone as the thing that makes your next round a conversation about price instead of a conversation about whether the business works. Usually that is proof the growth is repeatable rather than a single number. Then ask how many months of the current plan it takes, and be honest that you are estimating.</p>
+
+<h2 id="running-out">What running out actually looks like</h2>
+
+<p>CB Insights analyzed <a href="https://www.cbinsights.com/research/report/startup-failure-reasons-top/" target="_blank" rel="noopener noreferrer">431 VC-backed startups that shut down from 2023 onward</a>. "Ran out of capital" was cited by 70% of them, and CB Insights is careful to say that this is the final cause, not the root one. Underneath it: poor product-market fit at 43%, bad timing at 29%, unsustainable unit economics at 19%.</p>
+
+<p>That distinction is the whole point of this post. Running out of money is almost never the disease. It is what the disease looks like on the last day. A round sized correctly against a milestone you cannot actually hit does not save you; it just moves the date.</p>
+
+<p>One more figure from the same analysis, worth sitting with: the median time from last fundraise to shutdown was <strong>22 months</strong>. That is roughly the same as the median seed-to-Series A interval. The companies that make it and the companies that do not are working on almost identical clocks.</p>
+
+<h2 id="short-version">The short version</h2>
+
+<p>Do the arithmetic before you pick the number. Target 24 months of post-close runway rather than 18, because the market's own interval data now says 18 is short. Budget five to six months for the raise itself and burn cash the whole time you are doing it. Use the average burn of the plan you are funding, not the burn you have today. And when your calculated number is well under the median, that is information about your stage, not a reason to inflate the ask.</p>
+
+<p>The inputs this depends on are your current net burn, your cash, and a projection of how both move as you hire. If those numbers live in a spreadsheet you update when you remember to, the calculation is only as good as the last time you touched it. Keeping burn, runway, and cash current is what Fintoit is for, and the scenario side of it will run the hiring plan above without you rebuilding the model.</p>
+
+<hr class="divider" />
+
+<p><em>This post explains the financial mechanics of round-sizing and runway planning. It is general commentary for founders about structuring their own capital raise, not a personalized recommendation, and not investment, legal, or tax advice to you or to any investor. It does not create an attorney-client, advisory, or fiduciary relationship with Fintoit. Round structure, valuation, dilution, and SAFE-versus-priced-round terms carry real legal and tax consequences specific to your company, your investors, and your jurisdiction. Talk to a securities lawyer and an accountant before you finalize terms or sign anything.</em></p>
+
+{% endblock %}

@@ -1,0 +1,1679 @@
+{% extends "base.html" %} {% block title %}Fintoit The AI CFO Platform for
+Startups{% endblock %} {% block content %}
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f7f6f2;
+    --blue: #1d4ed8;
+    --green: #16a34a;
+    --muted: #6b6b7a;
+    --border: #e2e1db;
+  }
+
+  .home-wrap {
+    font-family: "Bricolage Grotesque", sans-serif;
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 0 3rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--paper);
+  }
+
+  .hero-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.6;
+  }
+
+  .hero-bg::after {
+    content: "";
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    top: -150px;
+    right: -200px;
+    background: radial-gradient(
+      circle,
+      rgba(29, 78, 216, 0.13) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .orb2 {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    bottom: -100px;
+    left: -150px;
+    background: radial-gradient(
+      circle,
+      rgba(22, 163, 74, 0.1) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    animation: float 11s ease-in-out infinite reverse;
+    z-index: 0;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-28px) scale(1.04);
+    }
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 0.35rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .badge-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: blink 2s ease infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  .hero-headline {
+    font-size: clamp(3rem, 9vw, 6.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s ease 0.1s both;
+  }
+
+  .hero-headline .l1 {
+    display: block;
+    color: var(--ink);
+  }
+  .hero-headline .l2 {
+    display: block;
+    background: linear-gradient(
+      135deg,
+      var(--blue) 0%,
+      #6366f1 55%,
+      #8b5cf6 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 0.875rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.7s ease 0.3s both;
+  }
+
+  .btn-dark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--ink);
+    color: white;
+    padding: 0.875rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    font-family: "Bricolage Grotesque", sans-serif;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(10, 10, 15, 0.2);
+  }
+  .btn-dark:hover {
+    background: #1e1e2e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(10, 10, 15, 0.28);
+  }
+
+  .btn-light {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    color: var(--ink);
+    padding: 0.875rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border: 1.5px solid var(--border);
+    font-family: "Bricolage Grotesque", sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-light:hover {
+    border-color: #9ca3af;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    margin-top: 4rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.7s ease 0.4s both;
+  }
+
+  .stat-num {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: var(--ink);
+    display: block;
+    letter-spacing: -0.03em;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-family: "DM Mono", monospace;
+  }
+
+  /* DEMO SECTION */
+  .demo-section {
+  padding: 4rem 1.5rem;
+  background: white;
+}
+
+.demo-inner {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.demo-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  background: var(--paper);
+  border: 1.5px solid var(--border);
+  border-radius: 24px;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.demo-left {
+  z-index: 1;
+}
+
+.demo-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.demo-desc {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 1.75rem;
+}
+
+.demo-terminal {
+  background: #0f0f14;
+  border-radius: 16px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.terminal-header {
+  background: #1a1a24;
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.terminal-title {
+  font-size: 0.7rem;
+  color: #6b7280;
+  margin-left: 0.6rem;
+}
+
+.terminal-body {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.cred-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cred-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  min-width: 70px;
+}
+
+.cred-value {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  color: #e5e7eb;
+  font-size: 0.85rem;
+}
+
+.copy-btn {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem;
+  cursor: pointer;
+}
+
+.demo-note {
+  margin-top: 0.8rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* ✅ MOBILE FIX */
+@media (max-width: 768px) {
+  .demo-card {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.75rem 1.25rem;
+  }
+
+  .demo-left {
+    text-align: center;
+  }
+
+  .demo-title {
+    font-size: 1.5rem;
+  }
+
+  .demo-desc {
+    margin: 0 auto 1.5rem;
+  }
+
+  .btn-dark {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cred-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .cred-value {
+    width: 100%;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    align-self: flex-end;
+  }
+
+  .demo-note {
+    text-align: center;
+  }
+}
+
+  /* MOCKUP */
+  .mockup-section {
+    padding: 3rem 1.5rem 5rem;
+    background: white;
+  }
+
+  .mockup-shell {
+    max-width: 980px;
+    margin: 0 auto;
+    background: #0f0f14;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.07),
+      0 40px 80px rgba(0, 0, 0, 0.32),
+      0 0 100px rgba(29, 78, 216, 0.12);
+  }
+
+  .mockup-topbar {
+    background: #1a1a24;
+    padding: 0.7rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .mdot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+
+  .mockup-grid {
+    padding: 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.875rem;
+  }
+
+  .mc {
+    background: #1a1a24;
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.055);
+  }
+
+  .mc-label {
+    font-size: 0.65rem;
+    color: #52525b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: "DM Mono", monospace;
+    margin-bottom: 0.45rem;
+  }
+  .mc-val {
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-family: "Bricolage Grotesque", sans-serif;
+  }
+  .mc-sub {
+    font-size: 0.65rem;
+    margin-top: 0.2rem;
+    font-family: "DM Mono", monospace;
+  }
+
+  .mc-wide {
+    grid-column: span 2;
+  }
+
+  .mc-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    height: 72px;
+    margin-top: 0.875rem;
+  }
+
+  .mc-bar {
+    flex: 1;
+    border-radius: 3px 3px 0 0;
+  }
+
+  .mc-ai {
+    border: 1px solid rgba(59, 110, 246, 0.28) !important;
+    position: relative;
+    overflow: hidden;
+  }
+  .mc-ai::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(29, 78, 216, 0.07) 0%,
+      transparent 60%
+    );
+  }
+
+  .mc-msg {
+    background: rgba(255, 255, 255, 0.055);
+    border-radius: 7px;
+    padding: 0.55rem 0.7rem;
+    font-size: 0.68rem;
+    color: #d1d5db;
+    margin-top: 0.7rem;
+    font-family: "DM Mono", monospace;
+    line-height: 1.5;
+    position: relative;
+  }
+  .mc-reply {
+    background: rgba(29, 78, 216, 0.18);
+    border-radius: 7px;
+    padding: 0.55rem 0.7rem;
+    font-size: 0.68rem;
+    color: #93c5fd;
+    margin-top: 0.4rem;
+    font-family: "DM Mono", monospace;
+    line-height: 1.5;
+    position: relative;
+  }
+
+  /* FEATURES */
+  .features-section {
+    padding: 6rem 1.5rem;
+    background: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .features-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.4;
+  }
+
+  .eyebrow {
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 0.6rem;
+    font-family: "DM Mono", monospace;
+  }
+  .sec-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 0.875rem;
+  }
+  .sec-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 460px;
+    line-height: 1.7;
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+    max-width: 1080px;
+    margin: 3.5rem auto 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .bc {
+    background: white;
+    border-radius: 20px;
+    padding: 1.875rem;
+    border: 1.5px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform 0.22s,
+      box-shadow 0.22s;
+  }
+  .bc:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.07);
+  }
+
+  .bc-8 {
+    grid-column: span 8;
+  }
+  .bc-4 {
+    grid-column: span 4;
+  }
+  .bc-6 {
+    grid-column: span 6;
+  }
+
+  @media (max-width: 768px) {
+    .bc-8,
+    .bc-4,
+    .bc-6 {
+      grid-column: span 12;
+    }
+  }
+
+  .bc-icon {
+    font-size: 1.875rem;
+    margin-bottom: 0.875rem;
+    display: block;
+  }
+  .bc-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.02em;
+  }
+  .bc-desc {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .bc.dark {
+    background: var(--ink);
+    border-color: transparent;
+  }
+  .bc.dark .bc-title {
+    color: white;
+  }
+  .bc.dark .bc-desc {
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .bc.blue-tint {
+    background: linear-gradient(135deg, #eff6ff 0%, white 65%);
+  }
+  .bc.green-tint {
+    background: linear-gradient(135deg, #f0fdf4 0%, white 65%);
+  }
+
+  .tag-row {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    font-family: "DM Mono", monospace;
+  }
+  .tag-white {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.65);
+  }
+  .tag-green {
+    background: rgba(22, 163, 74, 0.1);
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .mini-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 44px;
+    margin-top: 1.1rem;
+  }
+  .mb-item {
+    flex: 1;
+    border-radius: 3px 3px 0 0;
+    background: var(--blue);
+    opacity: 0.12;
+  }
+  .mb-item.hi {
+    opacity: 0.85;
+  }
+
+  .runway-bar {
+    background: #f3f4f6;
+    border-radius: 100px;
+    height: 9px;
+    margin-top: 1rem;
+    overflow: hidden;
+  }
+  .runway-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--green), #4ade80);
+    width: 68%;
+  }
+
+  /* STEPS */
+  .steps-section {
+    padding: 6rem 1.5rem;
+    background: white;
+  }
+
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    max-width: 880px;
+    margin: 3.5rem auto 0;
+    position: relative;
+  }
+
+  .steps-row::before {
+    content: "";
+    position: absolute;
+    top: 27px;
+    left: calc(16.67% + 27px);
+    right: calc(16.67% + 27px);
+    height: 2px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--border) 0,
+      var(--border) 8px,
+      transparent 8px,
+      transparent 16px
+    );
+  }
+
+  @media (max-width: 600px) {
+    .steps-row {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .steps-row::before {
+      display: none;
+    }
+  }
+
+  .step {
+    text-align: center;
+    padding: 0 1.25rem;
+  }
+  .step-circle {
+    width: 54px;
+    height: 54px;
+    background: var(--ink);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    margin: 0 auto 1.25rem;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.02em;
+  }
+  .step-emoji {
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+  .step-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+  .step-desc {
+    font-size: 0.865rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* DARK STATS */
+  .stats-section {
+    padding: 5rem 1.5rem;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stats-section::before {
+    content: "";
+    position: absolute;
+    width: 900px;
+    height: 900px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle,
+      rgba(29, 78, 216, 0.14) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .stats-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-top: 2.75rem;
+  }
+
+  @media (max-width: 600px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .stat-box {
+    padding: 1.5rem 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+  }
+
+  .sn {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: white;
+    display: block;
+    letter-spacing: -0.04em;
+  }
+  .sl {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 500;
+    margin-top: 0.2rem;
+    font-family: "DM Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  /* VIDEO */
+  .video-section {
+    padding: 5rem 1.5rem;
+    background: white;
+  }
+  .video-shell {
+    max-width: 860px;
+    margin: 2.5rem auto 0;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.11);
+    border: 1.5px solid var(--border);
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 7rem 1.5rem;
+    background: var(--paper);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.4;
+  }
+
+  .cta-box {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border: 2px solid var(--ink);
+    border-radius: 24px;
+    padding: 3.5rem 3rem;
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+
+  .cta-title {
+    font-size: clamp(1.875rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 0.875rem;
+  }
+  .cta-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    line-height: 1.65;
+  }
+  .cta-btns {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cta-note {
+    font-size: 0.73rem;
+    color: var(--muted);
+    margin-top: 1.25rem;
+    font-family: "DM Mono", monospace;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fadeDown {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.65s ease,
+      transform 0.65s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal.delay-1 {
+    transition-delay: 0.1s;
+  }
+  .reveal.delay-2 {
+    transition-delay: 0.2s;
+  }
+</style>
+
+<!-- <div class="home-wrap"> -->
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="orb2"></div>
+    <div class="hero-inner">
+
+      <h1 class="hero-headline">
+        <span class="l1">Your AI CFO.</span>
+        <span class="l2">Without the CFO price tag.</span>
+      </h1>
+
+      <p class="hero-sub">
+        Fintoit gives early-stage startups CFO-level financial intelligence burn
+        rate, runway, forecasting, investor reports all powered by AI.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="/signup" class="btn-dark"
+          >Sign Up Now →</a
+        >
+        <a href="/about" class="btn-light">See How It Works</a>
+      <!-- </div>
+
+      <div class="hero-stats"> -->
+        <div class="text-center">
+          <span class="stat-num">20+</span>
+          <span class="stat-label">Features</span>
+        </div>
+        <div class="text-center">
+          <span class="stat-num">6</span>
+          <span class="stat-label">AI Tools</span>
+        </div>
+        <div class="text-center">
+          <span class="stat-num">1-Click</span>
+          <span class="stat-label">Investor Reports</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DEMO ACCESS ── -->
+<section class="demo-section">
+  <div class="demo-inner reveal">
+    <div class="demo-card">
+      
+      <!-- LEFT -->
+      <div class="demo-left">
+        <div class="eyebrow">Try It Now</div>
+        <h2 class="demo-title">Explore the live demo</h2>
+        <p class="demo-desc">
+          No signup required. Launch your own private sandbox, pre-loaded with
+          six months of sample data. Add, edit, delete anything; it's wiped clean
+          the moment you log out.
+        </p>
+        <form method="POST" action="/demo/launch" style="margin:0;">
+          <button type="submit" class="btn-dark" style="border:none;cursor:pointer;font:inherit;">
+            Launch Demo Dashboard →
+          </button>
+        </form>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="demo-right">
+        <div class="demo-terminal">
+          <div class="terminal-header">
+            <div class="tdot" style="background:#ef4444"></div>
+            <div class="tdot" style="background:#f59e0b"></div>
+            <div class="tdot" style="background:#22c55e"></div>
+            <span class="terminal-title">your sandbox</span>
+          </div>
+
+          <div class="terminal-body">
+            <div class="cred-row">
+              <span class="cred-label">access</span>
+              <code class="cred-value">Full read &amp; write</code>
+            </div>
+
+            <div class="cred-row">
+              <span class="cred-label">data</span>
+              <code class="cred-value">6 months pre-loaded</code>
+            </div>
+
+            <div class="cred-row">
+              <span class="cred-label">resets</span>
+              <code class="cred-value">On logout</code>
+            </div>
+          </div>
+        </div>
+
+        <p class="demo-note">
+          💡 It's all yours, a private copy that resets when you log out.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  <!-- ── DARK MOCKUP ── -->
+  <section class="mockup-section">
+    <div class="mockup-shell reveal">
+      <div class="mockup-topbar">
+        <div class="mdot" style="background: #ef4444"></div>
+        <div class="mdot" style="background: #f59e0b"></div>
+        <div class="mdot" style="background: #22c55e"></div>
+        <span
+          style="
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            color: #52525b;
+            margin-left: 0.75rem;
+          "
+          >fintoit.com/dashboard</span
+        >
+      </div>
+      <div class="mockup-grid">
+        <div class="mc">
+          <div class="mc-label">Current Cash</div>
+          <div class="mc-val" style="color: #22c55e">$247K</div>
+          <div class="mc-sub" style="color: #4ade80">↑ +12% this month</div>
+        </div>
+        <div class="mc">
+          <div class="mc-label">Monthly Burn</div>
+          <div class="mc-val" style="color: #f87171">$18.4K</div>
+          <div class="mc-sub" style="color: #6b7280">avg last 3 months</div>
+        </div>
+        <div class="mc">
+          <div class="mc-label">Runway</div>
+          <div class="mc-val" style="color: #60a5fa">13.4mo</div>
+          <div class="mc-sub" style="color: #4ade80">✓ Healthy</div>
+        </div>
+        <div class="mc">
+          <div class="mc-label">MRR</div>
+          <div class="mc-val" style="color: #a78bfa">$12.8K</div>
+          <div class="mc-sub" style="color: #4ade80">↑ +8% MoM</div>
+        </div>
+        <!-- Line Chart -->
+        <div class="mc mc-wide">
+          <div class="mc-label">Revenue vs Expenses</div>
+          <svg
+            viewBox="0 0 260 80"
+            style="width: 100%; margin-top: 0.875rem; overflow: visible"
+          >
+            <defs>
+              <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25" />
+                <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="expGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ef4444" stop-opacity="0.18" />
+                <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <!-- Revenue fill -->
+            <path
+              d="M0,55 C20,50 40,38 65,32 C90,26 110,20 130,15 C150,10 175,8 195,6 C215,4 240,5 260,3 L260,80 L0,80 Z"
+              fill="url(#revGrad)"
+            />
+            <!-- Expense fill -->
+            <path
+              d="M0,62 C20,60 40,57 65,55 C90,53 110,50 130,48 C150,46 175,45 195,44 C215,43 240,43 260,42 L260,80 L0,80 Z"
+              fill="url(#expGrad)"
+            />
+            <!-- Revenue line -->
+            <path
+              d="M0,55 C20,50 40,38 65,32 C90,26 110,20 130,15 C150,10 175,8 195,6 C215,4 240,5 260,3"
+              fill="none"
+              stroke="#3b82f6"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <!-- Expense line -->
+            <path
+              d="M0,62 C20,60 40,57 65,55 C90,53 110,50 130,48 C150,46 175,45 195,44 C215,43 240,43 260,42"
+              fill="none"
+              stroke="#ef4444"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <!-- Dots at end -->
+            <circle cx="260" cy="3" r="3" fill="#3b82f6" />
+            <circle cx="260" cy="42" r="3" fill="#ef4444" />
+          </svg>
+          <div style="display: flex; gap: 1rem; margin-top: 0.4rem">
+            <span
+              style="
+                font-size: 0.62rem;
+                color: #3b82f6;
+                font-family: 'DM Mono', monospace;
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+              "
+              ><span
+                style="
+                  display: inline-block;
+                  width: 12px;
+                  height: 2px;
+                  background: #3b82f6;
+                  border-radius: 2px;
+                "
+              ></span
+              >Revenue</span
+            >
+            <span
+              style="
+                font-size: 0.62rem;
+                color: #ef4444;
+                font-family: 'DM Mono', monospace;
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+              "
+              ><span
+                style="
+                  display: inline-block;
+                  width: 12px;
+                  height: 2px;
+                  background: #ef4444;
+                  border-radius: 2px;
+                "
+              ></span
+              >Expenses</span
+            >
+          </div>
+        </div>
+        <!-- AI -->
+        <div class="mc mc-wide mc-ai">
+          <div class="mc-label" style="position: relative; z-index: 1">
+            🤖 AI CFO Assistant
+          </div>
+          <div class="mc-msg">What's my runway if I hire 2 engineers?</div>
+          <div class="mc-reply">
+            With 2 engineers at $9K/mo, runway drops from 13.4 → 8.1 months.
+            Consider raising before month 6.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES BENTO ── -->
+  <section class="features-section">
+    <div
+      style="max-width: 1080px; margin: 0 auto; position: relative; z-index: 1"
+    >
+      <div class="reveal">
+        <div class="eyebrow">What Fintoit Does</div>
+        <h2 class="sec-title">Everything a CFO does.<br />None of the cost.</h2>
+        <p class="sec-sub">
+          Built for founders who need real financial intelligence, not another
+          spreadsheet.
+        </p>
+      </div>
+
+      <div class="bento">
+        <!-- Hero feature -->
+        <div class="bc bc-8 dark reveal">
+          <span class="bc-icon">📊</span>
+          <div class="bc-title">Real-Time Financial Dashboard</div>
+          <div class="bc-desc" style="max-width: 400px">
+            See burn rate, runway, MRR, and cash balance the moment you log in.
+            Always live: no manual updates, no stale data.
+          </div>
+          <div class="tag-row">
+            {% for t in ['Burn Rate', 'Runway', 'MRR', 'Anomaly Alerts'] %}
+            <span class="tag tag-white">{{ t }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="bc bc-4 blue-tint reveal delay-1">
+          <span class="bc-icon">🤖</span>
+          <div class="bc-title">AI Chat Assistant</div>
+          <div class="bc-desc">
+            Ask anything in plain English. "What's my runway if I hire 3
+            people?" answered instantly from your real data.
+          </div>
+        </div>
+
+        <div class="bc bc-4 reveal">
+          <span class="bc-icon">🔮</span>
+          <div class="bc-title">6-Month Forecast</div>
+          <div class="bc-desc">
+            AI projects your cash flow from actual spending trends. Spot
+            problems before they happen.
+          </div>
+          <div class="runway-bar"><div class="runway-fill"></div></div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              margin-top: 0.35rem;
+            "
+          >
+            <span
+              style="
+                font-size: 0.68rem;
+                color: var(--muted);
+                font-family: 'DM Mono', monospace;
+              "
+              >Now</span
+            >
+            <span
+              style="
+                font-size: 0.68rem;
+                color: var(--green);
+                font-weight: 700;
+                font-family: 'DM Mono', monospace;
+              "
+              >+6 months</span
+            >
+          </div>
+        </div>
+
+        <div class="bc bc-4 reveal delay-1">
+          <span class="bc-icon">📑</span>
+          <div class="bc-title">Investor Reports</div>
+          <div class="bc-desc">
+            AI writes a board-ready PDF with narrative, KPI table, and
+            financials in under 30 seconds.
+          </div>
+        </div>
+
+        <div class="bc bc-4 reveal delay-2">
+          <span class="bc-icon">🔭</span>
+          <div class="bc-title">Scenario Planning</div>
+          <div class="bc-desc">
+            Model "what if" situations hiring, raising, cutting costs and see
+            the impact on runway instantly.
+          </div>
+        </div>
+
+        <div class="bc bc-6 reveal">
+          <span class="bc-icon">👥</span>
+          <div class="bc-title">Payroll & Cap Table</div>
+          <div class="bc-desc">
+            Track employees, salaries, equity, and pay runs. Generate and e-sign
+            contracts in one click.
+          </div>
+          <div class="mini-bars">
+            {% for h, hi in
+            [(40,False),(60,False),(45,False),(78,False),(65,False),(90,False),(75,False),(100,True)]
+            %}
+            <div
+              class="mb-item {% if hi %}hi{% endif %}"
+              style="height:{{ h }}%"
+            ></div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="bc bc-6 green-tint reveal delay-1">
+          <span class="bc-icon">🏦</span>
+          <div class="bc-title">Full Accounting Suite</div>
+          <div class="bc-desc">
+            Balance sheets, income statements, cash flow, P&L, tax docs,
+            invoices, bills, and vendors all in one platform.
+          </div>
+          <div class="tag-row">
+            {% for t in ['Balance Sheet', 'P&L', 'Cash Flow', 'Tax Docs',
+            'Invoices'] %}
+            <span class="tag tag-green">{{ t }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section class="steps-section">
+    <div
+      style="max-width: 880px; margin: 0 auto; text-align: center"
+      class="reveal"
+    >
+      <div class="eyebrow">Get Started</div>
+      <h2 class="sec-title">Up and running in minutes</h2>
+      <p class="sec-sub" style="margin: 0 auto">
+        No accountant needed. No CFO required. Just sign up and go.
+      </p>
+    </div>
+
+    <div class="steps-row reveal">
+      {% for num, emoji, title, desc in [ ('01', '✍️', 'Create your account',
+      'Sign up in 60 seconds. No credit card, no setup fees, no nonsense.'),
+      ('02', '💳', 'Add your transactions', 'Import from CSV or add manually. AI
+      auto-categorizes everything.'), ('03', '📊', 'Get instant insights', 'Your
+      dashboard, AI advisor, forecasts, and reports, ready immediately.') ] %}
+      <div class="step">
+        <div class="step-circle">{{ num }}</div>
+        <span class="step-emoji">{{ emoji }}</span>
+        <div class="step-title">{{ title }}</div>
+        <div class="step-desc">{{ desc }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ── VIDEO ── -->
+  <section class="video-section">
+    <div style="max-width: 860px; margin: 0 auto">
+      <div style="text-align: center; margin-bottom: 2rem" class="reveal">
+        <div class="eyebrow">See It In Action</div>
+        <h2 class="sec-title" style="font-size: clamp(1.75rem, 4vw, 2.75rem)">
+          Watch the overview
+        </h2>
+      </div>
+      <div class="video-shell reveal">
+        <video
+          controls
+          preload="metadata"
+          poster="../static/images/video-tumbnail(2).png"
+          style="width: 100%; display: block; background: #000"
+        >
+          <source src="/static/videos/Overview(1).mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DARK STATS ── -->
+  <section class="stats-section">
+    <div class="stats-inner">
+      <div class="reveal">
+        <div class="eyebrow" style="color: rgba(255, 255, 255, 0.35)">
+          The Numbers
+        </div>
+        <h2
+          style="
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+          "
+        >
+          Built for startups.<br />Ready on day one.
+        </h2>
+        <p style="color: rgba(255, 255, 255, 0.4); font-size: 0.95rem">
+          Everything included. No per-seat pricing.
+        </p>
+      </div>
+      <div class="stats-grid reveal">
+        {% for num, label in [('20+','Features included'),('6','AI-powered
+        tools'),('∞','Transactions'),('$0','Setup Fees')] %}
+        <div class="stat-box">
+          <span class="sn">{{ num }}</span>
+          <span class="sl">{{ label }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="cta-section">
+    <div class="cta-box reveal">
+      <h2 class="cta-title">Ready to know your numbers?</h2>
+      <p class="cta-sub">
+        Join founders using Fintoit to make smarter financial decisions without
+        hiring a CFO.
+      </p>
+      <div class="cta-btns">
+        <a href="/signup" class="btn-dark"
+          >Sign Up Now →</a
+        >
+        <a href="/contact" class="btn-light">Talk to Us</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Reveal on scroll
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add("visible"), i * 70);
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.08 }
+  );
+
+  document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+
+  // Copy to clipboard
+  function copyToClipboard(elementId) {
+    const el = document.getElementById(elementId);
+    const text = el.textContent;
+
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = el.nextElementSibling;
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML =
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+      setTimeout(() => {
+        btn.innerHTML = originalHTML;
+      }, 1500);
+    });
+  }
+</script>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PROMO CAPTURE — timed popup.
+     Only ever seen by anonymous visitors, because the / route redirects
+     signed-in users straight to the dashboard. Dismissal and success are
+     both remembered in localStorage so it appears once, not on every
+     page view — a popup that re-nags is worse than no popup.
+     The code string comes from the server, so rotating it in Stripe and
+     in the env var is enough; this markup never hardcodes it.
+     ══════════════════════════════════════════════════════════════════ -->
+<div id="promo-overlay" class="promo-overlay" role="dialog" aria-modal="true"
+     aria-labelledby="promo-title" aria-hidden="true">
+  <div class="promo-modal">
+    <button type="button" class="promo-close" id="promo-close" aria-label="Close">×</button>
+
+    <div id="promo-step-form">
+      <div class="promo-badge">15% off</div>
+      <h2 class="promo-title" id="promo-title">Get 15% off your first month</h2>
+      <p class="promo-sub">
+        Drop your email and we'll send you a code. No spam: one email with the
+        code, and you can unsubscribe from it in a click.
+      </p>
+      <form id="promo-form" novalidate>
+        <div class="promo-row">
+          <input type="email" id="promo-email" name="email" required
+                 placeholder="you@startup.com" class="promo-input"
+                 autocomplete="email" aria-label="Email address">
+          <button type="submit" class="promo-btn" id="promo-submit">Get my code</button>
+        </div>
+        <div class="promo-error" id="promo-error" role="alert" hidden></div>
+      </form>
+    </div>
+
+    <div id="promo-step-done" hidden>
+      <div class="promo-badge promo-badge-green">✓ Sent</div>
+      <h2 class="promo-title">Here's your code</h2>
+      <p class="promo-sub" id="promo-done-sub">We've emailed it to you as well, so you won't lose it.</p>
+      <button type="button" class="promo-code" id="promo-code" title="Click to copy">
+        <span id="promo-code-text">—</span>
+        <span class="promo-copy-hint" id="promo-copy-hint">click to copy</span>
+      </button>
+      <a href="/pricing" class="promo-cta">See plans →</a>
+    </div>
+  </div>
+</div>
+
+<style>
+.promo-overlay{
+  position:fixed;inset:0;z-index:9998;
+  background:rgba(10,10,15,.55);backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;padding:1.25rem;
+  opacity:0;pointer-events:none;transition:opacity .25s ease;
+}
+.promo-overlay.visible{opacity:1;pointer-events:auto;}
+.promo-modal{
+  position:relative;width:100%;max-width:440px;box-sizing:border-box;
+  background:#fff;border:2px solid #0a0a0f;border-radius:20px;
+  box-shadow:8px 8px 0 #0a0a0f;padding:2rem;text-align:center;
+  font-family:'Bricolage Grotesque',sans-serif;color:#0a0a0f;
+  transform:translateY(16px);transition:transform .25s ease;
+}
+.promo-overlay.visible .promo-modal{transform:translateY(0);}
+@media(max-width:480px){.promo-modal{padding:1.5rem;}}
+.promo-close{
+  position:absolute;top:.6rem;right:.85rem;background:none;border:none;
+  font-size:1.6rem;line-height:1;color:#6b6b7a;cursor:pointer;padding:.2rem;
+  transition:color .15s;
+}
+.promo-close:hover{color:#0a0a0f;}
+.promo-badge{
+  display:inline-block;background:#1d4ed8;color:#fff;font-family:'DM Mono',monospace;
+  font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  padding:.28rem .7rem;border-radius:100px;margin-bottom:.9rem;
+}
+.promo-badge-green{background:#16a34a;}
+.promo-title{font-size:1.45rem;font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:0 0 .55rem;}
+.promo-sub{font-size:.88rem;color:#6b6b7a;line-height:1.6;margin:0 0 1.35rem;}
+.promo-row{display:flex;gap:.5rem;}
+@media(max-width:480px){.promo-row{flex-direction:column;}}
+.promo-input{
+  flex:1;min-width:0;box-sizing:border-box;
+  border:1.5px solid #e2e1db;border-radius:10px;padding:.75rem .9rem;
+  font-family:'Bricolage Grotesque',sans-serif;font-size:.95rem;color:#0a0a0f;
+  background:#f7f6f2;outline:none;transition:border-color .18s,background .18s,box-shadow .18s;
+}
+.promo-input:focus{border-color:#0a0a0f;background:#fff;box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.promo-btn{
+  background:#0a0a0f;color:#fff;border:none;border-radius:10px;padding:.75rem 1.15rem;
+  font-family:'Bricolage Grotesque',sans-serif;font-size:.92rem;font-weight:700;
+  cursor:pointer;white-space:nowrap;transition:all .18s;
+}
+.promo-btn:hover:not(:disabled){background:#1e1e2e;transform:translateY(-1px);}
+.promo-btn:disabled{opacity:.55;cursor:default;}
+.promo-error{color:#dc2626;font-size:.8rem;font-weight:600;margin-top:.7rem;text-align:left;}
+.promo-code{
+  display:block;width:100%;box-sizing:border-box;background:#f7f6f2;
+  border:2px dashed #0a0a0f;border-radius:12px;padding:1rem;margin-bottom:1.1rem;
+  font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:500;letter-spacing:.22em;
+  color:#0a0a0f;cursor:pointer;transition:background .15s;
+}
+.promo-code:hover{background:#efeee8;}
+.promo-copy-hint{
+  display:block;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  color:#6b6b7a;margin-top:.45rem;
+}
+.promo-cta{
+  display:inline-block;background:#0a0a0f;color:#fff;padding:.75rem 1.5rem;
+  border-radius:10px;font-weight:700;font-size:.92rem;text-decoration:none;
+  font-family:'Bricolage Grotesque',sans-serif;transition:all .2s;
+}
+.promo-cta:hover{background:#1e1e2e;transform:translateY(-1px);}
+</style>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'fintoit_promo_seen';
+  var DELAY_MS = 18000;   // long enough to read something first
+
+  var overlay = document.getElementById('promo-overlay');
+  if (!overlay) return;
+
+  var closeBtn  = document.getElementById('promo-close');
+  var form      = document.getElementById('promo-form');
+  var emailEl   = document.getElementById('promo-email');
+  var submitEl  = document.getElementById('promo-submit');
+  var errorEl   = document.getElementById('promo-error');
+  var stepForm  = document.getElementById('promo-step-form');
+  var stepDone  = document.getElementById('promo-step-done');
+  var codeBtn   = document.getElementById('promo-code');
+  var codeText  = document.getElementById('promo-code-text');
+  var copyHint  = document.getElementById('promo-copy-hint');
+  var doneSub   = document.getElementById('promo-done-sub');
+  var timer     = null;
+
+  function seen() {
+    try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) { return false; }
+  }
+  function markSeen() {
+    try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) { /* private mode */ }
+  }
+
+  function open() {
+    overlay.classList.add('visible');
+    overlay.setAttribute('aria-hidden', 'false');
+    if (emailEl) { try { emailEl.focus(); } catch (e) {} }
+    if (window.gtag) gtag('event', 'promo_popup_shown', { source: 'home' });
+  }
+
+  function close() {
+    overlay.classList.remove('visible');
+    overlay.setAttribute('aria-hidden', 'true');
+    markSeen();
+    if (timer) { clearTimeout(timer); timer = null; }
+  }
+
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('visible')) close();
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    errorEl.hidden = true;
+
+    var email = (emailEl.value || '').trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      errorEl.textContent = 'Please enter a valid email address.';
+      errorEl.hidden = false;
+      return;
+    }
+
+    submitEl.disabled = true;
+    submitEl.textContent = 'Sending…';
+
+    fetch('/promo/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+      .then(function (res) {
+        if (!res.ok || !res.data.ok) {
+          throw new Error((res.data && res.data.error) || 'Something went wrong.');
+        }
+        codeText.textContent = res.data.code;
+        if (res.data.already) {
+          doneSub.textContent = "You're already on the list. Here's the code again.";
+        }
+        stepForm.hidden = true;
+        stepDone.hidden = false;
+        markSeen();
+        if (window.gtag) gtag('event', 'promo_email_captured', { source: 'home' });
+      })
+      .catch(function (err) {
+        errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+        errorEl.hidden = false;
+        submitEl.disabled = false;
+        submitEl.textContent = 'Get my code';
+      });
+  });
+
+  codeBtn.addEventListener('click', function () {
+    var text = codeText.textContent;
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(text).then(function () {
+      copyHint.textContent = 'copied ✓';
+      setTimeout(function () { copyHint.textContent = 'click to copy'; }, 1800);
+    });
+  });
+
+  if (!seen()) timer = setTimeout(open, DELAY_MS);
+})();
+</script>
+
+{% endblock %}

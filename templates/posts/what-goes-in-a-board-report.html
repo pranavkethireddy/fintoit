@@ -1,0 +1,132 @@
+{% extends "post_base.html" %}
+{% block title %}What Actually Goes in a Board Report | Fintoit Blog{% endblock %}
+
+{% block post_title %}What Actually Goes in a Board Report at Pre-Seed and Seed{% endblock %}
+{% block post_subtitle %}Investors want a monthly email that takes two minutes to read, not a deck. The four numbers it has to contain, the three sections that carry the story, and a filled-in example.{% endblock %}
+
+{% block toc %}
+<li><a href="#meeting-vs-update">A board meeting is not a board update</a></li>
+<li><a href="#four-numbers">The four numbers</a></li>
+<li><a href="#freeze-definitions">Freeze your definitions</a></li>
+<li><a href="#three-sections">The three sections that carry the story</a></li>
+<li><a href="#the-ask">The ask</a></li>
+<li><a href="#filled-in">What it looks like filled in</a></li>
+<li><a href="#length-cadence">Length, cadence, and two checks</a></li>
+{% endblock %}
+
+{% block post_content %}
+
+<p>You closed the round a few weeks ago. Somewhere in the paperwork there was a line about regular reporting, and now one of your investors has asked when the first update is coming. You have never written one, and you are not sure whether they want a deck, a spreadsheet, or an email.</p>
+
+<p>Short version: they want an email, monthly, that takes under two minutes to read. Not a deck.</p>
+
+<h2 id="meeting-vs-update">A board meeting and a board update are not the same thing</h2>
+
+<p>These get conflated, and the confusion is why founders overbuild their first one.</p>
+
+<p>A <strong>board meeting</strong> is a scheduled session with your formal board, and it comes with a deck circulated in advance. NextView Ventures makes the useful point that <a href="https://nextview.vc/blog/free-startup-board-decks-template/" target="_blank" rel="noopener noreferrer">the deck is a pre-read rather than a presentation aid</a>, and that more than half the meeting should go to actually discussing problems instead of narrating slides. At pre-seed and seed you may have two or three people on your board, or no formal board at all, and meetings might be quarterly.</p>
+
+<p>A <strong>monthly investor update</strong> is an email to everyone who put money in. It is the instrument that matters at your stage, and it is the one to start now.</p>
+
+<p>If you do nothing else after reading this, start the monthly email. Consistency does more for you than polish.</p>
+
+<h2 id="four-numbers">The four numbers</h2>
+
+<p>Every update needs these, in the same format, every month:</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Metric</th><th>What it answers</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>MRR (or your revenue equivalent)</td><td>Is it working?</td></tr>
+    <tr><td>Net burn</td><td>How fast is cash leaving?</td></tr>
+    <tr><td>Cash on hand</td><td>How much is left?</td></tr>
+    <tr><td>Runway</td><td>How long until you need to raise?</td></tr>
+  </tbody>
+</table>
+
+<p>Two questions sit behind every investor read: is this working, and how long can you keep going. Those four answer both. Add a fifth company-specific metric only when it genuinely explains the month.</p>
+
+<p>Note <strong>net</strong> burn, not gross. Gross burn is what you spent. Net burn is what you spent minus what came in, and it is the number that sets runway. If you are pre-revenue they are the same, which is fine, but say which one you are reporting.</p>
+
+<p>Then the rule most first updates fail: <strong>your runway has to be derivable from the cash and burn you just reported.</strong> If you say you have $400,000 in the bank and you are burning $50,000 a month, your runway is eight months. If you then write "runway: 12 months" because you are assuming revenue growth, you have handed a careful reader a contradiction inside the same paragraph. Report the arithmetic honestly, or show the assumption explicitly.</p>
+
+<p>Our post on <a href="/blog/burn-rate-and-runway">burn rate and runway</a> works through how to calculate both properly, and the <a href="/blog/what-is-mrr-and-how-to-grow-it">MRR post</a> covers the revenue side.</p>
+
+<h2 id="freeze-definitions">Freeze your definitions</h2>
+
+<p>If burn means net burn in January, it means net burn in December. If customer count means paying customers in one update, it cannot quietly become signups in the next.</p>
+
+<p>This sounds pedantic. It is the difference between an update investors can read as a trend and one they have to reinterpret every month. If you do have to change a definition, say so rather than hoping nobody notices. They notice. Investors read updates side by side, and a metric that quietly changes shape reads as something being hidden.</p>
+
+<h2 id="three-sections">The three sections that carry the story</h2>
+
+<p><strong>What changed.</strong> One or two sentences comparing this month to last. It is the section founders leave out, and without it your reader is reconstructing the trend from memory.</p>
+
+<p><strong>What is not working.</strong> This is where the update earns trust or loses it. Every company has something hard every month, and naming yours plainly, with the number attached, is what makes the good news believable. Not "sales is slower than we hoped" but "our average sales cycle went from 43 days to 67 days, we think because we moved upmarket, and here is what we are doing about it." An update that is all wins reads like marketing, and the reader discounts the wins accordingly.</p>
+
+<p><strong>What is next.</strong> One to three things that define success in the next thirty days, specific enough that your investor can check them against next month's update. "Grow faster" is not checkable. "Close the two deals in final negotiation" is.</p>
+
+<h2 id="the-ask">The ask</h2>
+
+<p>One ask. Two at most. A list of five gets none of them acted on.</p>
+
+<p>Make it specific enough to act on without a follow-up question. "Intros would be great" produces nothing. "A warm intro to a VP of Operations at a 200 to 500 person SaaS company evaluating workflow tools this quarter" produces an intro.</p>
+
+<p>Your investors see a lot of companies and know a lot of people. The ask is the only part of the update that puts any of that to work, and most founders waste it.</p>
+
+<h2 id="filled-in">What it looks like filled in</h2>
+
+<p>Here is a complete example. The company and every number in it are invented for illustration.</p>
+
+<blockquote style="border-left:3px solid var(--border); background:var(--paper); border-radius:0 12px 12px 0; padding:1.5rem 1.75rem; margin:1.75rem 0;">
+
+  <p><strong>Subject: Northwind, August 2026 update</strong></p>
+
+  <p>We closed August at $18,400 MRR, up 11% from July, added six customers, and lost our largest pilot. Focus for September is converting the four remaining pilots.</p>
+
+  <p><strong>By the numbers</strong></p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>Metric</th><th>Aug</th><th>Jul</th><th>Change</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>MRR</td><td>$18,400</td><td>$16,600</td><td>+11%</td></tr>
+      <tr><td>Net burn</td><td>$41,000</td><td>$38,500</td><td>+$2,500</td></tr>
+      <tr><td>Cash</td><td>$612,000</td><td>$653,000</td><td></td></tr>
+      <tr><td>Runway</td><td>14.9 months at current net burn</td><td></td><td></td></tr>
+      <tr><td>Customers</td><td>34</td><td>28</td><td>+6</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>What changed.</strong> Growth came almost entirely from the self-serve tier, which we did not expect. Six of eight new accounts arrived without ever talking to us.</p>
+
+  <p><strong>What is not working.</strong> We lost the Brightline pilot, worth $2,100 of expected MRR. They needed SSO and we do not have it. That is the third deal SSO has cost us, so it moves up the roadmap for September.</p>
+
+  <p><strong>What is next.</strong> Ship SSO. Convert at least two of the four open pilots. Hold net burn under $42,000.</p>
+
+  <p><strong>Ask.</strong> We are hiring a first support engineer. If you know someone who has done support at a sub-20-person B2B company and wants more ownership, I would like the intro.</p>
+
+  <p>Numbers behind this are in the shared folder. Reply any time.</p>
+
+</blockquote>
+
+<p>Under 200 words plus a table, which is shorter than the range below and perfectly fine. It took fifteen minutes to write because the format did not change from last month.</p>
+
+<p>Notice that the numbers agree with each other. Cash fell from $653,000 to $612,000, a drop of exactly the $41,000 net burn reported on the line above. Runway of 14.9 months is $612,000 divided by $41,000. A reader can check every figure against the others in about ten seconds, and that is the point.</p>
+
+<h2 id="length-cadence">Length, cadence, and two things before you send</h2>
+
+<p>Aim for 250 to 600 words plus the metrics block. <a href="https://techcrunch.com/2024/02/05/how-to-write-your-monthly-investor-update/" target="_blank" rel="noopener noreferrer">TechCrunch's guide</a> puts seed and Series A updates in the 250 to 750 word range, which matches what investors say they actually read. Longer is not more thorough. An investor who wants detail will reply and ask, and that reply is worth more than the detail would have been.</p>
+
+<p>Send monthly, on a fixed date, whether the month was good or bad. Draft it a week ahead so a bad week does not turn into a missed update.</p>
+
+<p>Then two checks that cost nothing. Search the draft for the word "excited" and delete it. And confirm that nothing in the update contradicts what you said last month, by reading the previous update rather than trusting your memory.</p>
+
+<hr class="divider" />
+
+<p>Pulling these four numbers together should take minutes, not an evening of reconciling spreadsheets. That is the part Fintoit handles: burn, runway, MRR, and cash stay current, and the board-ready version generates off them.</p>
+
+{% endblock %}

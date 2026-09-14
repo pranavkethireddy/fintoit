@@ -1,0 +1,820 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Fintoit{% endblock %}
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap');
+:root { --ink:#0a0a0f; --paper:#f7f6f2; --blue:#1d4ed8; --green:#16a34a; --red:#dc2626; --amber:#d97706; --muted:#6b6b7a; --border:#e2e1db; }
+.db { font-family:'Bricolage Grotesque',sans-serif; color:var(--ink); }
+
+/* ── HEADER ── */
+.db-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.db-greeting { }
+.db-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+
+.db-sub {
+  font-size: 0.875rem;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+
+.db-sub span { color: var(--blue); font-weight: 500; }
+
+.db-actions {
+  display: flex;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  transition: all 0.18s;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+}
+
+.ab-dark { background:var(--ink); color:white; }
+.ab-dark:hover { background:#1e1e2e; transform:translateY(-1px); }
+
+.ab-outline { background:white; color:var(--ink); border-color:var(--border); }
+.ab-outline:hover { border-color:var(--ink); transform:translateY(-1px); }
+
+.ab-purple { background:#7c3aed; color:white; }
+.ab-purple:hover { background:#6d28d9; transform:translateY(-1px); }
+
+.ab-teal { background:#0d9488; color:white; }
+.ab-teal:hover { background:#0f766e; transform:translateY(-1px); }
+
+/* ── METRIC CARDS ── */
+.metrics-grid {
+  display: grid;
+  /* Five tiles now (cash · gross burn · net burn · runway · MRR). auto-fit lets
+     them share one row on wide screens and wrap cleanly instead of squashing. */
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media(max-width:900px){ .metrics-grid { grid-template-columns:repeat(2,1fr); } }
+@media(max-width:480px){ .metrics-grid { grid-template-columns:1fr; } }
+
+.mc {
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 4px 4px 0 var(--ink);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.mc:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+
+.mc-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 0.625rem;
+}
+
+.mc-value {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 0.375rem;
+}
+
+.mc-sub {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+
+.mc-accent {
+  position: absolute;
+  top: 0; right: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: 0 14px 14px 0;
+}
+
+.mc-cash .mc-value { color: var(--green); }
+.mc-cash .mc-accent { background: var(--green); }
+
+.mc-burn .mc-value { color: var(--red); }
+.mc-burn .mc-accent { background: var(--red); }
+
+.mc-netburn .mc-value { color: var(--red); }
+.mc-netburn .mc-accent { background: var(--red); }
+.mc-netburn-pos .mc-value { color: var(--green); }
+.mc-netburn-pos .mc-accent { background: var(--green); }
+
+.mc-runway-good .mc-value { color: var(--green); }
+.mc-runway-good .mc-accent { background: var(--green); }
+.mc-runway-warn .mc-value { color: var(--amber); }
+.mc-runway-warn .mc-accent { background: var(--amber); }
+.mc-runway-crit .mc-value { color: var(--red); }
+.mc-runway-crit .mc-accent { background: var(--red); }
+
+.mc-mrr .mc-value { color: var(--blue); }
+.mc-mrr .mc-accent { background: var(--blue); }
+
+/* ── ALERTS ── */
+.alert-strip {
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  border: 1.5px solid;
+}
+
+.alert-crit { background:#fef2f2; border-color:#fecaca; }
+.alert-warn { background:#fffbeb; border-color:#fde68a; }
+
+.alert-icon { font-size: 1.25rem; flex-shrink:0; margin-top:0.05rem; }
+.alert-body { flex: 1; }
+.alert-title { font-size:0.9rem; font-weight:700; margin-bottom:0.2rem; }
+.alert-crit .alert-title { color:#991b1b; }
+.alert-warn .alert-title { color:#92400e; }
+.alert-msg { font-size:0.825rem; line-height:1.55; }
+.alert-crit .alert-msg { color:#b91c1c; }
+.alert-warn .alert-msg { color:#b45309; }
+
+/* Anomaly cards */
+.anomaly-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+@media(max-width:640px){ .anomaly-grid{grid-template-columns:1fr;} }
+
+.anomaly-card {
+  border-radius: 12px;
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border: 1.5px solid;
+}
+.ac-high { background:#fef2f2; border-color:#fecaca; }
+.ac-med { background:#fffbeb; border-color:#fde68a; }
+.ac-icon { font-size:1.1rem; flex-shrink:0; }
+.ac-title { font-size:0.825rem; font-weight:700; margin-bottom:0.15rem; }
+.ac-high .ac-title { color:#991b1b; }
+.ac-med .ac-title { color:#92400e; }
+.ac-msg { font-size:0.775rem; line-height:1.5; }
+.ac-high .ac-msg { color:#b91c1c; }
+.ac-med .ac-msg { color:#b45309; }
+
+/* ── SECTION HEADER ── */
+.section-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.18rem 0.55rem;
+  border-radius: 100px;
+  background: var(--paper);
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── KPI GRID ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+@media(max-width:900px){ .kpi-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:480px){ .kpi-grid{grid-template-columns:1fr;} }
+
+.kpi-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 1.125rem;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.kpi-card:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.07); }
+
+.kpi-label { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); font-family:'DM Mono',monospace; margin-bottom:0.4rem; }
+.kpi-val { font-size:1.5rem; font-weight:800; letter-spacing:-0.03em; margin-bottom:0.2rem; }
+.kpi-sub { font-size:0.7rem; color:var(--muted); font-family:'DM Mono',monospace; }
+
+.kpi-bar { height:3px; background:var(--paper); border-radius:100px; margin-top:0.625rem; overflow:hidden; }
+.kpi-bar-fill { height:100%; border-radius:100px; }
+
+/* Sparkline */
+.sparkline { display:flex; align-items:flex-end; gap:2px; height:20px; margin-top:0.5rem; }
+.spark-bar { flex:1; border-radius:2px 2px 0 0; background:#bfdbfe; }
+
+/* ── CHARTS ── */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+@media(max-width:800px){ .charts-grid{grid-template-columns:1fr;} }
+
+.chart-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 1.375rem;
+}
+
+.chart-card-title {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.01em;
+}
+
+.chart-card-sub {
+  font-size: 0.68rem;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 1rem;
+}
+
+/* Forecast card — full width */
+.forecast-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 1.375rem;
+  margin-bottom: 1rem;
+}
+
+.forecast-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+@media(max-width:480px){ .forecast-stats{grid-template-columns:1fr;} }
+
+.fstat {
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 0.875rem;
+  text-align: center;
+}
+.fstat-val { font-size:1.125rem; font-weight:800; letter-spacing:-0.03em; display:block; }
+.fstat-label { font-size:0.62rem; color:var(--muted); font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.07em; margin-top:0.2rem; }
+
+/* ── MONTHLY TABLE ── */
+.table-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.table-card table { width:100%; border-collapse:collapse; }
+.table-card thead { background:var(--ink); }
+.table-card th { padding:0.875rem 1.25rem; text-align:left; font-size:0.65rem; font-weight:700; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.1em; font-family:'DM Mono',monospace; }
+.table-card th:last-child { text-align:right; }
+.table-card td { padding:0.875rem 1.25rem; font-size:0.875rem; border-bottom:1px solid var(--border); }
+.table-card tr:last-child td { border-bottom:none; }
+.table-card tr:hover td { background:var(--paper); }
+
+.td-month { font-weight:700; color:var(--ink); font-family:'DM Mono',monospace; font-size:0.8rem; }
+.td-green { color:var(--green); font-weight:700; text-align:right; }
+.td-red { color:var(--red); font-weight:700; text-align:right; }
+.td-blue { color:var(--blue); font-weight:800; font-size:0.95rem; text-align:right; }
+.td-neutral { text-align:right; font-weight:700; color:var(--ink); }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  border: 2px dashed var(--border);
+  border-radius: 20px;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: var(--paper);
+}
+
+.empty-icon { font-size:3.5rem; margin-bottom:1.25rem; display:block; }
+.empty-title { font-size:1.5rem; font-weight:800; letter-spacing:-0.03em; color:var(--ink); margin-bottom:0.5rem; }
+.empty-sub { font-size:0.9rem; color:var(--muted); max-width:400px; margin:0 auto 2rem; line-height:1.65; }
+.empty-btns { display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap; }
+
+.eb-dark { display:inline-flex; align-items:center; gap:0.4rem; background:var(--ink); color:white; padding:0.75rem 1.5rem; border-radius:10px; font-weight:700; font-size:0.9rem; text-decoration:none; font-family:'Bricolage Grotesque',sans-serif; transition:all 0.18s; }
+.eb-dark:hover { background:#1e1e2e; transform:translateY(-1px); }
+
+.eb-outline { display:inline-flex; align-items:center; gap:0.4rem; background:white; color:var(--ink); padding:0.75rem 1.5rem; border-radius:10px; font-weight:600; font-size:0.9rem; text-decoration:none; border:1.5px solid var(--border); font-family:'Bricolage Grotesque',sans-serif; transition:all 0.18s; }
+.eb-outline:hover { border-color:var(--ink); transform:translateY(-1px); }
+</style>
+
+<div class="db">
+
+  <!-- ── HEADER ── -->
+  <div class="db-header">
+    <div class="db-greeting">
+      <h1 class="db-title">Financial Dashboard</h1>
+      <p class="db-sub">Welcome back, <span>{{ current_user.full_name }}</span> · <span id="db-time"></span></p>
+    </div>
+    <div class="db-actions">
+      <a href="/ai-chat-page" class="action-btn ab-purple">💬 AI Chat</a>
+      <a href="/ai-insights" class="action-btn ab-purple">🤖 AI Insights</a>
+      <a href="/investor-report" class="action-btn ab-dark">📑 Investor Report</a>
+      <a href="/scenario-planning" class="action-btn ab-teal">🔭 Scenarios</a>
+      <a href="/export-pdf" class="action-btn ab-outline">📄 PDF</a>
+      <a href="/export-csv" class="action-btn ab-outline">📊 CSV</a>
+    </div>
+  </div>
+
+  <!-- ── METRIC CARDS ── -->
+  <div class="metrics-grid">
+
+    <!-- Cash -->
+    <div class="mc mc-cash">
+      <div class="mc-accent"></div>
+      <div class="mc-label">Current Cash</div>
+      <div class="mc-value">${{ "{:,.0f}".format(metrics.cash|int) }}</div>
+      <div class="mc-sub">💵 Available funds</div>
+    </div>
+
+    {# Gross and net burn are shown as separate tiles on purpose. When only the
+       gross figure was displayed next to a runway derived from net burn, a user
+       dividing cash by the number on screen got a different answer and had no
+       way to reconcile it. Each tile now states what it is, and the runway tile
+       names the two figures it comes from. #}
+
+    <!-- Gross burn -->
+    <div class="mc mc-burn">
+      <div class="mc-accent"></div>
+      <div class="mc-label">Gross Burn</div>
+      <div class="mc-value">${{ "{:,.0f}".format(metrics.burn_rate|int) }}</div>
+      <div class="mc-sub">📉 Expenses only · avg last {{ metrics.window_months }}mo</div>
+    </div>
+
+    <!-- Net burn -->
+    <div class="mc {% if metrics.is_profitable %}mc-netburn-pos{% else %}mc-netburn{% endif %}">
+      <div class="mc-accent"></div>
+      <div class="mc-label">Net Burn</div>
+      <div class="mc-value">
+        {%- if metrics.is_profitable %}+${{ "{:,.0f}".format((-metrics.net_burn)|int) }}
+        {%- else %}${{ "{:,.0f}".format(metrics.net_burn|int) }}{% endif %}
+      </div>
+      <div class="mc-sub">
+        {%- if metrics.is_profitable %}✓ Cash generated after ${{ "{:,.0f}".format(metrics.revenue_monthly|int) }}/mo revenue
+        {%- else %}After ${{ "{:,.0f}".format(metrics.revenue_monthly|int) }}/mo revenue · drives runway{% endif %}
+      </div>
+    </div>
+
+    <!-- Runway -->
+    <div class="mc {% if metrics.runway is none %}mc-runway-good{% elif metrics.runway > 12 %}mc-runway-good{% elif metrics.runway > 6 %}mc-runway-warn{% else %}mc-runway-crit{% endif %}">
+      <div class="mc-accent"></div>
+      <div class="mc-label">Runway</div>
+      {# runway is None whenever net burn <= 0. Never print a month count for a
+         profitable company, and never use a 999 sentinel. #}
+      <div class="mc-value">{% if metrics.runway is none %}∞{% else %}{{ "%.1f"|format(metrics.runway) }}mo{% endif %}</div>
+      <div class="mc-sub">
+        {%- if metrics.runway is none %}✓ {{ metrics.runway_display }}
+        {%- else %}Cash ÷ net burn ·
+          {%- if metrics.runway > 12 %} ✓ Healthy
+          {%- elif metrics.runway > 6 %} ⚠ Watch closely
+          {%- else %} 🚨 Act now{% endif %}
+        {%- endif %}
+      </div>
+    </div>
+
+    <!-- MRR -->
+    <div class="mc mc-mrr">
+      <div class="mc-accent"></div>
+      <div class="mc-label">MRR</div>
+      <div class="mc-value">${{ "{:,.0f}".format(metrics.mrr|int) }}</div>
+      <div class="mc-sub">💎 Monthly recurring</div>
+    </div>
+
+  </div>
+
+  <!-- ── RUNWAY ALERT ── -->
+  {% if metrics.runway is not none and metrics.runway < 12 %}
+  <div class="alert-strip {% if metrics.runway < 6 %}alert-crit{% else %}alert-warn{% endif %}">
+    <span class="alert-icon">{% if metrics.runway < 6 %}🚨{% else %}⚠️{% endif %}</span>
+    <div class="alert-body">
+      <div class="alert-title">{% if metrics.runway < 6 %}Critical: Immediate Action Required{% else %}Warning: Plan Ahead{% endif %}</div>
+      <div class="alert-msg">
+        You have <strong>{{ "%.1f"|format(metrics.runway) }} months</strong> of runway remaining.
+        {% if metrics.runway < 6 %}Start fundraising conversations immediately and review non-essential expenses.
+        {% else %}Begin preparing fundraising materials and identify cost optimizations.{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── ANOMALIES ── -->
+{% if user_plan == 'starter' or user_plan == 'pro' %}
+
+  <div class="section-hdr" style="margin-top:0.5rem;">
+    <div class="section-title">
+      🔍 Anomaly Detection
+      <span class="section-badge">
+        {{ anomalies|length if anomalies else 0 }} alert{{ '' if anomalies|length == 1 else 's' }}
+      </span>
+    </div>
+  </div>
+
+  {% if anomalies and anomalies|length > 0 %}
+    <div class="anomaly-grid">
+      {% for a in anomalies %}
+      <div class="anomaly-card {% if a.severity == 'high' %}ac-high{% else %}ac-med{% endif %}">
+        <span class="ac-icon">{{ a.icon }}</span>
+        <div>
+          <div class="ac-title">{{ a.title }}</div>
+          <div class="ac-msg">{{ a.message }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="font-size:0.9rem; color:var(--muted); margin-top:1rem;">
+      ✅ No anomalies detected — everything looks healthy.
+    </p>
+  {% endif %}
+
+{% else %}
+  <p style="font-size:0.9rem; color:var(--muted); margin-top:1rem;">
+    Upgrade to <strong>Starter</strong> to unlock Anomaly Detection on your dashboard.
+  </p>
+{% endif %}
+
+  {% if metrics.monthly_data and (user_plan == 'starter' or user_plan == 'pro') %}
+
+  <!-- ── KPI SECTION ── -->
+  <div class="section-hdr" style="margin-top:1rem;">
+    <div class="section-title">📈 Key Performance Indicators</div>
+    <span class="section-badge">Based on your transactions</span>
+  </div>
+
+  <div class="kpi-grid">
+
+    <!-- ARR/MRR -->
+    <div class="kpi-card">
+      <div class="kpi-label">ARR / MRR</div>
+      <div class="kpi-val" style="color:var(--blue)">${{ "{:,.0f}".format(kpis.arr) }}</div>
+      <div class="kpi-sub">${{ "{:,.0f}".format(kpis.mrr) }} / mo</div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:{{ [kpis.mom_growth,100]|min|abs }}%;background:var(--blue);"></div></div>
+    </div>
+
+    <!-- MoM Growth -->
+    <div class="kpi-card">
+      <div class="kpi-label">MoM Growth</div>
+      <div class="kpi-val" style="color:{% if kpis.mom_growth >= 0 %}var(--green){% else %}var(--red){% endif %}">
+        {% if kpis.mom_growth >= 0 %}+{% endif %}{{ kpis.mom_growth }}%
+      </div>
+      <div class="kpi-sub">vs last month</div>
+      <div class="sparkline">
+        {% for val in kpis.mom_trend %}
+        <div class="spark-bar" style="height:{{ [(val / ([kpis.mom_trend|max,1]|max) * 100)|int,100]|min }}%;{% if loop.last %}background:var(--blue);{% endif %}"></div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Gross Margin -->
+    <div class="kpi-card">
+      <div class="kpi-label">Gross Margin</div>
+      <div class="kpi-val" style="color:{% if kpis.gross_margin >= 60 %}var(--green){% elif kpis.gross_margin >= 40 %}var(--amber){% else %}var(--red){% endif %}">{{ kpis.gross_margin }}%</div>
+      <div class="kpi-sub">{% if kpis.gross_margin >= 60 %}Healthy{% elif kpis.gross_margin >= 40 %}Moderate{% else %}Low{% endif %}</div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:{{ kpis.gross_margin }}%;background:{% if kpis.gross_margin >= 60 %}var(--green){% elif kpis.gross_margin >= 40 %}var(--amber){% else %}var(--red){% endif %};"></div></div>
+    </div>
+
+    <!-- Burn Multiple -->
+    {# None when the company is profitable or not growing — the ratio is
+       undefined in both cases, so show why rather than printing 0x. #}
+    <div class="kpi-card">
+      <div class="kpi-label">Burn Multiple</div>
+      {% if kpis.burn_multiple is none %}
+      <div class="kpi-val" style="color:var(--muted)">N/A</div>
+      <div class="kpi-sub">{{ kpis.burn_multiple_note }}</div>
+      {% else %}
+      <div class="kpi-val" style="color:{% if kpis.burn_multiple <= 1 %}var(--green){% elif kpis.burn_multiple <= 2 %}var(--amber){% else %}var(--red){% endif %}">{{ kpis.burn_multiple }}x</div>
+      <div class="kpi-sub">{% if kpis.burn_multiple <= 1 %}Excellent{% elif kpis.burn_multiple <= 2 %}Good{% else %}High{% endif %} · net burn per $1 of new ARR</div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:{{ [kpis.burn_multiple*20,100]|min }}%;background:#f97316;"></div></div>
+      {% endif %}
+    </div>
+
+    <!-- CAC -->
+    <div class="kpi-card">
+      <div class="kpi-label">CAC</div>
+      <div class="kpi-val" style="color:var(--ink)">${{ "{:,.0f}".format(kpis.cac) }}</div>
+      <div class="kpi-sub">Cost to acquire</div>
+    </div>
+
+    <!-- LTV -->
+    {# LTV is ARPU ÷ churn, which is infinite at zero churn. None means we will
+       not print a finite figure derived from an unstated lifetime assumption. #}
+    <div class="kpi-card">
+      <div class="kpi-label">LTV</div>
+      {% if kpis.ltv is none %}
+      <div class="kpi-val" style="color:var(--muted)">N/A</div>
+      <div class="kpi-sub">{{ kpis.ltv_note }} — infinite at 0% churn</div>
+      {% else %}
+      <div class="kpi-val" style="color:var(--ink)">${{ "{:,.0f}".format(kpis.ltv) }}</div>
+      <div class="kpi-sub">
+        {%- if kpis.ltv_cac_ratio is not none %}LTV:CAC = <strong style="color:{% if kpis.ltv_cac_ratio >= 3 %}var(--green){% else %}var(--red){% endif %}">{{ kpis.ltv_cac_ratio }}x</strong>
+        {%- else %}{{ kpis.ltv_note }}{% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Churn -->
+    <div class="kpi-card">
+      <div class="kpi-label">Churn Rate</div>
+      <div class="kpi-val" style="color:{% if kpis.churn_rate <= 5 %}var(--green){% elif kpis.churn_rate <= 10 %}var(--amber){% else %}var(--red){% endif %}">{{ kpis.churn_rate }}%</div>
+      <div class="kpi-sub">{% if kpis.churn_rate <= 5 %}Low — great{% elif kpis.churn_rate <= 10 %}Watch closely{% else %}High — act now{% endif %}</div>
+    </div>
+
+    <!-- NRR -->
+    <div class="kpi-card">
+      <div class="kpi-label">Net Revenue Retention</div>
+      <div class="kpi-val" style="color:{% if kpis.nrr >= 100 %}var(--green){% elif kpis.nrr >= 80 %}var(--amber){% else %}var(--red){% endif %}">{{ kpis.nrr }}%</div>
+      <div class="kpi-sub">{% if kpis.nrr >= 100 %}Expanding{% elif kpis.nrr >= 80 %}Stable{% else %}Contracting{% endif %}</div>
+    </div>
+
+  </div>
+
+  <!-- ── CHARTS ROW 1 ── -->
+  <div class="section-hdr">
+    <div class="section-title">📊 Financial Charts</div>
+    <span class="section-badge">Last 6 months</span>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-card-title">Revenue vs Expenses</div>
+      <div class="chart-card-sub">Monthly comparison</div>
+      <div style="position:relative;height:260px;"><canvas id="revenueExpenseChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">Cash Balance</div>
+      <div class="chart-card-sub">Running total over time</div>
+      <div style="position:relative;height:260px;"><canvas id="cashFlowChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ── CHARTS ROW 2 ── -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-card-title">Monthly Burn Rate</div>
+      <div class="chart-card-sub">Expenses minus revenue</div>
+      <div style="position:relative;height:240px;"><canvas id="burnRateChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">Expense Breakdown</div>
+      <div class="chart-card-sub">By category</div>
+      <div style="position:relative;height:240px;"><canvas id="categoryChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ── FORECAST ── -->
+  {% if metrics.forecast %}
+  <div class="forecast-card">
+    <div class="section-hdr" style="margin-bottom:0.5rem;">
+      <div>
+        <div class="chart-card-title">🔮 Cash Flow Forecast</div>
+        <div class="chart-card-sub">AI projection for next 6 months based on your trends</div>
+      </div>
+      <span class="section-badge">AI Projection</span>
+    </div>
+    <div style="position:relative;height:300px;margin-top:1rem;"><canvas id="forecastChart"></canvas></div>
+    <div class="forecast-stats">
+      {% set last = metrics.forecast[-1] %}
+      <div class="fstat">
+        <span class="fstat-val" style="color:{% if last.cash_balance > 0 %}var(--green){% else %}var(--red){% endif %}">${{ "{:,.0f}".format(last.cash_balance) }}</span>
+        <span class="fstat-label">Projected cash in 6mo</span>
+      </div>
+      <div class="fstat">
+        <span class="fstat-val" style="color:var(--blue)">${{ "{:,.0f}".format((metrics.forecast|sum(attribute='revenue')) / metrics.forecast|length) }}</span>
+        <span class="fstat-label">Avg projected revenue</span>
+      </div>
+      <div class="fstat">
+        <span class="fstat-val" style="color:var(--red)">${{ "{:,.0f}".format((metrics.forecast|sum(attribute='expenses')) / metrics.forecast|length) }}</span>
+        <span class="fstat-label">Avg projected burn</span>
+      </div>
+    </div>
+    <p style="font-size:0.68rem;color:var(--muted);text-align:center;margin-top:1rem;font-family:'DM Mono',monospace;">⚠ Projections are estimates based on recent trends. Actual results may vary.</p>
+  </div>
+  {% endif %}
+
+  <!-- ── MONTHLY TABLE ── -->
+  <div class="section-hdr">
+    <div class="section-title">📋 Monthly Breakdown</div>
+    <a href="/transactions" style="font-size:0.78rem;font-weight:700;color:var(--blue);text-decoration:none;font-family:'DM Mono',monospace;">View all →</a>
+  </div>
+
+  <div class="table-card">
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th style="text-align:right">Revenue</th>
+            <th style="text-align:right">Expenses</th>
+            <th style="text-align:right">Net Burn</th>
+            <th style="text-align:right">Cash Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for month in metrics.monthly_data %}
+          <tr>
+            <td class="td-month">{{ month.month }}</td>
+            <td class="td-green">+${{ "{:,}".format(month.revenue|int) }}</td>
+            <td class="td-red">-${{ "{:,}".format(month.expenses|int) }}</td>
+            <td class="{% if month.burn_rate > 0 %}td-red{% else %}td-green{% endif %}">
+              {% if month.burn_rate > 0 %}-{% else %}+{% endif %}${{ "{:,}".format(month.burn_rate|abs|int) }}
+            </td>
+            <td class="td-blue">${{ "{:,}".format(month.cash_balance|int) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- ── EMPTY STATE ── -->
+  {% if empty_state %}
+  <div class="empty-state">
+    <span class="empty-icon">📊</span>
+    <h3 class="empty-title">No financial data yet</h3>
+    <p class="empty-sub">Add your first transaction or import a CSV to see your dashboard come to life.</p>
+    <div class="empty-btns">
+      <a href="/add-transaction" class="eb-dark">➕ Add Transaction</a>
+      <a href="/import-csv" class="eb-outline">⬆️ Import CSV</a>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3 class="empty-title">Please Ugrade your plan</h3>
+    <p class="empty-sub"><a href="/pricing">Upgrade</a> to a higher plan to access all features.</p>
+  </div>
+  {% endif %}
+  {% endif %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// Greeting time
+const h = new Date().getHours();
+const t = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : h < 21 ? 'Good evening' : 'Good night';
+const el = document.getElementById('db-time');
+if (el) el.textContent = t;
+
+const monthlyData = {{ metrics.monthly_data | tojson | safe }};
+
+if (monthlyData && monthlyData.length > 0) {
+  const labels = monthlyData.map(m => m.month);
+  const revenues = monthlyData.map(m => m.revenue);
+  const expenses = monthlyData.map(m => m.expenses);
+  const burnRates = monthlyData.map(m => m.burn_rate);
+  const cashBalances = monthlyData.map(m => m.cash_balance);
+
+  const base = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { intersect: false, mode: 'index' },
+    plugins: {
+      tooltip: {
+        backgroundColor: 'rgba(10,10,15,0.9)',
+        padding: 12,
+        titleFont: { size: 12, weight: 'bold', family: 'DM Mono' },
+        bodyFont: { size: 12, family: 'DM Mono' },
+        callbacks: { label: ctx => (ctx.dataset.label||'') + ': $' + ctx.parsed.y.toLocaleString() }
+      }
+    },
+    scales: {
+      y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => '$'+(v/1000)+'K', font: { size: 10, family: 'DM Mono' } } },
+      x: { grid: { display: false }, ticks: { font: { size: 10, family: 'DM Mono' } } }
+    }
+  };
+
+  // Revenue vs Expenses
+  new Chart(document.getElementById('revenueExpenseChart'), {
+    type: 'line',
+    data: { labels, datasets: [
+      { label:'Revenue', data:revenues, borderColor:'#16a34a', backgroundColor:'rgba(22,163,74,0.08)', borderWidth:2.5, tension:0.4, fill:true, pointRadius:4, pointHoverRadius:6, pointBackgroundColor:'#16a34a' },
+      { label:'Expenses', data:expenses, borderColor:'#dc2626', backgroundColor:'rgba(220,38,38,0.08)', borderWidth:2.5, tension:0.4, fill:true, pointRadius:4, pointHoverRadius:6, pointBackgroundColor:'#dc2626' }
+    ]},
+    options: { ...base, plugins: { ...base.plugins, legend: { position:'top', labels:{ usePointStyle:true, padding:12, font:{size:11,family:'DM Mono'} } } }, scales: { ...base.scales, y: { ...base.scales.y, beginAtZero:true } } }
+  });
+
+  // Cash Balance
+  const cashCtx = document.getElementById('cashFlowChart').getContext('2d');
+  const cg = cashCtx.createLinearGradient(0,0,0,280);
+  cg.addColorStop(0,'rgba(29,78,216,0.25)');
+  cg.addColorStop(1,'rgba(29,78,216,0)');
+  new Chart(cashCtx, {
+    type:'line',
+    data:{ labels, datasets:[{ label:'Cash Balance', data:cashBalances, borderColor:'#1d4ed8', backgroundColor:cg, borderWidth:2.5, tension:0.4, fill:true, pointRadius:4, pointHoverRadius:6, pointBackgroundColor:'#1d4ed8' }] },
+    options:{ ...base, plugins:{ ...base.plugins, legend:{display:false} } }
+  });
+
+  // Burn Rate
+  new Chart(document.getElementById('burnRateChart'), {
+    type:'bar',
+    data:{ labels, datasets:[{ label:'Monthly Burn', data:burnRates, backgroundColor:burnRates.map(b=>b>0?'rgba(220,38,38,0.75)':'rgba(22,163,74,0.75)'), borderRadius:6 }] },
+    options:{ ...base, plugins:{ ...base.plugins, legend:{display:false} } }
+  });
+
+  // Categories
+  {% if metrics.categories %}
+  const cats = {{ metrics.categories | tojson | safe }};
+  new Chart(document.getElementById('categoryChart'), {
+    type:'doughnut',
+    data:{
+      labels: cats.map(c=>c[0]),
+      datasets:[{ data:cats.map(c=>c[1]), backgroundColor:['#dc2626','#1d4ed8','#16a34a','#d97706','#7c3aed','#0d9488'], borderWidth:0, hoverOffset:4 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{ position:'right', labels:{ usePointStyle:true, padding:12, font:{size:11,family:'DM Mono'} } },
+        tooltip:{ backgroundColor:'rgba(10,10,15,0.9)', padding:12, bodyFont:{family:'DM Mono'},
+          callbacks:{ label: ctx=>{ const tot=ctx.dataset.data.reduce((a,b)=>a+b,0); return ctx.label+': $'+ctx.parsed.toLocaleString()+' ('+(ctx.parsed/tot*100).toFixed(1)+'%)'; } } }
+      }
+    }
+  });
+  {% else %}
+  const cc = document.getElementById('categoryChart');
+  if(cc) cc.parentElement.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#9ca3af;font-size:0.875rem;font-family:DM Mono,monospace;">No expense data</div>';
+  {% endif %}
+
+  // Forecast
+  {% if metrics.forecast %}
+  const fd = {{ metrics.forecast | tojson | safe }};
+  const hLabels = labels.slice(-3);
+  const hCash = cashBalances.slice(-3);
+  const fLabels = fd.map(m=>m.month);
+  const fCash = fd.map(m=>m.cash_balance);
+  const allL = [...hLabels,...fLabels];
+  const histL = [...hCash,...Array(fLabels.length).fill(null)];
+  const projL = [...Array(hLabels.length-1).fill(null),hCash[hCash.length-1],...fCash];
+
+  new Chart(document.getElementById('forecastChart'), {
+    type:'line',
+    data:{ labels:allL, datasets:[
+      { label:'Actual Cash', data:histL, borderColor:'#1d4ed8', backgroundColor:'rgba(29,78,216,0.08)', borderWidth:2.5, tension:0.4, fill:true, pointRadius:4, pointHoverRadius:6 },
+      { label:'Projected', data:projL, borderColor:'#7c3aed', backgroundColor:'rgba(124,58,237,0.06)', borderWidth:2.5, borderDash:[7,4], tension:0.4, fill:true, pointRadius:4, pointHoverRadius:6, pointStyle:'triangle' }
+    ]},
+    options:{ ...base, plugins:{ ...base.plugins, legend:{ position:'top', labels:{ usePointStyle:true, padding:12, font:{size:11,family:'DM Mono'} } } } }
+  });
+  {% endif %}
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,1048 @@
+{% extends "base.html" %} {% block title %}About Fintoit The AI CFO Platform for
+Startups{% endblock %} {% block content %}
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap");
+
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f7f6f2;
+    --blue: #1d4ed8;
+    --green: #16a34a;
+    --muted: #6b6b7a;
+    --border: #e2e1db;
+    --red: #dc2626;
+  }
+
+  .about-wrap {
+    font-family: "Bricolage Grotesque", sans-serif;
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── EDITORIAL HERO full bleed dark ── */
+  .about-hero {
+    background: var(--ink);
+    padding: 5rem 1.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .hero-orb {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    top: -200px;
+    right: -200px;
+    background: radial-gradient(
+      circle,
+      rgba(29, 78, 216, 0.18) 0%,
+      transparent 65%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero-orb2 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    bottom: -100px;
+    left: -100px;
+    background: radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.14) 0%,
+      transparent 65%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* Magazine-style issue label */
+  .issue-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .issue-line {
+    width: 40px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .issue-text {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-family: "DM Mono", monospace;
+  }
+
+  /* Big editorial layout */
+  .hero-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+  }
+
+  @media (max-width: 720px) {
+    .hero-layout {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .hero-left {
+  }
+
+  .hero-kicker {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: "DM Mono", monospace;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    color: white;
+    margin-bottom: 2rem;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-right {
+    padding-bottom: 0.5rem;
+  }
+
+  .hero-lede {
+    font-family: "Lora", serif;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hero-meta-item {
+  }
+  .meta-label {
+    font-size: 0.62rem;
+    color: rgba(255, 255, 255, 0.28);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: "DM Mono", monospace;
+    margin-bottom: 0.2rem;
+  }
+  .meta-val {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* ── PULL QUOTE STRIP ── */
+  .pullquote-strip {
+    background: var(--blue);
+    padding: 2.5rem 1.5rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .pq-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .pq-mark {
+    font-size: 6rem;
+    line-height: 0.7;
+    color: rgba(255, 255, 255, 0.15);
+    font-family: "Lora", serif;
+    flex-shrink: 0;
+    margin-top: -1rem;
+  }
+
+  .pq-text {
+    font-family: "Lora", serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: white;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .pq-attr {
+    font-family: "DM Mono", monospace;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 0.75rem;
+    font-style: normal;
+  }
+
+  /* ── STORY SECTION editorial columns ── */
+  .story-section {
+    padding: 6rem 1.5rem;
+    background: var(--paper);
+    position: relative;
+  }
+
+  .story-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 5rem;
+  }
+
+  @media (max-width: 800px) {
+    .story-inner {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .story-nav {
+      display: none;
+    }
+  }
+
+  .story-nav {
+    position: sticky;
+    top: 2rem;
+    align-self: start;
+  }
+
+  .story-nav-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-family: "DM Mono", monospace;
+    margin-bottom: 1.25rem;
+  }
+
+  .story-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 0.875rem;
+    cursor: pointer;
+    transition: color 0.18s;
+    text-decoration: none;
+  }
+
+  .story-nav-item:hover {
+    color: var(--ink);
+  }
+  .story-nav-item.active {
+    color: var(--ink);
+  }
+
+  .story-nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: background 0.18s;
+  }
+  .story-nav-item.active .story-nav-dot {
+    background: var(--ink);
+  }
+
+  /* Story content */
+  .story-content {
+  }
+
+  .story-block {
+    margin-bottom: 5rem;
+    padding-bottom: 5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .story-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .sb-number {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: "DM Mono", monospace;
+    margin-bottom: 0.625rem;
+  }
+
+  .sb-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+
+  .sb-body {
+    font-family: "Lora", serif;
+    font-size: 1.05rem;
+    color: #374151;
+    line-height: 1.85;
+    margin-bottom: 1.5rem;
+    max-width: 620px;
+  }
+
+  .sb-body strong {
+    font-weight: 600;
+    color: var(--ink);
+    font-family: "Bricolage Grotesque", sans-serif;
+  }
+
+  /* Inline stat callout */
+  .sb-stat {
+    display: inline-flex;
+    flex-direction: column;
+    background: var(--ink);
+    color: white;
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    float: right;
+    margin-left: 2rem;
+    min-width: 160px;
+    text-align: center;
+  }
+
+  .sb-stat-num {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .sb-stat-label {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: "DM Mono", monospace;
+    margin-top: 0.375rem;
+  }
+
+  .clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  /* Feature tags in story */
+  .sb-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  .sb-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+    background: white;
+    font-family: "DM Mono", monospace;
+  }
+
+  /* Problem callout box */
+  .problem-box {
+    background: #fef2f2;
+    border: 2px solid #fecaca;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .problem-box-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    font-family: "DM Mono", monospace;
+    margin-bottom: 0.75rem;
+  }
+
+  .problem-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    font-size: 0.9rem;
+    color: #7f1d1d;
+    margin-bottom: 0.5rem;
+    line-height: 1.55;
+  }
+
+  /* Solution callout */
+  .solution-box {
+    background: #f0fdf4;
+    border: 2px solid #bbf7d0;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .solution-box-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--green);
+    font-family: "DM Mono", monospace;
+    margin-bottom: 0.75rem;
+  }
+
+  .solution-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    font-size: 0.9rem;
+    color: #14532d;
+    margin-bottom: 0.5rem;
+    line-height: 1.55;
+  }
+
+  /* Who it's for horizontal scroll cards */
+  .who-section {
+    padding: 5rem 1.5rem;
+    background: white;
+    overflow: hidden;
+  }
+
+  .who-scroll {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 3rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    scrollbar-width: none;
+  }
+
+  .who-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .who-card {
+    flex-shrink: 0;
+    width: 280px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 5px 5px 0 var(--ink);
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .who-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--ink);
+  }
+
+  .who-stage {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: "DM Mono", monospace;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .who-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .who-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .who-desc {
+    font-size: 0.855rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── DARK CTA ── */
+  .about-cta {
+    background: var(--ink);
+    padding: 6rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .about-cta::before {
+    content: "";
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle,
+      rgba(29, 78, 216, 0.18) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  .cta-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.3);
+    font-family: "DM Mono", monospace;
+    margin-bottom: 1.25rem;
+  }
+
+  .cta-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: white;
+    margin-bottom: 1.25rem;
+  }
+
+  .cta-sub {
+    font-family: "Lora", serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+
+  .cta-btns {
+    display: flex;
+    gap: 0.875rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    color: var(--ink);
+    padding: 0.9rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.975rem;
+    text-decoration: none;
+    font-family: "Bricolage Grotesque", sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-white:hover {
+    background: var(--paper);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 0.9rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.975rem;
+    text-decoration: none;
+    font-family: "Bricolage Grotesque", sans-serif;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover {
+    color: white;
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .cta-note {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.22);
+    margin-top: 1.5rem;
+    font-family: "DM Mono", monospace;
+  }
+
+  /* ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.65s ease,
+      transform 0.65s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal.d1 {
+    transition-delay: 0.12s;
+  }
+  .reveal.d2 {
+    transition-delay: 0.24s;
+  }
+  .who-scroll {
+  cursor: grab;
+  user-select: none;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.who-scroll.dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+}
+
+.who-nav {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.who-arrow {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.2s ease;
+}
+
+.who-arrow:hover {
+  background: #f2f2f2;
+}
+</style>
+
+<div class="about-wrap">
+  <!-- ── EDITORIAL HERO ── -->
+  <section class="about-hero">
+    <div class="hero-orb"></div>
+    <div class="hero-orb2"></div>
+    <div class="hero-inner">
+      <div class="issue-label reveal">
+        <span class="issue-line"></span>
+        <span class="issue-text">Our Story · Fintoit · 2026</span>
+        <span class="issue-line"></span>
+      </div>
+
+      <div class="hero-layout">
+        <div class="hero-left reveal">
+          <div class="hero-kicker">The AI CFO Platform</div>
+          <h1 class="hero-title">Why we<br />built<br /><em>Fintoit.</em></h1>
+        </div>
+        <div class="hero-right reveal d1">
+          <p class="hero-lede">
+            "82% of startups fail because of cash flow problems. Not bad ideas
+            bad visibility. We decided to fix that."
+          </p>
+          <div class="hero-meta">
+            <div class="hero-meta-item">
+              <div class="meta-label">Founded</div>
+              <div class="meta-val">2026</div>
+            </div>
+            <div class="hero-meta-item">
+              <div class="meta-label">Based in</div>
+              <div class="meta-val">Texas, USA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PULL QUOTE ── -->
+  <div class="pullquote-strip reveal">
+    <div class="pq-inner">
+      <div class="pq-mark">"</div>
+      <div>
+        <div class="pq-text">
+          Every startup deserves the same financial intelligence that Fortune
+          500 companies have. Not someday from day one.
+        </div>
+        <div class="pq-attr">Pranav Kethireddy, Founder & CEO</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STORY ── -->
+  <section class="story-section">
+    <div class="story-inner">
+      <!-- Sticky nav -->
+      <div class="story-nav">
+        <div class="story-nav-label">In this story</div>
+        <a href="#problem" class="story-nav-item active">
+          <span class="story-nav-dot"></span> The Problem
+        </a>
+        <a href="#solution" class="story-nav-item">
+          <span class="story-nav-dot"></span> Our Solution
+        </a>
+        <a href="#product" class="story-nav-item">
+          <span class="story-nav-dot"></span> The Product
+        </a>
+        <a href="#who" class="story-nav-item">
+          <span class="story-nav-dot"></span> Who It's For
+        </a>
+      </div>
+
+      <!-- Story content -->
+      <div class="story-content">
+        <!-- 01 Problem -->
+        <div class="story-block reveal" id="problem">
+          <div class="sb-number">01 The Problem</div>
+          <h2 class="sb-title">
+            Founders are making million-dollar decisions with no data.
+          </h2>
+
+          <div class="sb-stat">
+            <span class="sb-stat-num">82%</span>
+            <span class="sb-stat-label"
+              >of startups fail from cash flow issues</span
+            >
+          </div>
+
+          <p class="sb-body">
+            Every early-stage founder faces the same brutal reality: you're
+            making critical financial decisions when to hire, when to raise,
+            when to cut with almost no visibility into what's actually
+            happening.
+          </p>
+
+          <p class="sb-body">
+            A full-time CFO costs <strong>$200,000+ per year</strong>.
+            Spreadsheets break, go stale, and require hours of manual work to
+            maintain. And by the time you realize something is wrong, it's often
+            too late.
+          </p>
+
+          <div class="problem-box clearfix">
+            <div class="problem-box-title">The old way</div>
+            {% for item in [ 'CFOs cost $200K+/year out of reach for 99% of
+            startups', 'Spreadsheets are manual, error-prone, and always 2 weeks
+            behind', 'No real-time alerts when something goes wrong', 'Investor
+            reports take days to prepare from scratch' ] %}
+            <div class="problem-item">
+              <span>✗</span><span>{{ item }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- 02 Solution -->
+        <div class="story-block reveal" id="solution">
+          <div class="sb-number">02 Our Solution</div>
+          <h2 class="sb-title">
+            We built the CFO that every startup can afford.
+          </h2>
+
+          <p class="sb-body">
+            Fintoit connects to your financial data and gives you instant,
+            AI-powered clarity. Your burn rate, runway, and cash flow are always
+            live not updated once a month after a painful spreadsheet session.
+          </p>
+
+          <p class="sb-body">
+            Ask your AI CFO anything in plain English:
+            <strong>"What's my runway if I hire two engineers?"</strong> Get an
+            answer in seconds, based on your real numbers. Model scenarios,
+            generate investor reports, track KPIs without needing a finance
+            degree.
+          </p>
+
+          <div class="solution-box">
+            <div class="solution-box-title">The Fintoit way</div>
+            {% for item in [ 'Real-time burn rate and runway always live, always
+            accurate', 'AI chat that knows your exact numbers and answers
+            instantly', '1-click investor reports with AI-written narrative',
+            'Scenario planning to model hiring, raising, and cutting costs' ] %}
+            <div class="solution-item">
+              <span style="color: var(--green)">✓</span><span>{{ item }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- 03 Product -->
+        <div class="story-block reveal" id="product">
+          <div class="sb-number">03 The Product</div>
+          <h2 class="sb-title">
+            20+ features. One platform. Zero CFO required.
+          </h2>
+
+          <p class="sb-body">
+            We didn't build a dashboard with a few charts. We built the entire
+            financial operating system a startup needs from the day you
+            incorporate to the day you close your Series A.
+          </p>
+
+          <p class="sb-body">
+            Every feature is designed to replace something that used to cost
+            thousands of dollars or dozens of hours per month.
+          </p>
+
+          <div class="sb-tags">
+            {% for tag in ['AI Dashboard','Cash Flow Forecast','Investor
+            Reports','Scenario Planning','Payroll','Cap Table','Invoices &
+            Bills','Budget Alerts','Cohort Analysis','Board Reports','Tax
+            Summary','Headcount Planning','AR Aging','Vendor Management','Custom
+            Reports'] %}
+            <span class="sb-tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- 04 Who -->
+        <div class="story-block reveal" id="who">
+          <div class="sb-number">04 Who It's For</div>
+          <h2 class="sb-title">
+            Built for early-stage founders, not finance teams.
+          </h2>
+          <p class="sb-body">
+            Fintoit is designed for founders at every stage of the early startup
+            journey from your first dollar of revenue to your Series A
+            preparation. No accounting background required.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WHO CARDS ── -->
+  <section class="who-section">
+    <div style="max-width: 1100px; margin: 0 auto">
+      <div class="reveal" style="padding: 0 0 0 0">
+        <div
+          style="
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--blue);
+            font-family: &quot;DM Mono&quot;, monospace;
+            margin-bottom: 0.5rem;
+          "
+        >
+          Who Uses Fintoit
+        </div>
+        <h2
+          style="
+            font-size: clamp(1.75rem, 4vw, 2.75rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+          "
+        >
+          The right tool for every stage.
+        </h2>
+        <p
+          style="
+            color: var(--muted);
+            font-size: 0.95rem;
+            max-width: 480px;
+            line-height: 1.7;
+          "
+        >
+          From pre-revenue to Series A Fintoit scales with you.
+        </p>
+      </div>
+    </div>
+    <div class="who-scroll reveal" id="whoScroll">
+      {% for icon, stage, title, desc in [ ('🌱', 'Pre-Seed', 'Get clarity from
+      day one', 'Know your burn, set budgets, and understand your runway before
+      investors ever ask.'), ('🚀', 'Seed Stage', 'Raise with confidence',
+      'Generate board-ready reports and track the KPIs investors actually care
+      about.'), ('📈', 'Series A Prep', 'Walk in prepared', 'Clean financials,
+      investor reports, and a full accounting trail ready for due diligence.'),
+      ('⚡', 'Growing Teams', 'Scale without chaos', 'Manage payroll, headcount
+      planning, department budgets, and cap table as you hire.'), ('🤖', 'Solo
+      Founders', 'Your AI finance team', 'Get the financial intelligence of a
+      full finance team without a single hire.') ] %}
+      <div class="who-card reveal">
+        <span class="who-stage">{{ stage }}</span>
+        <span class="who-icon">{{ icon }}</span>
+        <div class="who-title">{{ title }}</div>
+        <p class="who-desc">{{ desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="who-nav">
+      <button class="who-arrow" id="whoPrev" aria-label="Scroll left">←</button>
+      <button class="who-arrow" id="whoNext" aria-label="Scroll right">→</button>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="about-cta">
+    <div class="cta-inner reveal">
+      <div class="cta-label">Get Started</div>
+      <h2 class="cta-title">Ready to know<br />your numbers?</h2>
+      <p class="cta-sub">
+        Sign up and get full access to every feature while we're building,
+        completely free. No credit card required.
+      </p>
+      <div class="cta-btns">
+        <a href="/signup" class="btn-white"
+          >Sign Up Now →</a
+        >
+        <a href="/contact" class="btn-ghost">Talk to the Founder</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add("visible"), i * 60);
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.07 },
+  );
+  document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+
+  // Active nav highlight
+  const blocks = document.querySelectorAll(".story-block");
+  const navItems = document.querySelectorAll(".story-nav-item");
+  const scrollObs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          navItems.forEach((n) => {
+            n.classList.toggle("active", n.getAttribute("href") === "#" + id);
+          });
+        }
+      });
+    },
+    { threshold: 0.4 },
+  );
+  blocks.forEach((b) => scrollObs.observe(b));
+</script>
+<script>
+(function () {
+  const scroller = document.getElementById('whoScroll');
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  scroller.addEventListener('mousedown', (e) => {
+    isDown = true;
+    scroller.classList.add('dragging');
+    startX = e.pageX - scroller.offsetLeft;
+    scrollLeft = scroller.scrollLeft;
+  });
+
+  scroller.addEventListener('mouseleave', () => {
+    isDown = false;
+    scroller.classList.remove('dragging');
+  });
+
+  scroller.addEventListener('mouseup', () => {
+    isDown = false;
+    scroller.classList.remove('dragging');
+  });
+
+  scroller.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - scroller.offsetLeft;
+    const walk = (x - startX) * 1.5; // drag speed multiplier
+    scroller.scrollLeft = scrollLeft - walk;
+  });
+
+  // Arrow button controls
+  const cardWidth = 280; // adjust to match your .who-card width + gap
+  document.getElementById('whoPrev').addEventListener('click', () => {
+    scroller.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+  });
+  document.getElementById('whoNext').addEventListener('click', () => {
+    scroller.scrollBy({ left: cardWidth, behavior: 'smooth' });
+  });
+})();
+</script>
+{% endblock %}

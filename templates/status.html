@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+{% block title %}System Status — Fintoit{% endblock %}
+{% block content %}
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f7f6f2;
+    --blue: #1d4ed8;
+    --green: #16a34a;
+    --red: #dc2626;
+    --amber: #d97706;
+    --muted: #6b6b7a;
+    --border: #e6e5df;
+  }
+
+  .status-page {
+    font-family: "Bricolage Grotesque", sans-serif;
+    color: var(--ink);
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 1rem 0 4rem;
+  }
+
+  /* Kicker */
+  .status-kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: "DM Mono", monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .status-kicker::before {
+    content: "";
+    width: 26px;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Overall banner ── */
+  .overall {
+    border: 2px solid var(--ink);
+    border-radius: 18px;
+    padding: 1.75rem 1.75rem;
+    box-shadow: 6px 6px 0 var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2.25rem;
+    background: white;
+  }
+  .overall.ok      { background: #f0fdf4; }
+  .overall.warning { background: #fffbeb; }
+  .overall.error   { background: #fef2f2; }
+
+  .beacon {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .beacon .core {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+  .ok      .beacon .core { background: var(--green); }
+  .warning .beacon .core { background: var(--amber); }
+  .error   .beacon .core { background: var(--red); }
+  /* live pulse on the healthy state */
+  .ok .beacon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease-out infinite;
+  }
+  @keyframes pulse {
+    0%   { transform: scale(1);   opacity: 0.55; }
+    70%  { transform: scale(2.6); opacity: 0; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+
+  .overall-head {
+    font-size: clamp(1.35rem, 3.5vw, 1.9rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .ok      .overall-head { color: #15803d; }
+  .warning .overall-head { color: #b45309; }
+  .error   .overall-head { color: var(--red); }
+  .overall-sub {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+    line-height: 1.5;
+  }
+
+  /* ── Components ── */
+  .section-bar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.9rem;
+  }
+  .section-name {
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .section-meta {
+    font-family: "DM Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .components {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .comp {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.05rem 1.35rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .comp:last-child { border-bottom: none; }
+  .comp.deg  { background: #fffdf5; }
+  .comp.out  { background: #fef5f5; }
+
+  .comp-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+  }
+  .comp-body { flex: 1; min-width: 0; }
+  .comp-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .comp-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+    line-height: 1.45;
+  }
+  .comp-msg {
+    font-family: "DM Mono", monospace;
+    font-size: 0.72rem;
+    margin-top: 0.35rem;
+  }
+  .deg .comp-msg { color: var(--amber); }
+  .out .comp-msg { color: var(--red); }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: "DM Mono", monospace;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .pill.op  { background: #f0fdf4; color: var(--green); border: 1px solid #bbf7d0; }
+  .pill.op .dot  { background: var(--green); }
+  .pill.dg  { background: #fffbeb; color: var(--amber); border: 1px solid #fde68a; }
+  .pill.dg .dot  { background: var(--amber); }
+  .pill.out { background: #fef2f2; color: var(--red);   border: 1px solid #fecaca; }
+  .pill.out .dot { background: var(--red); }
+
+  /* ── Footer ── */
+  .status-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .status-foot .meta {
+    font-family: "DM Mono", monospace;
+    font-size: 0.72rem;
+  }
+  .status-foot a {
+    color: var(--blue);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .status-foot a:hover { text-decoration: underline; }
+
+  @media (max-width: 560px) {
+    .overall { flex-direction: row; align-items: flex-start; }
+    .comp { flex-wrap: wrap; }
+  }
+</style>
+
+<div class="status-page">
+
+  <div class="status-kicker">Fintoit · System Status</div>
+
+  <!-- Overall -->
+  <div class="overall {{ overall }}">
+    <span class="beacon"><span class="core"></span></span>
+    <div>
+      <div class="overall-head">
+        {% if overall == 'ok' %}All systems operational
+        {% elif overall == 'warning' %}Partial degradation
+        {% else %}Service disruption{% endif %}
+      </div>
+      <div class="overall-sub">
+        {% if overall == 'ok' %}Every Fintoit service is running normally.
+        {% elif overall == 'warning' %}Some features may be limited. We're keeping an eye on it.
+        {% else %}We're aware of an issue and are working to restore service.{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Components -->
+  <div class="section-bar">
+    <span class="section-name">Components</span>
+    <span class="section-meta">Live health check</span>
+  </div>
+
+  {% set descriptions = {
+    'Database': 'Core data storage and queries',
+    'AI Features': 'AI CFO chat, insights & forecasting',
+    'Email Delivery': 'Transactional and report emails',
+    'PDF Export': 'Investor & board report generation',
+    'File Storage': 'Uploads and document storage',
+    'API & Web App': 'Dashboard and API availability'
+  } %}
+
+  <div class="components">
+    {% for check in checks %}
+    <div class="comp {% if check.status == 'warning' %}deg{% elif check.status == 'error' %}out{% endif %}">
+      <div class="comp-icon">{{ check.icon }}</div>
+      <div class="comp-body">
+        <div class="comp-name">{{ check.name }}</div>
+        <div class="comp-desc">{{ descriptions.get(check.name, 'Fintoit service') }}</div>
+        {% if check.message %}<div class="comp-msg">{{ check.message }}</div>{% endif %}
+      </div>
+      <span class="pill {% if check.status == 'ok' %}op{% elif check.status == 'warning' %}dg{% else %}out{% endif %}">
+        <span class="dot"></span>
+        {% if check.status == 'ok' %}Operational
+        {% elif check.status == 'warning' %}Degraded
+        {% else %}Outage{% endif %}
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Footer -->
+  <div class="status-foot">
+    <span class="meta" id="checked-at">Last checked: —</span>
+    <span>
+      Auto-refreshes every 60s ·
+      <a href="{{ request.url }}">Refresh now</a> ·
+      <a href="/contact">Report an issue</a>
+    </span>
+  </div>
+
+</div>
+
+<script>
+  // Human-friendly "last checked" timestamp from the server-provided ISO time.
+  (function () {
+    const raw = "{{ checked_at }}";
+    const el = document.getElementById("checked-at");
+    if (raw && el) {
+      const d = new Date(raw);
+      if (!isNaN(d)) {
+        el.textContent = "Last checked: " + d.toLocaleString(undefined, {
+          dateStyle: "medium", timeStyle: "short"
+        });
+      }
+    }
+    // Keep the page fresh without a manual reload.
+    setTimeout(function () { window.location.reload(); }, 60000);
+  })();
+</script>
+{% endblock %}

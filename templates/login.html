@@ -1,0 +1,415 @@
+{% extends "base.html" %}
+{% block title %}Login - Fintoit{% endblock %}
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap');
+:root { --ink:#0a0a0f; --paper:#f7f6f2; --blue:#1d4ed8; --green:#16a34a; --muted:#6b6b7a; --border:#e2e1db; }
+
+/* Full bleed override — escape the base.html max-width container */
+.login-page {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: white;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  z-index: 10;
+  background: white;
+}
+
+@media(max-width: 768px) {
+  .login-page {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .login-left {
+    display: none;
+  }
+
+  .login-right {
+    align-items: flex-start;   /* 🔥 key fix */
+    padding: 2rem 1rem;
+  }
+
+  .form-card {
+    margin-top: 2rem;
+    padding: 1.5rem;           /* 🔥 prevents overflow */
+    border-radius: 16px;
+  }
+}
+
+/* LEFT — dark brand panel */
+.login-left {
+  background: var(--ink);
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  top: -100px; right: -150px;
+  background: radial-gradient(circle, rgba(29,78,216,0.25) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.login-left::after {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  bottom: -100px; left: -100px;
+  background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.ll-logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+}
+
+.ll-center {
+  position: relative;
+  z-index: 1;
+}
+
+.ll-headline {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+
+.ll-headline span {
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ll-sub {
+  color: rgba(255,255,255,0.45);
+  font-size: 0.95rem;
+  line-height: 1.72;
+  margin-bottom: 2.5rem;
+  max-width: 320px;
+}
+
+/* Mini metric cards on left panel */
+.ll-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.ll-metric {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 1rem 1.125rem;
+}
+
+.ll-metric-val {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.04em;
+  display: block;
+}
+
+.ll-metric-label {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: 'DM Mono', monospace;
+  margin-top: 0.15rem;
+}
+
+.ll-footer {
+  position: relative;
+  z-index: 1;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.25);
+  font-family: 'DM Mono', monospace;
+}
+
+/* RIGHT — form panel */
+.login-right {
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.5;
+}
+
+.form-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+.form-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--blue);
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 0.5rem;
+}
+
+.form-title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+}
+
+.form-sub {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.error-box {
+  background: #fef2f2;
+  border: 1.5px solid #fecaca;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #dc2626;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.form-group { margin-bottom: 1.125rem; }
+
+.form-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 0.4rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  border-color: var(--ink);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(10,10,15,0.06);
+}
+
+.form-input::placeholder { color: #a1a1aa; }
+
+.forgot-link {
+  display: block;
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  margin-top: 0.4rem;
+  transition: color 0.15s;
+}
+.forgot-link:hover { color: var(--blue); }
+
+.btn-submit {
+  width: 100%;
+  background: var(--ink);
+  color: white;
+  padding: 0.925rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.75rem;
+}
+.btn-submit:hover { background: #1e1e2e; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(10,10,15,0.2); }
+
+.form-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.form-footer a {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid var(--ink);
+  transition: opacity 0.15s;
+}
+.form-footer a:hover { opacity: 0.6; }
+
+/* ── Social sign-in ──────────────────────────────────────────────────
+   Neutral white button with a hairline border, so the coloured Google
+   mark is the only saturated thing in the card and the dark primary
+   button stays the obvious default action. */
+.social-auth { display: flex; flex-direction: column; gap: 0.6rem; }
+.btn-social {
+  display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+  width: 100%; box-sizing: border-box;
+  background: white; color: var(--ink);
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font-size: 0.95rem; font-weight: 600;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  text-decoration: none; cursor: pointer; transition: all 0.18s;
+}
+.btn-social:hover {
+  border-color: var(--ink); transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(10,10,15,0.08);
+}
+.btn-social svg { flex-shrink: 0; }
+.social-divider {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin: 1.25rem 0 1rem;
+  font-family: 'DM Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.social-divider::before, .social-divider::after {
+  content: ""; flex: 1; height: 1px; background: var(--border);
+}
+</style>
+
+<div class="login-page">
+
+  <!-- LEFT PANEL -->
+  <div class="login-left">
+    <a href="/" class="ll-logo">Fintoit</a>
+
+    <div class="ll-center">
+      <h2 class="ll-headline">Your AI CFO.<br><span>Without the price tag.</span></h2>
+      <p class="ll-sub">Real-time burn rate, runway, forecasting, and investor reports — all powered by AI. Welcome back.</p>
+      <div class="ll-metrics">
+        <div class="ll-metric">
+          <span class="ll-metric-val">13.4mo</span>
+          <span class="ll-metric-label">Runway tracked</span>
+        </div>
+        <div class="ll-metric">
+          <span class="ll-metric-val">$18.4K</span>
+          <span class="ll-metric-label">Burn rate</span>
+        </div>
+        <div class="ll-metric">
+          <span class="ll-metric-val">20+</span>
+          <span class="ll-metric-label">Features</span>
+        </div>
+        <div class="ll-metric">
+          <span class="ll-metric-val">Free</span>
+          <span class="ll-metric-label">Sign up</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ll-footer">© 2026 Fintoit · Free to get started</div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="login-right">
+    <div class="form-card">
+      <div class="form-eyebrow">Welcome back</div>
+      <h1 class="form-title">Sign in to<br>Fintoit</h1>
+
+      {% if error %}
+      <div class="error-box">✗ {{ error }}</div>
+      {% endif %}
+
+      {# Social sign-in sits above the password form: a returning user who has
+         linked Google shouldn't have to scan past a password field they no
+         longer use. Hidden entirely until credentials are configured. #}
+      {% if google_login_enabled or apple_login_enabled %}
+      <div class="social-auth">
+        {% if google_login_enabled %}
+        <a href="{{ url_for('google_login') }}" class="btn-social">
+          <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
+            <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62z"/>
+            <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/>
+            <path fill="#FBBC05" d="M3.97 10.72a5.41 5.41 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/>
+            <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/>
+          </svg>
+          <span>Continue with Google</span>
+        </a>
+        {% endif %}
+      </div>
+      <div class="social-divider"><span>or sign in with email</span></div>
+      {% endif %}
+
+      <form method="POST" action="/login">
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input type="email" id="email" name="email" required placeholder="you@startup.com" class="form-input" autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" name="password" required placeholder="••••••••" class="form-input">
+          <a href="/forgot-password" class="forgot-link">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn-submit">Sign In →</button>
+      </form>
+
+      <div class="form-footer">
+        Need an account? <a href="/signup">Sign up</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

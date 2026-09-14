@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+{% block title %}Transactions - Fintoit{% endblock %}
+{% block content %}
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+  .txns { --ink:#0a0a0f; --paper:#f7f6f2; --blue:#1d4ed8; --green:#16a34a; --red:#dc2626;
+          --amber:#d97706; --muted:#6b6b7a; --border:#e2e1db;
+          font-family:'Bricolage Grotesque',sans-serif; color:var(--ink); }
+  .txns .num { font-family:'DM Mono',monospace; font-variant-numeric:tabular-nums; }
+
+  .tx-head { display:flex; align-items:flex-start; justify-content:space-between; gap:1.25rem;
+             flex-wrap:wrap; margin-bottom:1.75rem; }
+  .tx-eyebrow { font-family:'DM Mono',monospace; font-size:0.7rem; font-weight:500;
+                letter-spacing:0.16em; text-transform:uppercase; color:var(--blue); margin-bottom:0.5rem; }
+  .tx-title { font-size:clamp(1.7rem,3.5vw,2.3rem); font-weight:800; letter-spacing:-0.03em; line-height:1; margin:0; }
+  .tx-sub { color:var(--muted); font-size:0.9rem; margin:0.5rem 0 0; }
+  .tx-actions { display:flex; gap:0.6rem; flex-wrap:wrap; }
+  .tx-btn { display:inline-flex; align-items:center; gap:0.4rem; padding:0.6rem 1rem; border-radius:10px;
+            font-size:0.83rem; font-weight:700; font-family:'Bricolage Grotesque',sans-serif;
+            border:1.5px solid var(--ink); text-decoration:none; cursor:pointer; transition:all .15s; white-space:nowrap; }
+  .tx-btn-dark { background:var(--ink); color:#fff; }
+  .tx-btn-dark:hover { background:#1e1e2e; transform:translateY(-1px); }
+  .tx-btn-ghost { background:#fff; color:var(--ink); }
+  .tx-btn-ghost:hover { background:var(--paper); transform:translateY(-1px); }
+
+  .sum-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem; }
+  @media(max-width:760px){ .sum-grid { grid-template-columns:1fr; } }
+  .sum-card { background:#fff; border:2px solid var(--ink); border-radius:16px; box-shadow:4px 4px 0 var(--ink);
+              padding:1.25rem 1.4rem; position:relative; overflow:hidden; }
+  .sum-accent { position:absolute; top:0; left:0; width:100%; height:4px; }
+  .sum-label { font-family:'DM Mono',monospace; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase;
+               color:var(--muted); margin-bottom:0.5rem; }
+  .sum-val { font-size:1.9rem; font-weight:800; letter-spacing:-0.03em; line-height:1; }
+  .sum-cap { font-family:'DM Mono',monospace; font-size:0.66rem; color:var(--muted); margin-top:0.5rem; }
+  .sum-income .sum-val { color:var(--green); } .sum-income .sum-accent { background:var(--green); }
+  .sum-expense .sum-val { color:var(--red); } .sum-expense .sum-accent { background:var(--red); }
+  .sum-net-pos .sum-val { color:var(--blue); } .sum-net-pos .sum-accent { background:var(--blue); }
+  .sum-net-neg .sum-val { color:var(--amber); } .sum-net-neg .sum-accent { background:var(--amber); }
+
+  .tx-toolbar { background:#fff; border:2px solid var(--ink); border-radius:14px; box-shadow:3px 3px 0 var(--ink);
+                padding:0.8rem 1rem; margin-bottom:1.25rem; display:flex; gap:0.7rem; align-items:center; flex-wrap:wrap; }
+  .tx-input, .tx-select { border:1.5px solid var(--border); border-radius:10px; padding:0.6rem 0.8rem;
+            font-size:0.85rem; font-family:'Bricolage Grotesque',sans-serif; color:var(--ink); background:var(--paper); }
+  .tx-input { flex:1; min-width:220px; }
+  .tx-input:focus, .tx-select:focus { outline:none; border-color:var(--ink); background:#fff; box-shadow:0 0 0 3px rgba(10,10,15,.06); }
+  .tx-clear { font-size:0.8rem; color:var(--muted); background:none; border:none; cursor:pointer; text-decoration:underline; }
+  .tx-clear:hover { color:var(--red); }
+  .tx-count { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--muted); margin-left:auto; }
+
+  .tx-table-card { background:#fff; border:2px solid var(--ink); border-radius:16px; box-shadow:4px 4px 0 var(--ink); overflow:hidden; }
+  .tx-table-card table { width:100%; border-collapse:collapse; }
+  .tx-table-card thead { background:var(--ink); }
+  .tx-table-card th { padding:0.8rem 1.1rem; text-align:left; font-size:0.62rem; font-weight:700;
+            color:rgba(255,255,255,0.65); text-transform:uppercase; letter-spacing:0.1em; font-family:'DM Mono',monospace; white-space:nowrap; }
+  .tx-table-card td { padding:0.8rem 1.1rem; font-size:0.88rem; border-bottom:1px solid var(--border); vertical-align:middle; }
+  .tx-table-card tbody tr:last-child td { border-bottom:none; }
+  .tx-table-card tbody tr:hover td { background:var(--paper); }
+  .td-date { font-family:'DM Mono',monospace; font-size:0.8rem; color:var(--ink); white-space:nowrap; }
+  .td-amt { text-align:right; font-family:'DM Mono',monospace; font-weight:700; white-space:nowrap; }
+  .amt-pos { color:var(--green); } .amt-neg { color:var(--red); }
+  .td-center { text-align:center; }
+
+  .badge { display:inline-flex; align-items:center; gap:0.3rem; padding:0.2rem 0.6rem; border-radius:100px;
+           font-size:0.7rem; font-weight:700; border:1.5px solid; white-space:nowrap; }
+  .badge-income { background:#f0fdf4; color:#15803d; border-color:#bbf7d0; }
+  .badge-expense { background:#fef2f2; color:#b91c1c; border-color:#fecaca; }
+  .cat-chip { display:inline-block; background:var(--paper); border:1.5px solid var(--border); border-radius:8px;
+              padding:0.15rem 0.55rem; font-size:0.78rem; font-weight:600; }
+  .recur-yes { color:var(--blue); font-weight:700; font-size:0.8rem; }
+  .recur-no { color:var(--muted); }
+
+  .row-btn { font-size:0.72rem; font-weight:700; padding:0.35rem 0.7rem; border-radius:8px; cursor:pointer;
+             border:1.5px solid; background:#fff; transition:all .12s; font-family:'Bricolage Grotesque',sans-serif; }
+  .row-btn-edit { color:var(--blue); border-color:#bfdbfe; }
+  .row-btn-edit:hover { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .row-btn-del { color:var(--red); border-color:#fecaca; }
+  .row-btn-del:hover { background:var(--red); color:#fff; border-color:var(--red); }
+
+  .tx-bottomcount { text-align:center; font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--muted); margin-top:1rem; }
+
+  .tx-empty { border:2px dashed var(--border); border-radius:20px; padding:4rem 2rem; text-align:center; background:var(--paper); }
+  .tx-empty-icon { font-size:3.5rem; display:block; margin-bottom:1rem; }
+  .tx-empty-title { font-size:1.6rem; font-weight:800; letter-spacing:-0.03em; margin-bottom:0.5rem; }
+  .tx-empty-sub { color:var(--muted); max-width:460px; margin:0 auto 1.75rem; line-height:1.65; font-size:0.92rem; }
+
+  /* Edit modal */
+  .tx-modal-card { background:#fff; border:2px solid var(--ink); border-radius:18px; box-shadow:8px 8px 0 var(--ink);
+                   width:100%; max-width:28rem; padding:1.6rem; font-family:'Bricolage Grotesque',sans-serif; }
+  .tx-modal-title { font-size:1.2rem; font-weight:800; letter-spacing:-0.02em; display:flex; align-items:center; gap:0.5rem; }
+  .f-label { display:block; font-family:'DM Mono',monospace; font-size:0.64rem; letter-spacing:0.08em;
+             text-transform:uppercase; color:var(--muted); margin-bottom:0.3rem; }
+  .f-input { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.6rem 0.75rem;
+             font-family:'Bricolage Grotesque',sans-serif; color:var(--ink); background:#fff; }
+  .f-input:focus { outline:none; border-color:var(--ink); box-shadow:0 0 0 3px rgba(10,10,15,.06); }
+  .modal-btn { padding:0.6rem 1.1rem; border-radius:10px; font-weight:700; cursor:pointer;
+               font-family:'Bricolage Grotesque',sans-serif; border:1.5px solid var(--ink); }
+  .modal-btn-cancel { background:#fff; color:var(--ink); }
+  .modal-btn-save { background:var(--ink); color:#fff; }
+</style>
+
+<div class="txns">
+  <!-- Header -->
+  <div class="tx-head">
+    <div>
+      <div class="tx-eyebrow">Ledger</div>
+      <h1 class="tx-title">Transactions</h1>
+      <p class="tx-sub">Every dollar in and out — search, filter, edit and export.</p>
+    </div>
+    <div class="tx-actions">
+      <a href="/import-csv" class="tx-btn tx-btn-ghost">⬆️ Import CSV</a>
+      <a href="/export-csv" class="tx-btn tx-btn-ghost">📊 Export CSV</a>
+      <a href="/add-transaction" class="tx-btn tx-btn-dark">➕ Add transaction</a>
+    </div>
+  </div>
+
+  {% if transactions %}
+  <!-- Summary Cards -->
+  {% set total_income = transactions | selectattr('type', 'equalto', 'income') | sum(attribute='amount') %}
+  {% set total_expense = transactions | selectattr('type', 'equalto', 'expense') | sum(attribute='amount') %}
+  {% set net_flow = total_income - total_expense %}
+  <div class="sum-grid">
+    <div class="sum-card sum-income">
+      <div class="sum-accent"></div>
+      <div class="sum-label">Total income</div>
+      <div class="sum-val num">${{ "{:,}".format(total_income|float|int) }}</div>
+      <div class="sum-cap">{{ transactions | selectattr('type', 'equalto', 'income') | list | length }} transactions</div>
+    </div>
+    <div class="sum-card sum-expense">
+      <div class="sum-accent"></div>
+      <div class="sum-label">Total expenses</div>
+      <div class="sum-val num">${{ "{:,}".format(total_expense|float|int) }}</div>
+      <div class="sum-cap">{{ transactions | selectattr('type', 'equalto', 'expense') | list | length }} transactions</div>
+    </div>
+    <div class="sum-card {% if net_flow >= 0 %}sum-net-pos{% else %}sum-net-neg{% endif %}">
+      <div class="sum-accent"></div>
+      <div class="sum-label">Net cash flow</div>
+      <div class="sum-val num">{% if net_flow >= 0 %}+{% endif %}${{ "{:,}".format(net_flow|float|int) }}</div>
+      <div class="sum-cap">{{ transactions | length }} total transactions</div>
+    </div>
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <div class="tx-toolbar">
+    <input type="text" id="searchInput" placeholder="🔍 Search description or category..." onkeyup="filterTable()" class="tx-input">
+    <select id="typeFilter" onchange="filterTable()" class="tx-select">
+      <option value="">All types</option>
+      <option value="income">💰 Income</option>
+      <option value="expense">💸 Expense</option>
+    </select>
+    <button onclick="clearFilters()" class="tx-clear">Clear</button>
+    <span id="rowCount" class="tx-count"></span>
+  </div>
+
+  <!-- Transactions Table -->
+  <div class="tx-table-card">
+    <div style="overflow-x:auto;">
+      <table id="txTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th style="text-align:right;">Amount</th>
+            <th style="text-align:center;">Recurring</th>
+            <th style="text-align:center;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="txBody">
+          {% for transaction in transactions | reverse %}
+          <tr class="tx-row"
+              data-type="{{ transaction.type }}"
+              data-search="{{ (transaction.description or '') | lower }} {{ transaction.category | lower }}">
+            <td class="td-date">{{ transaction.date }}</td>
+            <td>
+              {% if transaction.type == 'income' %}
+                <span class="badge badge-income">💰 Income</span>
+              {% else %}
+                <span class="badge badge-expense">💸 Expense</span>
+              {% endif %}
+            </td>
+            <td><span class="cat-chip">{{ transaction.category }}</span></td>
+            <td style="color:var(--muted);">{{ transaction.description or '—' }}</td>
+            <td class="td-amt">
+              {% if transaction.type == 'income' %}
+                <span class="amt-pos">+${{ "{:,.2f}".format(transaction.amount|float) }}</span>
+              {% else %}
+                <span class="amt-neg">-${{ "{:,.2f}".format(transaction.amount|float) }}</span>
+              {% endif %}
+            </td>
+            <td class="td-center">
+              {% if transaction.recurring %}
+                <span class="recur-yes">🔄 Yes</span>
+              {% else %}
+                <span class="recur-no">—</span>
+              {% endif %}
+            </td>
+            <td class="td-center">
+              <div style="display:flex; align-items:center; justify-content:center; gap:0.4rem;">
+                <button type="button" onclick="openEditModal(this)"
+                        data-id="{{ transaction.id }}"
+                        data-date="{{ transaction.date }}"
+                        data-type="{{ transaction.type }}"
+                        data-category="{{ transaction.category }}"
+                        data-description="{{ transaction.description or '' }}"
+                        data-amount="{{ transaction.amount }}"
+                        data-recurring="{{ 'true' if transaction.recurring else 'false' }}"
+                        data-frequency="{{ transaction.recurring_frequency or 'monthly' }}"
+                        class="row-btn row-btn-edit">✏️ Edit</button>
+                <form method="POST" action="/transactions/delete/{{ transaction.id }}"
+                      onsubmit="return confirm('Delete this transaction? This cannot be undone.')">
+                  <button type="submit" class="row-btn row-btn-del">🗑️ Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tx-bottomcount" id="bottomCount">
+    Showing <strong>{{ transactions | length }}</strong> transactions
+  </div>
+
+  {% else %}
+  <!-- Empty state -->
+  <div class="tx-empty">
+    <span class="tx-empty-icon">💳</span>
+    <h3 class="tx-empty-title">No transactions yet</h3>
+    <p class="tx-empty-sub">Start tracking your startup's finances by adding your first transaction or importing from CSV.</p>
+    <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+      <a href="/add-transaction" class="tx-btn tx-btn-dark">➕ Add transaction</a>
+      <a href="/import-csv" class="tx-btn tx-btn-ghost">⬆️ Import CSV</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Edit Transaction Modal -->
+<div id="editModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"
+     onclick="if(event.target===this)closeEditModal()">
+  <div class="tx-modal-card">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.1rem;">
+      <h3 class="tx-modal-title"><span>✏️</span> Edit transaction</h3>
+      <button type="button" onclick="closeEditModal()" style="background:none;border:none;font-size:1.6rem;line-height:1;color:var(--muted);cursor:pointer;">&times;</button>
+    </div>
+    <form id="editForm" method="POST" action="">
+      <div style="display:grid; grid-template-columns:1fr; gap:1rem;">
+        <div>
+          <label class="f-label">Date</label>
+          <input type="date" name="date" id="edit-date" required class="f-input">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+          <div>
+            <label class="f-label">Type</label>
+            <select name="type" id="edit-type" class="f-input">
+              <option value="income">💰 Income</option>
+              <option value="expense">💸 Expense</option>
+            </select>
+          </div>
+          <div>
+            <label class="f-label">Amount</label>
+            <input type="number" step="0.01" min="0" name="amount" id="edit-amount" required class="f-input">
+          </div>
+        </div>
+        <div>
+          <label class="f-label">Category</label>
+          <input type="text" name="category" id="edit-category" required class="f-input">
+        </div>
+        <div>
+          <label class="f-label">Description</label>
+          <input type="text" name="description" id="edit-description" class="f-input">
+        </div>
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <input type="checkbox" name="recurring" id="edit-recurring" onchange="toggleEditFrequency()" style="width:1rem;height:1rem;">
+          <label for="edit-recurring" style="font-size:0.85rem;font-weight:600;">Recurring</label>
+          <select name="recurring_frequency" id="edit-frequency" class="f-input hidden" style="width:auto; margin-left:0.5rem; padding:0.3rem 0.5rem; font-size:0.8rem;">
+            <option value="monthly">Monthly</option>
+            <option value="weekly">Weekly</option>
+            <option value="yearly">Yearly</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.6rem; margin-top:1.4rem;">
+        <button type="button" onclick="closeEditModal()" class="modal-btn modal-btn-cancel">Cancel</button>
+        <button type="submit" class="modal-btn modal-btn-save">Save changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function filterTable() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const type = document.getElementById('typeFilter').value.toLowerCase();
+    const rows = document.querySelectorAll('.tx-row');
+    let visible = 0;
+    rows.forEach(row => {
+        const matchSearch = !search || row.dataset.search.includes(search);
+        const matchType = !type || row.dataset.type === type;
+        if (matchSearch && matchType) { row.style.display = ''; visible++; }
+        else { row.style.display = 'none'; }
+    });
+    document.getElementById('rowCount').textContent = `${visible} result${visible !== 1 ? 's' : ''}`;
+    document.getElementById('bottomCount').innerHTML = `Showing <strong>${visible}</strong> of <strong>${rows.length}</strong> transactions`;
+}
+function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('typeFilter').value = '';
+    filterTable();
+}
+function openEditModal(btn) {
+    const d = btn.dataset;
+    document.getElementById('editForm').action = '/transactions/edit/' + d.id;
+    document.getElementById('edit-date').value = (d.date || '').slice(0, 10);
+    document.getElementById('edit-type').value = d.type;
+    document.getElementById('edit-amount').value = d.amount;
+    document.getElementById('edit-category').value = d.category;
+    document.getElementById('edit-description').value = d.description;
+    document.getElementById('edit-recurring').checked = (d.recurring === 'true');
+    document.getElementById('edit-frequency').value = d.frequency || 'monthly';
+    toggleEditFrequency();
+    const m = document.getElementById('editModal');
+    m.classList.remove('hidden'); m.classList.add('flex');
+}
+function closeEditModal() {
+    const m = document.getElementById('editModal');
+    m.classList.add('hidden'); m.classList.remove('flex');
+}
+function toggleEditFrequency() {
+    const on = document.getElementById('edit-recurring').checked;
+    document.getElementById('edit-frequency').classList.toggle('hidden', !on);
+}
+</script>
+{% endblock %}

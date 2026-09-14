@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block title %}Goals - Fintoit{% endblock %}
+{% block content %}
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="fp">
+    <!-- Header -->
+    <div class="fp-head">
+        <div>
+            <div class="fp-eyebrow">Planning</div>
+            <h1 class="fp-title">🎯 Financial Goals</h1>
+            <p class="fp-sub">Set targets and track your progress over time</p>
+        </div>
+        <div class="fp-actions">
+            <a href="/goals/add" class="fp-btn fp-btn-dark">➕ New Goal</a>
+        </div>
+    </div>
+
+    {% if goals %}
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem;">
+        {% for goal in goals %}
+
+        {% if goal.achieved %}
+            {% set border = 'border-green-500' %}
+            {% set badge_bg = 'bg-green-100 text-green-800' %}
+            {% set bar_color = 'bg-green-500' %}
+            {% set status_icon = '🏆' %}
+        {% elif goal.percent >= 75 %}
+            {% set border = 'border-blue-500' %}
+            {% set badge_bg = 'bg-blue-100 text-blue-800' %}
+            {% set bar_color = 'bg-blue-500' %}
+            {% set status_icon = '🔥' %}
+        {% elif goal.percent >= 40 %}
+            {% set border = 'border-yellow-500' %}
+            {% set badge_bg = 'bg-yellow-100 text-yellow-800' %}
+            {% set bar_color = 'bg-yellow-400' %}
+            {% set status_icon = '📈' %}
+        {% else %}
+            {% set border = 'border-gray-300' %}
+            {% set badge_bg = 'bg-gray-100 text-gray-600' %}
+            {% set bar_color = 'bg-gray-400' %}
+            {% set status_icon = '🎯' %}
+        {% endif %}
+
+        <div class="fp-card" style="border-top:4px solid {% if goal.achieved %}var(--green){% elif goal.percent >= 75 %}var(--blue){% elif goal.percent >= 40 %}var(--amber){% else %}var(--border){% endif %};">
+            <!-- Header Row -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;">
+                <div>
+                    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;">
+                        <span style="font-size:1.2rem;">{{ status_icon }}</span>
+                        <h3 style="font-weight:800;font-size:1rem;margin:0;">{{ goal.name }}</h3>
+                    </div>
+                    <span class="fp-badge" style="border-color:{% if goal.achieved %}var(--green){% elif goal.percent >= 75 %}var(--blue){% elif goal.percent >= 40 %}var(--amber){% else %}var(--border){% endif %};color:{% if goal.achieved %}var(--green){% elif goal.percent >= 75 %}var(--blue){% elif goal.percent >= 40 %}var(--amber){% else %}var(--muted){% endif %};">
+                        {% if goal.goal_type == 'cash' %}💰 Cash Balance
+                        {% elif goal.goal_type == 'revenue' %}📈 Monthly Revenue
+                        {% elif goal.goal_type == 'expenses' %}📉 Expense Control
+                        {% elif goal.goal_type == 'runway' %}🛫 Runway
+                        {% endif %}
+                    </span>
+                    {% if goal.deadline %}
+                    <span style="font-size:.75rem;color:var(--muted);margin-left:.5rem;" class="num">📅 Due {{ goal.deadline }}</span>
+                    {% endif %}
+                </div>
+                <form method="POST" action="/goals/delete/{{ goal.id }}"
+                      onsubmit="return confirm('Delete this goal?')">
+                    <button type="submit" class="fp-btn fp-btn-ghost" style="padding:.3rem .5rem;font-size:1rem;border-color:transparent;">🗑️</button>
+                </form>
+            </div>
+
+            <!-- Values -->
+            <div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-bottom:.5rem;">
+                <span>
+                    Current:
+                    <strong style="color:var(--ink);" class="num">
+                        {% if goal.goal_type == 'runway' %}
+                            {{ goal.current_value }} mo
+                        {% else %}
+                            ${{ "{:,.0f}".format(goal.current_value) }}
+                        {% endif %}
+                    </strong>
+                </span>
+                <span>
+                    Target:
+                    <strong style="color:var(--ink);" class="num">
+                        {% if goal.goal_type == 'runway' %}
+                            {{ goal.target_value }} mo
+                        {% else %}
+                            ${{ "{:,.0f}".format(goal.target_value) }}
+                        {% endif %}
+                    </strong>
+                </span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="fp-progress" style="height:14px;margin-bottom:.3rem;">
+                <div class="fp-progress-fill"
+                     style="width:{{ goal.percent }}%;background:{% if goal.achieved %}var(--green){% elif goal.percent >= 75 %}var(--blue){% elif goal.percent >= 40 %}var(--amber){% else %}var(--muted){% endif %};"></div>
+            </div>
+            <div style="text-align:right;font-size:.72rem;font-weight:700;margin-bottom:1rem;font-family:'DM Mono',monospace;color:{% if goal.achieved %}var(--green){% elif goal.percent >= 75 %}var(--blue){% else %}var(--muted){% endif %};">
+                {% if goal.achieved %}
+                    🏆 Goal achieved!
+                {% else %}
+                    {{ goal.percent }}% complete
+                {% endif %}
+            </div>
+
+            <!-- Chart (only for cash/revenue goals with data) -->
+            {% if goal.goal_type in ('cash', 'revenue') and goal.monthly_labels %}
+            <div style="margin-top:.5rem;">
+                <p style="font-size:.7rem;color:var(--muted);margin-bottom:.5rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;">Progress Over Time</p>
+                <canvas id="chart_{{ loop.index }}" height="100"></canvas>
+            </div>
+            <script>
+            (function() {
+                const labels = {{ goal.monthly_labels | tojson }};
+                const values = {{ goal.monthly_values | tojson }};
+                const target = {{ goal.target_value }};
+                const ctx = document.getElementById('chart_{{ loop.index }}').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: '{{ "Cash" if goal.goal_type == "cash" else "Revenue" }}',
+                                data: values,
+                                borderColor: '{% if goal.achieved %}#22c55e{% elif goal.percent >= 75 %}#3b82f6{% else %}#f59e0b{% endif %}',
+                                backgroundColor: '{% if goal.achieved %}rgba(34,197,94,0.1){% elif goal.percent >= 75 %}rgba(59,130,246,0.1){% else %}rgba(245,158,11,0.1){% endif %}',
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 3
+                            },
+                            {
+                                label: 'Target',
+                                data: labels.map(() => target),
+                                borderColor: '#ef4444',
+                                borderDash: [6, 3],
+                                borderWidth: 2,
+                                pointRadius: 0,
+                                fill: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    font: { size: 10 },
+                                    callback: v => '$' + v.toLocaleString()
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                ticks: { font: { size: 10 } },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            })();
+            </script>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="fp-empty">
+        <span class="fp-empty-icon">🎯</span>
+        <div class="fp-empty-title">No Goals Yet</div>
+        <p class="fp-empty-sub">Set your first financial goal — whether it's hitting a revenue milestone, saving cash, or extending your runway.</p>
+        <a href="/goals/add" class="fp-btn fp-btn-dark">➕ Create First Goal</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,924 @@
+{% extends "base.html" %}
+{% block title %}Startup Runway Calculator — Free Cash Runway Tool | Fintoit{% endblock %}
+
+{% block head %}
+<meta name="description" content="Free startup runway calculator. Models revenue growth and new hires month by month (not one division) to show when you run out of cash and whether you reach breakeven first. No login required.">
+<link rel="canonical" href="https://fintoit.com/runway-calculator">
+<meta name="robots" content="index,follow">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Startup Runway Calculator — Free | Fintoit">
+<meta property="og:description" content="How many months of runway do you have? Model revenue growth and new hires month by month, and see whether you hit breakeven before you hit zero.">
+<meta property="og:url" content="https://fintoit.com/runway-calculator">
+<meta property="og:image" content="https://fintoit.com/static/images/logo 6.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Startup Runway Calculator — Free | Fintoit">
+<meta name="twitter:description" content="Model growth and hiring month by month. See when you run out, and whether you reach breakeven first.">
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Startup Runway Calculator",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "url": "https://fintoit.com/runway-calculator",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free startup runway calculator that projects cash month by month, including revenue growth and new hires, to show your cash-zero date and whether you reach breakeven first."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How is startup runway calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The simple formula is cash divided by net monthly burn, where net burn is monthly expenses minus monthly revenue. That assumes revenue never changes. If your revenue is growing, the simple formula understates your runway, because each month you burn a little less than the last. This calculator projects each month forward instead."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does default alive mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Default alive means your revenue reaches your expenses before your cash reaches zero, so you never need to raise again to survive. Default dead means you run out first. The term comes from Paul Graham. A company can be default dead today and default alive at a slightly higher growth rate, which is why growth rate belongs in the calculation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does hiring affect runway?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Each hire adds their fully loaded monthly cost to your expenses, which increases net burn and shortens runway immediately. It also pushes your breakeven month further out, because revenue now has further to climb to cover expenses. Fully loaded cost means salary plus payroll tax, benefits, equipment and software, which is typically 1.25 to 1.4 times base salary."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much runway should a startup have?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A common guideline is 18 to 24 months after a raise, and never fewer than 6 months without a plan. Fundraising typically takes 3 to 6 months, so runway under 6 months means raising from a position of weakness. Under 12 months is the point at which most founders start preparing materials."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics (funnel: page view -> CTA click). Guarded so it never double-loads if the base template already defines gtag. -->
+<script>
+  if (!window.gtag) {
+    var _ga = document.createElement('script');
+    _ga.async = true;
+    _ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-XBT6631QQ7';
+    document.head.appendChild(_ga);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', 'G-XBT6631QQ7');
+  }
+</script>
+{% endblock %}
+
+{% block content %}
+<style>
+  /* Runway calculator — matches the Fintoit home design system
+     (paper/ink palette, Bricolage Grotesque + DM Mono, grid hero, neo-brutalist CTA). */
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+
+  .rc {
+    --ink: #0a0a0f;
+    --paper: #f7f6f2;
+    --blue: #1d4ed8;
+    --green: #16a34a;
+    --red: #dc2626;
+    --amber: #d97706;
+    --muted: #6b6b7a;
+    --border: #e2e1db;
+    font-family: "Bricolage Grotesque", sans-serif;
+    color: var(--ink);
+    /* Cancel the base .main max-width so the hero can go edge-to-edge */
+    margin: -2rem -1rem 0;
+  }
+
+  /* ── HERO ── */
+  .rc-hero {
+    position: relative;
+    padding: 4rem 1.5rem 2.5rem;
+    overflow: hidden;
+    background: var(--paper);
+    text-align: center;
+  }
+  .rc-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.6;
+  }
+  .rc-hero::after {
+    content: "";
+    position: absolute;
+    width: 620px; height: 620px;
+    top: -180px; right: -220px;
+    background: radial-gradient(circle, rgba(29,78,216,0.13) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: rcFloat 8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes rcFloat {
+    0%,100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-24px) scale(1.04); }
+  }
+  .rc-hero-inner { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+
+  .rc-eyebrow {
+    font-size: 0.73rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blue);
+    font-family: "DM Mono", monospace; margin-bottom: 0.9rem;
+  }
+  .rc-headline {
+    font-size: clamp(2.25rem, 6vw, 4rem);
+    font-weight: 800; line-height: 1.02; letter-spacing: -0.03em;
+    margin: 0 0 1.1rem;
+  }
+  .rc-headline .grad {
+    background: linear-gradient(135deg, var(--blue) 0%, #6366f1 55%, #8b5cf6 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .rc-sub {
+    font-size: 1.1rem; color: var(--muted); line-height: 1.65;
+    max-width: 560px; margin: 0 auto;
+  }
+
+  /* ── BODY ── */
+  .rc-body { max-width: 760px; margin: 0 auto; padding: 0 1.5rem; }
+
+  .rc-card {
+    background: white; border: 1.5px solid var(--border);
+    border-radius: 24px; padding: 2rem; margin-top: -1.25rem;
+    position: relative; z-index: 2;
+    box-shadow: 0 20px 50px rgba(10,10,15,0.06);
+  }
+  @media (min-width: 768px) { .rc-card { padding: 2.5rem; } }
+
+  .rc-grid { display: grid; gap: 1rem; }
+  @media (min-width: 768px) { .rc-grid { grid-template-columns: repeat(3, 1fr); } }
+  .rc-grid + .rc-grid { margin-top: 1rem; }
+
+  /* Divider introducing the projection inputs */
+  .rc-section-note {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin: 1.5rem 0 0.25rem;
+    font-family: "DM Mono", monospace; font-size: 0.68rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+  .rc-section-note::after {
+    content: ""; flex: 1; height: 1px; background: var(--border);
+  }
+
+  .rc-label {
+    display: block; font-size: 0.8rem; font-weight: 600;
+    color: var(--ink); margin-bottom: 0.4rem;
+  }
+  .rc-label .opt { color: var(--muted); font-weight: 400; }
+  .rc-input {
+    width: 100%; padding: 0.8rem 0.9rem;
+    border: 1.5px solid var(--border); border-radius: 12px;
+    font-size: 1.05rem; font-family: "DM Mono", monospace;
+    color: var(--ink); background: white; transition: all 0.15s;
+    box-sizing: border-box;
+  }
+  .rc-input:focus {
+    outline: none; border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,78,216,0.12);
+  }
+
+  .rc-prefill {
+    margin-top: 0.9rem; font-size: 0.78rem; color: var(--muted);
+    display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+  }
+  .rc-linkbtn {
+    background: none; border: none; padding: 0; cursor: pointer;
+    font-family: "Bricolage Grotesque", sans-serif; font-size: 0.78rem;
+    font-weight: 600; color: var(--blue); text-decoration: underline;
+  }
+
+  .rc-currency-row { margin-top: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+  .rc-select {
+    padding: 0.55rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 10px; font-family: "DM Mono", monospace;
+    font-size: 0.9rem; background: white; color: var(--ink);
+  }
+
+  /* Result */
+  .rc-result {
+    margin-top: 1.5rem; border-radius: 18px; padding: 2rem 1.5rem;
+    text-align: center; background: var(--paper); border: 1.5px solid var(--border);
+  }
+  .rc-result-label {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); font-family: "DM Mono", monospace; font-weight: 500;
+  }
+  .rc-months {
+    font-family: "DM Mono", monospace; font-size: 3.5rem; font-weight: 700;
+    letter-spacing: -0.04em; color: var(--ink); line-height: 1.05; margin-top: 0.25rem;
+  }
+  .rc-months-unit { color: var(--muted); font-size: 0.95rem; }
+  .rc-badge {
+    display: inline-block; margin-top: 0.85rem; padding: 0.3rem 0.9rem;
+    border-radius: 100px; font-size: 0.82rem; font-weight: 700;
+    font-family: "DM Mono", monospace;
+  }
+  .rc-badge-healthy { background:#dcfce7; color:#166534; }
+  .rc-badge-watch   { background:#fef9c3; color:#854d0e; }
+  .rc-badge-danger  { background:#fee2e2; color:#991b1b; }
+  .rc-zero { margin-top: 0.85rem; font-size: 0.9rem; color: var(--muted); }
+
+  /* Cash projection chart */
+  .rc-chart-wrap { margin-top: 1.5rem; }
+  .rc-chart { display: block; width: 100%; height: auto; overflow: visible; }
+  .rc-chart-axis {
+    display: flex; justify-content: space-between;
+    font-family: "DM Mono", monospace; font-size: 0.65rem; color: var(--muted);
+    margin-top: 0.4rem;
+  }
+
+  /* The insight line — the thing a simple division cannot tell you */
+  .rc-insight {
+    margin-top: 1.25rem; padding: 0.9rem 1rem;
+    border-radius: 12px; font-size: 0.9rem; line-height: 1.6;
+    text-align: left; border: 1.5px solid;
+  }
+  .rc-insight strong { font-weight: 700; }
+  .rc-insight-warn { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+  .rc-insight-good { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+
+  /* Small stat strip under the headline number */
+  .rc-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem; margin-top: 1.25rem;
+  }
+  @media (max-width: 560px) { .rc-stats { grid-template-columns: 1fr; } }
+  .rc-stat {
+    background: white; border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 0.7rem 0.6rem;
+  }
+  .rc-stat-label {
+    font-family: "DM Mono", monospace; font-size: 0.6rem;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+  }
+  .rc-stat-val {
+    font-family: "DM Mono", monospace; font-size: 1rem;
+    font-weight: 700; margin-top: 0.2rem; color: var(--ink);
+  }
+
+  .rc-share {
+    margin-top: 1rem; width: 100%;
+    background: white; color: var(--ink);
+    border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 0.8rem 1rem; font-size: 0.95rem; font-weight: 600;
+    font-family: "Bricolage Grotesque", sans-serif; cursor: pointer; transition: all 0.18s;
+  }
+  .rc-share:hover { border-color: #9ca3af; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.07); }
+
+  /* CTA — neo-brutalist box mirroring the home page */
+  .rc-cta-wrap { padding: 3rem 0 1rem; }
+  .rc-cta-box {
+    background: white; border: 2px solid var(--ink); border-radius: 24px;
+    box-shadow: 8px 8px 0 var(--ink);
+    padding: 2.5rem 2rem; text-align: center;
+  }
+  .rc-cta-title { font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.6rem; }
+  .rc-cta-sub { color: var(--muted); font-size: 1rem; line-height: 1.6; margin-bottom: 1.75rem; }
+  .rc-btn-dark {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--ink); color: white; padding: 0.9rem 2rem;
+    border-radius: 12px; font-weight: 700; font-size: 1rem; text-decoration: none;
+    font-family: "Bricolage Grotesque", sans-serif; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(10,10,15,0.2);
+  }
+  .rc-btn-dark:hover { background: #1e1e2e; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,10,15,0.28); }
+
+  /* FAQ / SEO body */
+  .rc-faq { padding: 3rem 0 1rem; }
+  .rc-faq h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.6rem; }
+  .rc-faq h2:not(:first-child) { margin-top: 2rem; }
+  .rc-faq p { color: var(--muted); line-height: 1.75; font-size: 0.97rem; }
+  .rc-faq strong { color: var(--ink); }
+</style>
+
+<div class="rc">
+  <!-- ── HERO ── -->
+  <section class="rc-hero">
+    <div class="rc-hero-inner">
+      <div class="rc-eyebrow">Free · No login required</div>
+      <h1 class="rc-headline">Startup Runway<br><span class="grad">Calculator</span></h1>
+      <p class="rc-sub">
+        Most runway calculators divide once and stop. This one projects every month forward,
+        including your revenue growth and any hires you're considering, so you can see whether
+        you reach breakeven before you reach zero.
+      </p>
+    </div>
+  </section>
+
+  <div class="rc-body">
+    <!-- ── Calculator card ── -->
+    <div class="rc-card">
+      <div class="rc-grid">
+        <div>
+          <label for="rc-cash" class="rc-label">Cash in the bank</label>
+          <input id="rc-cash" class="rc-input" type="text" inputmode="numeric" placeholder="210,000" autocomplete="off">
+        </div>
+        <div>
+          <label for="rc-expenses" class="rc-label">Monthly expenses</label>
+          <input id="rc-expenses" class="rc-input" type="text" inputmode="numeric" placeholder="55,000" autocomplete="off">
+        </div>
+        <div>
+          <label for="rc-revenue" class="rc-label">Monthly revenue</label>
+          <input id="rc-revenue" class="rc-input" type="text" inputmode="numeric" placeholder="23,000" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="rc-section-note">Project it forward</div>
+
+      <div class="rc-grid">
+        <div>
+          <label for="rc-growth" class="rc-label">Revenue growth <span class="opt">(% / mo)</span></label>
+          <input id="rc-growth" class="rc-input" type="text" inputmode="decimal" placeholder="7" autocomplete="off">
+        </div>
+        <div>
+          <label for="rc-hires" class="rc-label">New hires <span class="opt">(planned)</span></label>
+          <input id="rc-hires" class="rc-input" type="text" inputmode="numeric" placeholder="0" autocomplete="off">
+        </div>
+        <div>
+          <label for="rc-hire-cost" class="rc-label">Cost per hire <span class="opt">(/ mo)</span></label>
+          <input id="rc-hire-cost" class="rc-input" type="text" inputmode="numeric" placeholder="11,000" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="rc-prefill">
+        <span id="rc-prefill-note">Pre-filled with an example startup. Change any number.</span>
+        <button type="button" id="rc-reset" class="rc-linkbtn">Reset example</button>
+      </div>
+
+      <div class="rc-currency-row">
+        <label for="rc-currency" class="rc-label" style="margin-bottom:0;">Currency</label>
+        <select id="rc-currency" class="rc-select">
+          <option value="USD">$ USD</option>
+          <option value="EUR">€ EUR</option>
+          <option value="GBP">£ GBP</option>
+          <option value="CAD">CA$ CAD</option>
+          <option value="AUD">A$ AUD</option>
+          <option value="INR">₹ INR</option>
+        </select>
+      </div>
+
+      <!-- Result -->
+      <div id="rc-result" class="rc-result" aria-live="polite">
+        <div class="rc-result-label">Your runway</div>
+        <div id="rc-months" class="rc-months">—</div>
+        <div class="rc-months-unit">months</div>
+        <span id="rc-badge" class="rc-badge rc-badge-watch">Enter your numbers</span>
+        <div id="rc-zero" class="rc-zero"></div>
+
+        <!-- Cash projection -->
+        <div class="rc-chart-wrap" id="rc-chart-wrap" hidden>
+          <svg id="rc-chart" class="rc-chart" viewBox="0 0 600 150" preserveAspectRatio="none" role="img"
+               aria-label="Projected cash balance by month"></svg>
+          <div class="rc-chart-axis">
+            <span>Today</span>
+            <span id="rc-chart-end"></span>
+          </div>
+        </div>
+
+        <!-- The insight a single division cannot give you -->
+        <div id="rc-insight" class="rc-insight rc-insight-warn" hidden></div>
+
+        <div class="rc-stats">
+          <div class="rc-stat">
+            <div class="rc-stat-label">Net burn now</div>
+            <div class="rc-stat-val" id="rc-stat-burn">—</div>
+          </div>
+          <div class="rc-stat">
+            <div class="rc-stat-label">Breakeven in</div>
+            <div class="rc-stat-val" id="rc-stat-breakeven">—</div>
+          </div>
+          <div class="rc-stat">
+            <div class="rc-stat-label">Without growth</div>
+            <div class="rc-stat-val" id="rc-stat-naive">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Share -->
+      <button id="rc-share" class="rc-share">🔗 Copy shareable link</button>
+    </div>
+
+    <!-- ── CTA ── -->
+    <div class="rc-cta-wrap">
+      <div class="rc-cta-box">
+        <h2 class="rc-cta-title">Want this tracked automatically?</h2>
+        <p class="rc-cta-sub">
+          Fintoit is your AI CFO: live burn rate, runway, forecasting and 1-click investor reports.
+          Ask it "what's my runway if I hire two engineers?" and get the same projection from your
+          real numbers. Free to start.
+        </p>
+        <a id="rc-cta" href="/signup?source=runway_calculator" class="rc-btn-dark">Sign up for the dashboard →</a>
+      </div>
+    </div>
+
+    <!-- ── FAQ / SEO body ── -->
+    <div class="rc-faq">
+      <h2>How is startup runway calculated?</h2>
+      <p>
+        The simple formula is <strong>cash ÷ net monthly burn</strong>, where net burn is your monthly
+        expenses minus your monthly revenue. That assumes revenue never changes. If your revenue is
+        growing, the simple formula <strong>understates your runway</strong>, because each month you burn a
+        little less than the last. This calculator projects each month forward instead, which is why
+        the answer above can differ from a single division by several months.
+      </p>
+
+      <h2>What does default alive mean?</h2>
+      <p>
+        <strong>Default alive</strong> means your revenue reaches your expenses before your cash reaches
+        zero, so you never <em>need</em> to raise again to survive. <strong>Default dead</strong> means you
+        run out first. The term comes from Paul Graham. A company can be default dead at one growth rate
+        and default alive at a slightly higher one, which is exactly why growth belongs in the
+        calculation rather than outside it.
+      </p>
+
+      <h2>How does hiring affect runway?</h2>
+      <p>
+        Each hire adds their <strong>fully loaded</strong> monthly cost to your expenses, which increases
+        net burn and shortens runway immediately. It also pushes your breakeven month further out, because
+        revenue now has further to climb to cover expenses. Fully loaded means salary plus payroll tax,
+        benefits, equipment and software, typically <strong>1.25–1.4× base salary</strong>, so a $8,000/mo
+        salary costs roughly $10,000–$11,000/mo in reality.
+      </p>
+
+      <h2>How much runway should a startup have?</h2>
+      <p>
+        A common guideline is <strong>18–24 months</strong> after a raise, and never fewer than
+        <strong>6 months</strong> without a plan. Fundraising typically takes 3–6 months, so runway under
+        6 months means raising from a position of weakness. Under 12 months is the point at which most
+        founders start preparing materials.
+      </p>
+
+      <h2>Learn more</h2>
+      <p>
+        Two guides that go deeper than the numbers on this page:
+      </p>
+      <ul style="margin:0;padding-left:1.15rem;line-height:1.85;">
+        <li>
+          <a href="/burn-rate-guide" style="font-weight:600;">What is burn rate and how to calculate it</a>:
+          gross vs. net burn, the formulas, worked examples, and the five mistakes that make founders
+          misjudge how much time they have.
+        </li>
+        <li>
+          <a href="/investor-update-template" style="font-weight:600;">The monthly investor update template</a>:
+          a copy-paste format, what investors actually look for, and the right cadence by stage.
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────
+// Runway projection.
+//
+// The old version of this page did one division: cash / (expenses - revenue).
+// That is only correct for a company whose revenue never moves. Every month
+// a growing company burns slightly less than the month before, so a single
+// division systematically UNDERSTATES runway -- on the example defaults below
+// it says 6.6 months when the real answer is 10.0.
+//
+// This projects month by month instead, which also makes two things visible
+// that a division cannot show at all:
+//   1. the breakeven month -- when revenue overtakes expenses
+//   2. whether you reach it before your cash hits zero (default alive vs dead)
+//
+// Semantics deliberately match the server-side canonical module
+// (Modules/metrics.py): net burn is expenses minus revenue, and runway is
+// undefined -- not zero, not a huge number -- when net burn is not positive.
+//
+// Pinned by tests/test_runway_calculator.py, which extracts this exact block
+// from this template and runs it under Node, so the tests cannot drift from
+// what actually ships.
+// ─────────────────────────────────────────────────────────────────────────
+
+// An example seed-stage company: default dead at 10.0 months, but it would
+// reach breakeven in month 13. Landing on a real, tense number beats landing
+// on an empty form.
+var RC_DEFAULTS = {
+  cash: 210000,
+  expenses: 55000,
+  revenue: 23000,
+  growth: 7,
+  hires: 0,
+  hireCost: 11000
+};
+
+var RC_HORIZON_MONTHS = 600;   // hard stop so a pathological input cannot hang
+var RC_CHART_MONTHS = 36;      // only ever draw the first three years
+
+function sanitizeAmount(value) {
+  var n = typeof value === 'number' ? value : parseFloat(String(value).replace(/[^0-9.\-]/g, ''));
+  if (!isFinite(n) || n <= 0) return 0;
+  return n;
+}
+// Growth may legitimately be negative (revenue shrinking), so it needs its own
+// parser rather than the clamp-to-zero one used for money.
+function sanitizeRate(value) {
+  var n = typeof value === 'number' ? value : parseFloat(String(value).replace(/[^0-9.\-]/g, ''));
+  if (!isFinite(n)) return 0;
+  if (n > 100) return 100;
+  if (n < -100) return -100;
+  return n;
+}
+function sanitizeCount(value) {
+  var n = typeof value === 'number' ? value : parseInt(String(value).replace(/[^0-9]/g, ''), 10);
+  if (!isFinite(n) || n <= 0) return 0;
+  return Math.min(Math.floor(n), 999);
+}
+
+function netBurn(expenses, revenue) { return sanitizeAmount(expenses) - sanitizeAmount(revenue); }
+
+// The single-division answer, kept so the page can show what growth is worth.
+function computeRunway(cash, expenses, revenue) {
+  var nb = netBurn(expenses, revenue);
+  if (nb <= 0) return Infinity;
+  var c = sanitizeAmount(cash);
+  if (c <= 0) return 0;
+  return c / nb;
+}
+
+// Month in which revenue first covers expenses, in closed form. Reported even
+// when the company runs out of cash first -- "you were 3 months short" is the
+// most useful thing this page can tell someone.
+function breakevenMonth(expenses, revenue, growthPct) {
+  var g = sanitizeRate(growthPct) / 100;
+  var exp = sanitizeAmount(expenses), rev = sanitizeAmount(revenue);
+  // "Already there" has to be checked BEFORE the growth check: a profitable
+  // company at 0% growth is at breakeven now, not never.
+  if (rev >= exp) return 0;
+  if (rev <= 0 || g <= 0) return null;      // flat or no revenue never catches up
+  return Math.ceil(Math.log(exp / rev) / Math.log(1 + g));
+}
+
+// How much additional cash it would take to survive all the way to breakeven.
+//
+// NOT months_short x today's net burn: net burn shrinks every month as revenue
+// grows, so that overstates the gap badly (on the default example plus one
+// hire it says ~$427k when the real figure is a fraction of that). The honest
+// answer is the deepest the cash balance would go if it were allowed to run
+// negative up to the breakeven month — that trough is exactly the capital
+// required to bridge it.
+function cashToReachBreakeven(cash, expenses, revenue, growthPct, breakeven) {
+  if (breakeven === null || breakeven <= 0) return 0;
+  var g = sanitizeRate(growthPct) / 100;
+  var balance = sanitizeAmount(cash), trough = balance;
+  for (var i = 1; i <= breakeven; i++) {
+    balance -= (expenses - revenue * Math.pow(1 + g, i));
+    if (balance < trough) trough = balance;
+  }
+  return trough < 0 ? -trough : 0;
+}
+
+function projectRunway(opts) {
+  var cash = sanitizeAmount(opts.cash);
+  var baseExpenses = sanitizeAmount(opts.expenses);
+  var revenue = sanitizeAmount(opts.revenue);
+  var g = sanitizeRate(opts.growth) / 100;
+  var hires = sanitizeCount(opts.hires);
+  var hireCost = sanitizeAmount(opts.hireCost);
+
+  var expenses = baseExpenses + hires * hireCost;
+  var balance = cash;
+  var series = [{ month: 0, cash: cash }];
+  var months = Infinity;
+  var crossed = null;
+
+  for (var i = 1; i <= RC_HORIZON_MONTHS; i++) {
+    var rev = revenue * Math.pow(1 + g, i);
+    var net = expenses - rev;
+
+    if (net <= 0 && crossed === null) crossed = i;
+
+    if (net > 0 && balance - net <= 0) {
+      // Cash runs out partway through this month.
+      months = (i - 1) + (balance / net);
+      series.push({ month: months, cash: 0 });
+      balance = 0;
+      break;
+    }
+
+    balance -= net;                        // net <= 0 adds to cash
+    if (i <= RC_CHART_MONTHS) series.push({ month: i, cash: balance });
+
+    // Once revenue covers expenses and is still growing, cash only rises from
+    // here — the company is default alive. Keep a short tail so the chart
+    // visibly turns upward, then stop.
+    if (crossed !== null && g >= 0 && i >= crossed + 6) break;
+  }
+
+  var crossAt = breakevenMonth(expenses, revenue, opts.growth);
+
+  return {
+    months: months,
+    series: series,
+    additionalCashNeeded: cashToReachBreakeven(cash, expenses, revenue,
+                                               opts.growth, crossAt),
+    // Measured against TOTAL expenses including hires — revenue has to cover
+    // the new payroll too, so hiring pushes breakeven out as well as shortening
+    // runway.
+    breakevenMonth: crossAt,
+    totalExpenses: expenses,
+    hireLoad: hires * hireCost,
+    // Net burn over the coming month, which is what "burn right now" means to
+    // a founder looking at next month's bank balance.
+    netBurnNow: expenses - revenue * (1 + g),
+    naiveMonths: computeRunway(cash, expenses, revenue)
+  };
+}
+
+function cashZeroDate(from, months) {
+  if (!isFinite(months)) return null;
+  if (months <= 0) return new Date(from.getTime());
+  var whole = Math.floor(months), frac = months - whole;
+  var d = new Date(from.getTime());
+  d.setMonth(d.getMonth() + whole);
+  var daysInNextMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  d.setDate(d.getDate() + Math.round(frac * daysInNextMonth));
+  return d;
+}
+function runwayHealth(months) {
+  if (!isFinite(months) || months >= 18) return { level: 'healthy', label: 'Healthy runway' };
+  if (months >= 6) return { level: 'watch', label: 'Plan your next raise' };
+  return { level: 'danger', label: 'Danger zone: act now' };
+}
+function formatMonths(months) { return isFinite(months) ? months.toFixed(1) : '∞'; }
+
+var CURRENCIES = {
+  USD: { symbol: '$',   locale: 'en-US' }, EUR: { symbol: '€', locale: 'en-IE' },
+  GBP: { symbol: '£',   locale: 'en-GB' }, CAD: { symbol: 'CA$', locale: 'en-CA' },
+  AUD: { symbol: 'A$',  locale: 'en-AU' }, INR: { symbol: '₹', locale: 'en-IN' }
+};
+function currencyMeta(code) { return CURRENCIES[code] || CURRENCIES.USD; }
+
+// Everything below is browser-only; the test harness stops here.
+if (typeof document !== 'undefined') {
+
+  var cashEl  = document.getElementById('rc-cash');
+  var expEl   = document.getElementById('rc-expenses');
+  var revEl   = document.getElementById('rc-revenue');
+  var growEl  = document.getElementById('rc-growth');
+  var hiresEl = document.getElementById('rc-hires');
+  var hcostEl = document.getElementById('rc-hire-cost');
+  var curEl   = document.getElementById('rc-currency');
+
+  var monthsEl    = document.getElementById('rc-months');
+  var badgeEl     = document.getElementById('rc-badge');
+  var zeroEl      = document.getElementById('rc-zero');
+  var insightEl   = document.getElementById('rc-insight');
+  var chartWrapEl = document.getElementById('rc-chart-wrap');
+  var chartEl     = document.getElementById('rc-chart');
+  var chartEndEl  = document.getElementById('rc-chart-end');
+  var statBurnEl  = document.getElementById('rc-stat-burn');
+  var statBeEl    = document.getElementById('rc-stat-breakeven');
+  var statNaiveEl = document.getElementById('rc-stat-naive');
+  var ctaEl       = document.getElementById('rc-cta');
+  var shareEl     = document.getElementById('rc-share');
+  var resetEl     = document.getElementById('rc-reset');
+  var prefillEl   = document.getElementById('rc-prefill-note');
+
+  var lastHealthBucket = null;
+
+  function fmtDate(d) {
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+  function fmtMoney(v) {
+    var m = currencyMeta(curEl.value);
+    return m.symbol + Math.round(v).toLocaleString(m.locale);
+  }
+  function fmtGroup(v) { return Number(v).toLocaleString('en-US'); }
+
+  function applyDefaults() {
+    cashEl.value  = fmtGroup(RC_DEFAULTS.cash);
+    expEl.value   = fmtGroup(RC_DEFAULTS.expenses);
+    revEl.value   = fmtGroup(RC_DEFAULTS.revenue);
+    growEl.value  = String(RC_DEFAULTS.growth);
+    hiresEl.value = String(RC_DEFAULTS.hires);
+    hcostEl.value = fmtGroup(RC_DEFAULTS.hireCost);
+  }
+
+  function readInputs() {
+    return {
+      cash: cashEl.value, expenses: expEl.value, revenue: revEl.value,
+      growth: growEl.value, hires: hiresEl.value, hireCost: hcostEl.value
+    };
+  }
+
+  // Zero-dependency cash curve. Chart.js would be ~70KB on a page whose whole
+  // job is to load fast for a cold visitor, so this draws an SVG path directly.
+  function drawChart(series) {
+    if (!series || series.length < 2) { chartWrapEl.hidden = true; return; }
+    var W = 600, H = 150, padY = 10;
+    var xs = series.map(function (p) { return p.month; });
+    var ys = series.map(function (p) { return p.cash; });
+    var maxX = Math.max.apply(null, xs) || 1;
+    var maxY = Math.max.apply(null, ys.concat([0]));
+    var minY = Math.min.apply(null, ys.concat([0]));
+    var spanY = (maxY - minY) || 1;
+
+    function px(m) { return (m / maxX) * W; }
+    function py(c) { return H - padY - ((c - minY) / spanY) * (H - padY * 2); }
+
+    var line = series.map(function (p, i) {
+      return (i === 0 ? 'M' : 'L') + px(p.month).toFixed(1) + ' ' + py(p.cash).toFixed(1);
+    }).join(' ');
+    var area = line + ' L' + px(maxX).toFixed(1) + ' ' + py(minY).toFixed(1) +
+               ' L0 ' + py(minY).toFixed(1) + ' Z';
+
+    var last = series[series.length - 1];
+    var died = last.cash <= 0.0001;
+    var stroke = died ? '#dc2626' : '#16a34a';
+    var fill = died ? 'rgba(220,38,38,0.10)' : 'rgba(22,163,74,0.10)';
+    var zeroY = py(0).toFixed(1);
+
+    chartEl.innerHTML =
+      '<path d="' + area + '" fill="' + fill + '"></path>' +
+      '<line x1="0" y1="' + zeroY + '" x2="' + W + '" y2="' + zeroY +
+        '" stroke="#e2e1db" stroke-width="1" stroke-dasharray="4 4"></line>' +
+      '<path d="' + line + '" fill="none" stroke="' + stroke +
+        '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" ' +
+        'vector-effect="non-scaling-stroke"></path>' +
+      '<circle cx="' + px(last.month).toFixed(1) + '" cy="' + py(last.cash).toFixed(1) +
+        '" r="4" fill="' + stroke + '"></circle>';
+
+    chartEndEl.textContent = 'Month ' + Math.round(maxX);
+    chartWrapEl.hidden = false;
+  }
+
+  function render() {
+    var input = readInputs();
+
+    // Everything cleared out.
+    if (sanitizeAmount(input.cash) === 0 && sanitizeAmount(input.expenses) === 0) {
+      monthsEl.textContent = '—';
+      badgeEl.textContent = 'Enter your numbers';
+      badgeEl.className = 'rc-badge rc-badge-watch';
+      zeroEl.textContent = '';
+      insightEl.hidden = true;
+      chartWrapEl.hidden = true;
+      statBurnEl.textContent = statBeEl.textContent = statNaiveEl.textContent = '—';
+      return;
+    }
+
+    var r = projectRunway(input);
+    var health = runwayHealth(r.months);
+    monthsEl.textContent = formatMonths(r.months);
+    badgeEl.textContent = isFinite(r.months) ? health.label : 'Default alive 🎉';
+    badgeEl.className = 'rc-badge rc-badge-' + health.level;
+
+    if (!isFinite(r.months)) {
+      zeroEl.textContent = "Your revenue overtakes your costs before the cash runs out.";
+    } else if (r.months <= 0) {
+      zeroEl.textContent = 'You are out of cash today.';
+    } else {
+      var d = cashZeroDate(new Date(), r.months);
+      zeroEl.textContent = d ? ('Estimated cash-zero date: ' + fmtDate(d)) : '';
+    }
+
+    drawChart(r.series);
+
+    // ── The insight line ──────────────────────────────────────────────
+    var be = r.breakevenMonth;
+    if (!isFinite(r.months)) {
+      insightEl.className = 'rc-insight rc-insight-good';
+      insightEl.innerHTML = '<strong>You\'re default alive.</strong> At ' +
+        sanitizeRate(input.growth) + '% monthly growth your revenue passes your ' +
+        fmtMoney(r.totalExpenses) + '/mo of costs in <strong>month ' + be +
+        '</strong>, while you still have cash in the bank. You don\'t need to raise to survive, ' +
+        'only to go faster.';
+      insightEl.hidden = false;
+    } else if (be !== null && be > r.months) {
+      var short = be - r.months;
+      insightEl.className = 'rc-insight rc-insight-warn';
+      insightEl.innerHTML = '<strong>You run out ' + short.toFixed(1) +
+        ' months short of breakeven.</strong> At ' + sanitizeRate(input.growth) +
+        '% monthly growth your revenue would cover your ' + fmtMoney(r.totalExpenses) +
+        '/mo of costs in <strong>month ' + be + '</strong>, but the cash is gone in month ' +
+        r.months.toFixed(1) + '. Bridging to breakeven takes about <strong>' +
+        fmtMoney(r.additionalCashNeeded) + '</strong> more in the bank, or faster growth, ' +
+        'or lower costs.';
+      insightEl.hidden = false;
+    } else if (be === null && sanitizeAmount(input.revenue) > 0) {
+      insightEl.className = 'rc-insight rc-insight-warn';
+      insightEl.innerHTML = '<strong>Flat revenue never catches up.</strong> With 0% growth your ' +
+        'costs stay ahead of revenue forever, so runway is just cash divided by net burn. ' +
+        'Try raising the growth rate to see what it would take to become default alive.';
+      insightEl.hidden = false;
+    } else {
+      insightEl.hidden = true;
+    }
+
+    // ── Stat strip ────────────────────────────────────────────────────
+    statBurnEl.textContent = r.netBurnNow > 0
+      ? fmtMoney(r.netBurnNow) + '/mo'
+      : '+' + fmtMoney(-r.netBurnNow) + '/mo';
+    statBeEl.textContent = be === null ? 'Never at 0%' : (be === 0 ? 'Already there' : 'Month ' + be);
+    statNaiveEl.textContent = isFinite(r.naiveMonths)
+      ? r.naiveMonths.toFixed(1) + ' mo'
+      : '∞';
+
+    // Funnel telemetry — coarse buckets only, never raw financials.
+    var bucket = isFinite(r.months) ? health.level : 'default_alive';
+    if (window.gtag && bucket !== lastHealthBucket) {
+      lastHealthBucket = bucket;
+      gtag('event', 'calc_used', {
+        source: 'runway_calculator',
+        health: bucket,
+        used_growth: sanitizeRate(input.growth) !== 0,
+        used_hiring: sanitizeCount(input.hires) > 0
+      });
+    }
+  }
+
+  var SHARE_KEYS = [
+    ['cash', function () { return cashEl; }],
+    ['expenses', function () { return expEl; }],
+    ['revenue', function () { return revEl; }],
+    ['growth', function () { return growEl; }],
+    ['hires', function () { return hiresEl; }],
+    ['hireCost', function () { return hcostEl; }]
+  ];
+
+  function buildShareUrl() {
+    var params = new URLSearchParams();
+    params.set('cash', String(sanitizeAmount(cashEl.value)));
+    params.set('expenses', String(sanitizeAmount(expEl.value)));
+    params.set('revenue', String(sanitizeAmount(revEl.value)));
+    params.set('growth', String(sanitizeRate(growEl.value)));
+    if (sanitizeCount(hiresEl.value) > 0) {
+      params.set('hires', String(sanitizeCount(hiresEl.value)));
+      params.set('hireCost', String(sanitizeAmount(hcostEl.value)));
+    }
+    if (curEl.value && CURRENCIES[curEl.value]) params.set('cur', curEl.value);
+    return location.origin + location.pathname + '?' + params.toString();
+  }
+
+  // A shared link must reproduce exactly what the sender saw, so any param at
+  // all means "these are real numbers" and the example note comes down.
+  function hydrateFromUrl() {
+    var p = new URLSearchParams(location.search);
+    var touched = false;
+    SHARE_KEYS.forEach(function (pair) {
+      if (p.has(pair[0])) { pair[1]().value = p.get(pair[0]); touched = true; }
+    });
+    if (p.has('cur') && CURRENCIES[p.get('cur')]) curEl.value = p.get('cur');
+    if (touched && prefillEl) prefillEl.textContent = 'Loaded from a shared link.';
+    return touched;
+  }
+
+  [cashEl, expEl, revEl, growEl, hiresEl, hcostEl, curEl].forEach(function (el) {
+    el.addEventListener('input', render);
+    el.addEventListener('change', render);
+  });
+
+  shareEl.addEventListener('click', function () {
+    var url = buildShareUrl();
+    navigator.clipboard && navigator.clipboard.writeText(url).then(function () {
+      var prev = shareEl.textContent;
+      shareEl.textContent = '✓ Link copied!';
+      setTimeout(function () { shareEl.textContent = prev; }, 1800);
+    });
+    if (window.gtag) gtag('event', 'share_clicked', { source: 'runway_calculator' });
+  });
+
+  resetEl.addEventListener('click', function () {
+    applyDefaults();
+    if (prefillEl) prefillEl.textContent = 'Pre-filled with an example startup. Change any number.';
+    render();
+  });
+
+  ctaEl.addEventListener('click', function () {
+    if (window.gtag) gtag('event', 'cta_click', { source: 'runway_calculator', cta: 'signup' });
+  });
+
+  // Land on a real number, not an empty form. A shared link always wins.
+  applyDefaults();
+  hydrateFromUrl();
+  render();
+}
+</script>
+{% endblock %}

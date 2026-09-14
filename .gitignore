@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtualenvs
+venv/
+.venv/
+env/
+ENV/
+
+# Environment & secrets — NEVER commit real secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+
+# Database dumps / backups (may contain real user/financial data)
+*.dump
+*.sql
+*.sqlite3
+*.db
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.DS_Store

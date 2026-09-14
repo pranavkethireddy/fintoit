@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Fintoit Blog{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="/static/images/other.png">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XBT6631QQ7"></script>
+  <script src="https://cdn.pagesense.io/js/fintoit/f1cf313955bc44e6a394f60172925564.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0a0a0f;
+      --paper: #f7f6f2;
+      --blue: #1d4ed8;
+      --green: #16a34a;
+      --purple: #7c3aed;
+      --muted: #6b6b7a;
+      --border: #e2e1db;
+    }
+
+    body {
+      font-family: "Bricolage Grotesque", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── NAV ── */
+    nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(247,246,242,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    }
+    .nav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    }
+
+    .nav-logo-link {
+    display: flex;
+    align-items: center;
+    }
+
+    .nav-logo-img {
+    height: 42px;
+    width: auto;
+    display: block;
+    }
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      flex-shrink: 0;
+    }
+    .nav-logo .accent {
+      background: linear-gradient(135deg, var(--blue) 0%, #6366f1 55%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    }
+
+    .nav-links li {
+    list-style: none;
+    }
+
+    .nav-links a {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted);
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    transition: all 0.15s;
+    }
+
+    .nav-links a:hover {
+    color: var(--ink);
+    background: rgba(0,0,0,0.04);
+    }
+    .nav-links a.active { color: var(--ink); font-weight: 600; }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--ink);
+      color: white !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 10px;
+      font-weight: 700 !important;
+      font-size: 0.875rem !important;
+      transition: all 0.2s !important;
+    }
+    .nav-cta:hover {
+      background: #1e1e2e !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(10,10,15,0.2);
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+      border: none;
+      background: none;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+
+    @media (max-width: 680px) {
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .nav-logo-img {
+    height: 36px;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+    gap: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-cta {
+    justify-content: center;
+    text-align: center;
+  }
+}    
+
+    /* ── SHARED UTILITIES ── */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    .tag {
+      display: inline-block;
+      font-family: "DM Mono", monospace;
+      font-size: 0.63rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      background: white;
+    }
+    .tag.green  { border-color: #bbf7d0; background: #f0fdf4; color: var(--green); }
+    .tag.blue   { border-color: #bfdbfe; background: #eff6ff; color: var(--blue); }
+    .tag.purple { border-color: #ddd6fe; background: #faf5ff; color: var(--purple); }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: "DM Mono", monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    {% block extra_styles %}{% endblock %}
+
+    /* ── RESPONSIVE NAV ── */
+    @media (max-width: 680px) {
+      .nav-hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 62px;
+        left: 0; right: 0;
+        background: rgba(247,246,242,0.98);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        padding: 1rem 1.5rem 1.5rem;
+        gap: 0.25rem;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 0.6rem 0.5rem; font-size: 1rem; }
+    }
+  </style>
+  </script>
+<style>
+  @media (max-width: 768px) {
+  footer div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+}
+</style>
+
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+  <!-- NAV -->
+    <nav>
+    <div class="nav-inner">
+        <a href="/" class="nav-logo-link">
+        <img src="{{ url_for('static', filename='images/logo 6.png') }}"
+            alt="Fintoit"
+            class="nav-logo-img">
+        </a>
+
+        <button class="nav-hamburger" onclick="toggleNav()" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+        <li><a href="/blog">Home</a></li>
+        <li><a href="https://fintoit.com/pricing">Pricing</a></li>
+        <li><a href="https://fintoit.com/signup" class="nav-cta">Get Started →</a></li>
+        </ul>
+    </div>
+    </nav>
+
+  <!-- PAGE CONTENT -->
+  {% block content %}{% endblock %}
+
+ <!-- Footer -->
+<footer style="background:#0f0f0f; color:#fff; margin-top:3rem;">
+  <div style="
+  max-width:1200px;
+  margin:0 auto;
+  padding:3.5rem 2rem 2.5rem;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:3rem;
+">
+    <!-- Col 1: Brand -->
+    <div>
+      <p>
+      <img src="/static/images/logo 6.png" alt="Fintoit" class="h-[30px] w-auto mb-4">
+      </p>
+      <p style="font-size:0.875rem; color:#a0a0a0; line-height:1.7; margin:0 0 1.75rem; max-width:320px;">
+        Fintoit brings all your startup's financial tools into one connected system. From burn rate and runway to AI-powered insights, everything you need is right at your fingertips.
+      </p>
+          <p style="font-size:0.8rem; color:#666; margin:0;">
+      &copy; 2026 Fintoit. All rights reserved.
+      <br>
+      5700 Tennyson Parkway
+      <br>
+Suite 300
+<br>
+Plano, Texas 75024
+<br>
+<br>
+      <!-- Social icons -->
+      <div style="display:flex; gap:10px;">
+        <a href="https://www.linkedin.com/company/fintoit" target="_blank" style="width:36px;height:36px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#a0a0a0;text-decoration:none;transition:border-color .2s,color .2s;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#a0a0a0';this.style.borderColor='#333'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="https://x.com/fintoit" target="_blank" style="width:36px;height:36px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#a0a0a0';this.style.borderColor='#333'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://instagram.com/fintoit" target="_blank" style="width:36px;height:36px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#a0a0a0';this.style.borderColor='#333'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@Fintoit" target="_blank" style="width:36px;height:36px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#a0a0a0';this.style.borderColor='#333'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+        </a>
+      </div>
+    </div>
+ 
+    <!-- Col 2: Company -->
+    <div>
+      <p style="font-size:0.875rem; font-weight:600; margin:0 0 1.25rem; letter-spacing:.03em;">Company</p>
+      <div style="display:flex; flex-direction:column; gap:0.75rem;">
+        <a href="/about" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">About Us</a>
+        <a href="https://fintoit.zohorecruit.com/jobs/Careers" target="_blank" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Careers</a>
+        <a href="/status" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Status</a>
+        <a href="/privacy" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Privacy Policy</a>
+        <a href="/terms" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Terms of Service</a>
+        <a href="https://donate.stripe.com/4gM6oG93n7cJgJD3k4bo400" target="_blank" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Donate</a>
+      </div>
+    </div>
+ 
+    <!-- Col 3: Resources -->
+    <div>
+      <p style="font-size:0.875rem; font-weight:600; margin:0 0 1.25rem; letter-spacing:.03em;">Resources</p>
+      <div style="display:flex; flex-direction:column; gap:0.75rem;">
+        <a href="/pricing" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Pricing</a>
+        <a href="/features" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Features</a>
+        <a href="/demo" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Demo</a>
+        <a href="/contact" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Contact</a>
+        <a href="/dashboard" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Dashboard</a>
+        <a href="https://blog.fintoit.com/" target="_blank" style="font-size:0.875rem;color:#a0a0a0;text-decoration:none;" rel="noopener noreferrer">Blog</a>
+    </div>
+    </div>
+ 
+  </div>
+</footer>
+      <script> (function(ss,ex){ window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));}; (function(d,s){ fs=d.getElementsByTagName(s)[0]; function ce(src){ var cs=d.createElement(s); cs.src=src; cs.async=1; fs.parentNode.insertBefore(cs,fs); }; ce('https://sc.lfeeder.com/lftracker_v1_'+ss+(ex?'_'+ex:'')+'.js'); })(document,'script'); })('lAxoEaKrnJo4OYGd'); </script>
+
+
+  <script>
+    // Mobile nav toggle
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    // Scroll reveal
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.07 });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  </script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

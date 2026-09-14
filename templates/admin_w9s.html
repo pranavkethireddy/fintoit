@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block title %}Contractor W-9 Submissions — Fintoit Admin{% endblock %}
+{% block content %}
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+</style>
+
+<div class="fp">
+
+    <!-- Page header -->
+    <div class="fp-head">
+        <div>
+            <div class="fp-eyebrow">Admin</div>
+            <h1 class="fp-title">📋 Contractor W-9 Forms</h1>
+            <p class="fp-sub">{{ w9s|length }} submission{{ 's' if w9s|length != 1 }}</p>
+        </div>
+        <div class="fp-actions">
+            <a href="/contractor-w9" target="_blank" class="fp-btn fp-btn-dark">View Form</a>
+            <a href="/admin" class="fp-btn fp-btn-ghost">← Admin Panel</a>
+        </div>
+    </div>
+
+    <!-- Summary stat cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.75rem;">
+        <div class="fp-card" style="padding:1.1rem 1.25rem;">
+            <div class="fp-stat-label">Total W-9s</div>
+            <div class="fp-stat-val num">{{ w9s|length }}</div>
+        </div>
+        <div class="fp-card" style="padding:1.1rem 1.25rem;">
+            <div class="fp-stat-label">This Month</div>
+            <div class="fp-stat-val num" style="color:var(--green);">{{ w9s | selectattr('this_month') | list | length }}</div>
+        </div>
+        <div class="fp-card" style="padding:1.1rem 1.25rem;">
+            <div class="fp-stat-label">Individuals</div>
+            <div class="fp-stat-val num" style="color:var(--blue);">{{ w9s | selectattr('tax_classification', 'equalto', 'individual') | list | length }}</div>
+        </div>
+        <div class="fp-card" style="padding:1.1rem 1.25rem;">
+            <div class="fp-stat-label">Entities</div>
+            <div class="fp-stat-val num" style="color:var(--amber);">{{ w9s | rejectattr('tax_classification', 'equalto', 'individual') | list | length }}</div>
+        </div>
+    </div>
+
+    {% if w9s %}
+
+    <!-- Filter bar -->
+    <div class="fp-card" style="padding:1rem 1.25rem;margin-bottom:1rem;display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;">
+        <input type="text" id="searchInput" placeholder="🔍 Search by name, company, or state..."
+               onkeyup="filterW9s()"
+               class="fp-input" style="flex:1;min-width:200px;">
+        <select id="classFilter" onchange="filterW9s()" class="fp-select" style="width:auto;min-width:200px;">
+            <option value="">All Classifications</option>
+            <option value="individual">Individual / Sole Proprietor</option>
+            <option value="c_corp">C Corporation</option>
+            <option value="s_corp">S Corporation</option>
+            <option value="partnership">Partnership</option>
+            <option value="trust">Trust / Estate</option>
+            <option value="llc">LLC</option>
+            <option value="other">Other</option>
+        </select>
+        <span id="w9Count" style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);"></span>
+    </div>
+
+    <!-- W-9 Cards -->
+    <div style="display:flex;flex-direction:column;gap:1rem;" id="w9List">
+        {% for w in w9s %}
+        {% set class_labels = {
+            'individual':  ('Individual / Sole Proprietor', 'blue'),
+            'c_corp':      ('C Corporation', 'indigo'),
+            's_corp':      ('S Corporation', 'purple'),
+            'partnership': ('Partnership', 'teal'),
+            'trust':       ('Trust / Estate', 'orange'),
+            'llc':         ('LLC', 'cyan'),
+            'other':       ('Other', 'gray'),
+        } %}
+        {% set cls_label = class_labels.get(w.tax_classification, ('Unknown', 'gray')) %}
+
+        <div class="fp-card w9-card"
+             style="padding:0;overflow:hidden;"
+             data-search="{{ w.full_name|lower }} {{ (w.business_name or '')|lower }} {{ (w.company_name or '')|lower }} {{ w.state|lower }}"
+             data-class="{{ w.tax_classification }}">
+
+            <!-- Card header -->
+            <div style="padding:1.1rem 1.5rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem;border-bottom:1.5px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <!-- Avatar initial -->
+                    <div style="width:2.75rem;height:2.75rem;background:var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.1rem;flex-shrink:0;">
+                        {{ w.full_name[0].upper() }}
+                    </div>
+                    <div>
+                        <div style="font-weight:800;font-size:1rem;">{{ w.full_name }}</div>
+                        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:.2rem;">
+                            {% if w.business_name %}
+                            <span style="font-size:.82rem;color:var(--muted);">{{ w.business_name }}</span>
+                            <span style="color:var(--border);">·</span>
+                            {% endif %}
+                            {% if w.submitted_by_email %}
+                            <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);">{{ w.submitted_by_email }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
+                    <!-- Tax classification badge -->
+                    <span class="fp-badge" style="border-color:var(--blue);color:var(--blue);">
+                        {{ cls_label[0] }}{% if w.llc_type %} · {{ w.llc_type }}{% endif %}
+                    </span>
+                    <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);">{{ w.created_at.strftime('%b %d, %Y') if w.created_at else '—' }}</span>
+                </div>
+            </div>
+
+            <!-- Card body -->
+            <div style="padding:1.25rem 1.5rem;">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1.1rem;margin-bottom:1rem;">
+                    <!-- Address -->
+                    <div>
+                        <div class="fp-stat-label">Address</div>
+                        <div style="font-size:.88rem;">{{ w.address }}</div>
+                        <div style="font-size:.88rem;">{{ w.city }}, {{ w.state }} {{ w.zip_code }}</div>
+                    </div>
+                    <!-- TIN type — preserve ALL conditionals exactly -->
+                    <div>
+                        <div class="fp-stat-label">TIN Type</div>
+                        <div style="font-size:.88rem;font-weight:700;">
+                            {% if w.ssn_1 and w.ssn_2 and w.ssn_3 %}
+                            <span class="fp-badge" style="border-color:var(--blue);color:var(--blue);">SSN on file</span>
+                            {% elif w.ein_1 and w.ein_2 %}
+                            <span class="fp-badge" style="border-color:#7c3aed;color:#7c3aed;">EIN on file</span>
+                            {% else %}
+                            <span class="fp-badge" style="border-color:var(--red);color:var(--red);">⚠ TIN missing</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Signed -->
+                    <div>
+                        <div class="fp-stat-label">Signed</div>
+                        <div style="font-size:.88rem;font-style:italic;">{{ w.signature }}</div>
+                        <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);margin-top:.2rem;">{{ w.signed_date }}</div>
+                    </div>
+                    <!-- Company -->
+                    <div>
+                        <div class="fp-stat-label">Company</div>
+                        <div style="font-size:.88rem;">{{ w.company_name or '—' }}</div>
+                        {% if w.exempt_payee_code %}
+                        <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);margin-top:.2rem;">Exempt code: {{ w.exempt_payee_code }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- TIN reveal + delete actions -->
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;padding-top:.9rem;border-top:1.5px solid var(--border);">
+
+                    <!-- View TIN (admin only, requires re-auth in production) -->
+                    <button onclick="revealTIN('{{ w.full_name }}')"
+                            class="fp-btn fp-btn-ghost" style="font-size:.78rem;padding:.45rem .85rem;border-color:var(--blue);color:var(--blue);">
+                        🔒 View TIN
+                    </button>
+
+                    <!-- Delete -->
+                    <form method="POST" action="/admin/w9s/delete/{{ w.full_name }}"
+                          onsubmit="return confirm('Permanently delete W-9 for {{ w.full_name }}? This cannot be undone.')"
+                          style="margin-left:auto;">
+                        <button type="submit"
+                                class="fp-btn fp-btn-ghost" style="font-size:.78rem;padding:.45rem .85rem;border-color:var(--red);color:var(--red);">
+                            🗑️ Delete
+                        </button>
+                    </form>
+                </div>
+
+                <!-- TIN reveal panel (hidden by default) -->
+                <div id="tin-{{ w.full_name }}" class="hidden" style="margin-top:.75rem;background:#fefce8;border:1.5px solid #fde68a;border-radius:12px;padding:.9rem 1.1rem;">
+                    <div style="font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:#92400e;font-weight:700;margin-bottom:.6rem;">⚠ Sensitive — TIN Information</div>
+                    <div style="display:flex;gap:2rem;font-family:'DM Mono',monospace;font-size:.88rem;">
+                        {% if w.ssn_1 and w.ssn_2 and w.ssn_3 %}
+                        <div>
+                            <span style="color:var(--muted);font-size:.75rem;">SSN:</span>
+                            <span style="font-weight:700;margin-left:.25rem;" id="ssn-{{ w.id }}">{{w.ssn_1}}-{{w.ssn_2}}-{{w.ssn_3}}</span>
+                        </div>
+                        {% endif %}
+                        {% if w.ein_1 and w.ein_2 %}
+                        <div>
+                            <span style="color:var(--muted);font-size:.75rem;">EIN:</span>
+                            <span style="font-weight:700;margin-left:.25rem;" id="ein-{{ w.id }}">{{w.ein_1}}-{{w.ein_2}}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div style="font-family:'DM Mono',monospace;font-size:.68rem;color:#a16207;margin-top:.5rem;">Access to this information is logged. Handle per IRS Publication 1075.</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <!-- Empty state -->
+    <div class="fp-empty">
+        <span class="fp-empty-icon">📋</span>
+        <div class="fp-empty-title">No W-9 Submissions Yet</div>
+        <p class="fp-empty-sub">W-9 forms submitted by contractors will appear here.</p>
+        <a href="/contractor-w9" class="fp-btn fp-btn-dark">View Contractor W-9 Form →</a>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+function filterW9s() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const cls = document.getElementById('classFilter').value;
+    const cards = document.querySelectorAll('.w9-card');
+    let visible = 0;
+    cards.forEach(card => {
+        const matchSearch = !q || card.dataset.search.includes(q);
+        const matchClass  = !cls  || card.dataset.class === cls;
+        card.style.display = (matchSearch && matchClass) ? '' : 'none';
+        if (matchSearch && matchClass) visible++;
+    });
+    const el = document.getElementById('w9Count');
+    if (el) el.textContent = visible + ' result' + (visible !== 1 ? 's' : '');
+}
+
+function revealTIN(id) {
+    const panel = document.getElementById('tin-' + id);
+    panel.classList.toggle('hidden');
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+{% block title %}Media Kit — Fintoit{% endblock %}
+{% block content %}
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;1,400&display=swap");
+
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f7f6f2;
+    --blue: #1d4ed8;
+    --green: #16a34a;
+    --muted: #6b6b7a;
+    --border: #e2e1db;
+  }
+  .mk { font-family: "Bricolage Grotesque", sans-serif; color: var(--ink); overflow-x: hidden; }
+  .mk-inner { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; }
+
+  .mk-eyebrow {
+    font-family: "DM Mono", monospace; font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+  }
+
+  /* HERO */
+  .mk-hero { background: var(--ink); padding: 4.5rem 0 4rem; position: relative; overflow: hidden; }
+  .mk-hero::before {
+    content: ""; position: absolute; width: 620px; height: 620px; top: -220px; right: -160px;
+    background: radial-gradient(circle, rgba(29,78,216,0.20) 0%, transparent 65%); border-radius: 50%;
+  }
+  .mk-hero .mk-inner { position: relative; z-index: 1; }
+  .mk-hero .mk-eyebrow { color: rgba(255,255,255,0.4); margin-bottom: 1rem; }
+  .mk-title {
+    font-size: clamp(2.75rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -0.04em;
+    line-height: 1; color: #fff; margin-bottom: 1.25rem;
+  }
+  .mk-title em {
+    font-style: normal; background: linear-gradient(135deg,#60a5fa,#a78bfa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .mk-lede {
+    font-family: "Lora", serif; font-size: 1.15rem; color: rgba(255,255,255,0.65);
+    line-height: 1.75; max-width: 620px; margin-bottom: 2rem;
+  }
+  .mk-hero-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.5rem;
+    border-radius: 12px; font-weight: 700; font-size: 0.925rem; text-decoration: none;
+    font-family: "Bricolage Grotesque", sans-serif; transition: all 0.2s; border: 1.5px solid transparent;
+  }
+  .btn-white { background: #fff; color: var(--ink); }
+  .btn-white:hover { transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.2); }
+  .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+
+  /* SECTIONS */
+  .mk-section { padding: 4rem 0; }
+  .mk-section.paper { background: var(--paper); }
+  .mk-section.white { background: #fff; }
+  .sec-label {
+    font-family: "DM Mono", monospace; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blue); margin-bottom: 0.75rem;
+  }
+  .sec-title { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+
+  /* FAST FACTS */
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  @media (max-width: 720px) { .facts { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 460px) { .facts { grid-template-columns: 1fr; } }
+  .fact {
+    background: #fff; border: 2px solid var(--ink); border-radius: 14px; padding: 1.25rem 1.4rem;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .fact-label {
+    font-family: "DM Mono", monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 0.35rem;
+  }
+  .fact-val { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; }
+
+  /* BOILERPLATE CARDS */
+  .copy-card {
+    background: #fff; border: 1.5px solid var(--border); border-radius: 16px;
+    padding: 1.5rem 1.75rem; margin-bottom: 1.25rem;
+  }
+  .copy-kind {
+    font-family: "DM Mono", monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem;
+  }
+  .copy-body { font-family: "Lora", serif; font-size: 1rem; line-height: 1.75; color: #374151; }
+  .copy-body.one-liner { font-size: 1.35rem; font-weight: 400; color: var(--ink); font-style: italic; }
+
+  /* FEATURE PILLS */
+  .pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .pill {
+    font-family: "DM Mono", monospace; font-size: 0.75rem; font-weight: 600;
+    padding: 0.35rem 0.8rem; border-radius: 100px; border: 1.5px solid var(--border);
+    background: #fff; color: var(--ink);
+  }
+
+  /* FOUNDER */
+  .founder {
+    display: flex; gap: 1.5rem; align-items: center; background: var(--ink); color: #fff;
+    border-radius: 20px; padding: 2rem;
+  }
+  @media (max-width: 560px) { .founder { flex-direction: column; text-align: center; } }
+  .founder-badge {
+    width: 88px; height: 88px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg,#60a5fa,#a78bfa); display: flex; align-items: center;
+    justify-content: center; font-size: 2rem; font-weight: 800; color: #0a0a0f;
+  }
+  .founder-name { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
+  .founder-role { font-family: "DM Mono", monospace; font-size: 0.75rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .founder-quote { font-family: "Lora", serif; font-style: italic; color: rgba(255,255,255,0.75); line-height: 1.6; margin-top: 0.9rem; }
+
+  /* BRAND ASSETS */
+  .brand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  @media (max-width: 720px) { .brand-grid { grid-template-columns: 1fr; } }
+  .brand-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 1.5rem; }
+  .brand-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 1rem; }
+  .logo-well {
+    background: var(--paper); border: 1.5px dashed var(--border); border-radius: 12px;
+    padding: 2rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+  }
+  .logo-well img { height: 46px; width: auto; }
+  .swatches { display: flex; flex-direction: column; gap: 0.6rem; }
+  .swatch { display: flex; align-items: center; gap: 0.75rem; }
+  .swatch-chip { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border); flex-shrink: 0; }
+  .swatch-name { font-size: 0.85rem; font-weight: 700; }
+  .swatch-hex { font-family: "DM Mono", monospace; font-size: 0.75rem; color: var(--muted); }
+  .type-row { margin-bottom: 0.9rem; }
+  .type-name { font-size: 0.72rem; font-family: "DM Mono", monospace; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .type-sample { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.01em; }
+
+  /* CONTACT */
+  .mk-contact { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+  @media (max-width: 720px) { .mk-contact { grid-template-columns: 1fr; } }
+  .contact-tile {
+    background: #fff; border: 2px solid var(--ink); border-radius: 14px; padding: 1.25rem 1.4rem;
+    box-shadow: 4px 4px 0 var(--ink); text-decoration: none; color: var(--ink); display: block;
+    transition: transform 0.18s, box-shadow 0.18s;
+  }
+  .contact-tile:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink); }
+  .usage-note { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-top: 1rem; }
+</style>
+
+<div class="mk">
+
+  <!-- HERO -->
+  <section class="mk-hero">
+    <div class="mk-inner">
+      <div class="mk-eyebrow">Press &amp; Media</div>
+      <h1 class="mk-title">Fintoit <em>Media Kit.</em></h1>
+      <p class="mk-lede">
+        Everything you need to write about Fintoit, the AI CFO platform for startups.
+        Boilerplate, fast facts, brand assets, and press contacts, all in one place.
+      </p>
+      <div class="mk-hero-btns">
+        <a class="btn btn-white" href="mailto:press@fintoit.com">✉️ press@fintoit.com</a>
+        <a class="btn btn-ghost" href="/static/images/logo 6.png" download="fintoit-logo.png">⬇ Download logo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAST FACTS -->
+  <section class="mk-section paper">
+    <div class="mk-inner">
+      <div class="sec-label">Fast Facts</div>
+      <h2 class="sec-title">The essentials.</h2>
+      <div class="facts">
+        {% for label, val in [
+          ('Company', 'Fintoit'),
+          ('Product', 'AI CFO platform for startups'),
+          ('Founded', '2026'),
+          ('Headquarters', 'Plano, Texas, USA'),
+          ('Category', 'Fintech · AI · SaaS'),
+          ('Stage', 'Open: free to sign up')
+        ] %}
+        <div class="fact">
+          <div class="fact-label">{{ label }}</div>
+          <div class="fact-val">{{ val }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- BOILERPLATE -->
+  <section class="mk-section white">
+    <div class="mk-inner">
+      <div class="sec-label">Boilerplate</div>
+      <h2 class="sec-title">Copy &amp; paste.</h2>
+
+      <div class="copy-card">
+        <div class="copy-kind">One-liner</div>
+        <div class="copy-body one-liner">Fintoit is the AI CFO platform for startups.</div>
+      </div>
+
+      <div class="copy-card">
+        <div class="copy-kind">Short (≈40 words)</div>
+        <div class="copy-body">
+          Fintoit gives early-stage startups CFO-level financial intelligence (real-time
+          burn rate, runway, cash-flow forecasting, and investor-ready reports), all powered
+          by AI, without the cost of hiring a full-time CFO.
+        </div>
+      </div>
+
+      <div class="copy-card">
+        <div class="copy-kind">Long</div>
+        <div class="copy-body">
+          Fintoit is a full-stack financial management platform built for early-stage startups.
+          It brings real-time financial tracking, AI-powered insights, and CFO-grade tools
+          (dashboards, cash-flow forecasting, scenario planning, one-click investor reports,
+          accounting, payroll, and cap-table management) into a single web app, so founders
+          can stay on top of their finances without hiring a CFO. Founded in 2026 and based in
+          Plano, Texas.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT IT DOES -->
+  <section class="mk-section paper">
+    <div class="mk-inner">
+      <div class="sec-label">What Fintoit Does</div>
+      <h2 class="sec-title">20+ features. 6 AI tools. One platform.</h2>
+      <div class="pills">
+        {% for tag in ['AI Dashboard','Burn Rate & Runway','Cash Flow Forecast','AI CFO Chat',
+          'Investor Reports','Scenario Planning','Anomaly Detection','Accounting','Invoices & Bills',
+          'Payroll','Cap Table','Budgets & Goals','Vendor Management','Bank Sync (Plaid)'] %}
+        <span class="pill">{{ tag }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUNDER -->
+  <section class="mk-section white">
+    <div class="mk-inner">
+      <div class="sec-label">Founder</div>
+      <h2 class="sec-title">Leadership.</h2>
+      <div class="founder">
+        <div class="founder-badge">PK</div>
+        <div>
+          <div class="founder-name">Pranav Kethireddy</div>
+          <div class="founder-role">Founder &amp; CEO</div>
+          <div class="founder-quote">
+            “Every startup deserves the same financial intelligence that Fortune 500 companies
+            have — not someday, from day one.”
+          </div>
+        </div>
+      </div>
+      <p class="usage-note">
+        For founder bio, headshot, or interview requests, email
+        <a href="mailto:press@fintoit.com" style="color:var(--blue);font-weight:600;text-decoration:none;">press@fintoit.com</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- BRAND ASSETS -->
+  <section class="mk-section paper">
+    <div class="mk-inner">
+      <div class="sec-label">Brand Assets</div>
+      <h2 class="sec-title">Logo, colors &amp; type.</h2>
+      <div class="brand-grid">
+
+        <div class="brand-card">
+          <h3>Logo</h3>
+          <div class="logo-well">
+            <img src="/static/images/logo 6.png" alt="Fintoit logo">
+          </div>
+          <a class="btn btn-white" style="border:1.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);"
+             href="/static/images/logo 6.png" download="fintoit-logo.png">⬇ Download PNG</a>
+          <p class="usage-note">
+            Please keep clear space around the logo and don't stretch, recolor, or add effects.
+            Need an SVG or alternate lockup? Email press@fintoit.com.
+          </p>
+        </div>
+
+        <div class="brand-card">
+          <h3>Colors</h3>
+          <div class="swatches">
+            {% for name, hexv in [('Ink','#0A0A0F'),('Paper','#F7F6F2'),('Blue','#1D4ED8'),('Green','#16A34A')] %}
+            <div class="swatch">
+              <span class="swatch-chip" style="background: {{ hexv }};"></span>
+              <span class="swatch-name">{{ name }}</span>
+              <span class="swatch-hex">{{ hexv }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          <h3 style="margin-top:1.5rem;">Typography</h3>
+          <div class="type-row">
+            <div class="type-name">Display — Bricolage Grotesque</div>
+            <div class="type-sample" style="font-family:'Bricolage Grotesque',sans-serif;">Aa Bb Cc</div>
+          </div>
+          <div class="type-row">
+            <div class="type-name">Mono — DM Mono</div>
+            <div class="type-sample" style="font-family:'DM Mono',monospace;">Aa Bb Cc</div>
+          </div>
+          <div class="type-row">
+            <div class="type-name">Serif — Lora</div>
+            <div class="type-sample" style="font-family:'Lora',serif;font-style:italic;font-weight:400;">Aa Bb Cc</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="mk-section white">
+    <div class="mk-inner">
+      <div class="sec-label">Press Contact</div>
+      <h2 class="sec-title">Get in touch.</h2>
+      <div class="mk-contact">
+        <a class="contact-tile" href="mailto:press@fintoit.com">
+          <div class="fact-label">Press &amp; Media</div>
+          <div class="fact-val">press@fintoit.com</div>
+        </a>
+        <a class="contact-tile" href="mailto:partnership@fintoit.com">
+          <div class="fact-label">Partnerships</div>
+          <div class="fact-val">partnership@fintoit.com</div>
+        </a>
+        <a class="contact-tile" href="https://www.linkedin.com/company/fintoit" target="_blank" rel="noopener noreferrer">
+          <div class="fact-label">Follow</div>
+          <div class="fact-val">LinkedIn · X · Instagram</div>
+        </a>
+      </div>
+      <p class="usage-note">
+        Fintoit LLC · 5700 Tennyson Parkway, Suite 300, Plano, Texas 75024 ·
+        <a href="/" style="color:var(--blue);font-weight:600;text-decoration:none;">fintoit.com</a>
+      </p>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

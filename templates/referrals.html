@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Refer & Earn — Fintoit{% endblock %}
+{% block content %}
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+  :root { --ink:#0a0a0f; --paper:#f7f6f2; --blue:#1d4ed8; --green:#16a34a; --muted:#6b6b7a; --border:#e2e1db; }
+  .rf { font-family:"Bricolage Grotesque",sans-serif; color:var(--ink); max-width:920px; margin:0 auto; padding:1rem 0 4rem; }
+  .rf-eyebrow { font-family:"DM Mono",monospace; font-size:0.7rem; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:var(--blue); margin-bottom:0.75rem; }
+  .rf-title { font-size:clamp(2rem,5vw,3rem); font-weight:800; letter-spacing:-0.03em; line-height:1.05; margin-bottom:0.5rem; }
+  .rf-sub { color:var(--muted); font-size:1rem; line-height:1.6; margin-bottom:2rem; max-width:560px; }
+
+  .reward {
+    background:var(--ink); color:#fff; border-radius:20px; padding:1.75rem 2rem; margin-bottom:1.5rem;
+    display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;
+  }
+  .reward-emoji { font-size:2.75rem; }
+  .reward-body { flex:1; min-width:220px; }
+  .reward-head { font-size:1.35rem; font-weight:800; letter-spacing:-0.02em; }
+  .reward-sub { color:rgba(255,255,255,0.55); font-size:0.9rem; margin-top:0.25rem; }
+  .progress-wrap { width:100%; margin-top:1rem; }
+  .progress-meta { display:flex; justify-content:space-between; font-family:"DM Mono",monospace; font-size:0.72rem; color:rgba(255,255,255,0.6); margin-bottom:0.4rem; }
+  .progress-bar { height:10px; background:rgba(255,255,255,0.12); border-radius:100px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#60a5fa,#34d399); border-radius:100px; transition:width .4s ease; }
+
+  .card { background:#fff; border:2px solid var(--ink); border-radius:16px; padding:1.5rem 1.75rem; box-shadow:5px 5px 0 var(--ink); margin-bottom:1.5rem; }
+  .card h2 { font-size:1.05rem; font-weight:800; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  .link-row { display:flex; gap:0.6rem; flex-wrap:wrap; }
+  .link-input {
+    flex:1; min-width:220px; font-family:"DM Mono",monospace; font-size:0.85rem; color:var(--ink);
+    background:var(--paper); border:1.5px solid var(--border); border-radius:10px; padding:0.7rem 0.9rem;
+  }
+  .copy-btn {
+    background:var(--ink); color:#fff; border:none; border-radius:10px; padding:0.7rem 1.25rem;
+    font-weight:700; font-family:"Bricolage Grotesque",sans-serif; cursor:pointer; transition:all .15s;
+  }
+  .copy-btn:hover { background:#1e1e2e; }
+  .code-pill { display:inline-block; font-family:"DM Mono",monospace; font-weight:700; letter-spacing:0.15em; background:var(--paper); border:1.5px solid var(--border); border-radius:8px; padding:0.35rem 0.7rem; margin-top:0.75rem; }
+
+  table.lb { width:100%; border-collapse:collapse; }
+  table.lb th { text-align:left; font-family:"DM Mono",monospace; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); padding:0.5rem 0.5rem; border-bottom:1.5px solid var(--border); }
+  table.lb td { padding:0.7rem 0.5rem; border-bottom:1px solid var(--border); font-size:0.92rem; }
+  table.lb tr:last-child td { border-bottom:none; }
+  .rank { font-weight:800; width:44px; }
+  .me-row { background:#eff6ff; }
+  .me-badge { font-family:"DM Mono",monospace; font-size:0.62rem; background:var(--blue); color:#fff; padding:0.1rem 0.4rem; border-radius:5px; margin-left:0.4rem; vertical-align:middle; }
+  .rf-fine { font-size:0.82rem; color:var(--muted); line-height:1.7; }
+  .empty { color:var(--muted); font-size:0.9rem; padding:0.5rem; }
+</style>
+
+<div class="rf">
+  <div class="rf-eyebrow">Referrals</div>
+  <h1 class="rf-title">Refer &amp; Earn</h1>
+  <p class="rf-sub">Share Fintoit with other founders. When they sign up with your link, it counts toward your rewards — and your spot on the leaderboard.</p>
+
+  <!-- Reward + progress -->
+  {% set pct = (my_referrals / goal * 100) if goal else 0 %}
+  {% if pct > 100 %}{% set pct = 100 %}{% endif %}
+  <div class="reward">
+    <div class="reward-emoji">🎁</div>
+    <div class="reward-body">
+      <div class="reward-head">Refer {{ goal }} founders → $25 gift card</div>
+      <div class="reward-sub">
+        {% if my_referrals >= goal %}You hit the goal! Our team will reach out about your $25 gift card.
+        {% else %}You're {{ goal - my_referrals }} referral{{ '' if (goal - my_referrals) == 1 else 's' }} away.{% endif %}
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-meta"><span>{{ my_referrals }} / {{ goal }} referrals</span><span>{{ pct|int }}%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width: {{ pct }}%;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Your link -->
+  <div class="card">
+    <h2><span>🔗</span> Your referral link</h2>
+    <div class="link-row">
+      <input id="refLink" class="link-input" readonly value="{{ request.host_url }}signup?ref={{ referral_code }}">
+      <button class="copy-btn" onclick="copyRef()">Copy link</button>
+    </div>
+    <div>Your code: <span class="code-pill">{{ referral_code | upper }}</span></div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="card">
+    <h2><span>🏆</span> Live leaderboard</h2>
+    {% if leaderboard %}
+    <table class="lb">
+      <thead><tr><th>#</th><th>Founder</th><th style="text-align:right;">Referrals</th></tr></thead>
+      <tbody>
+        {% for row in leaderboard %}
+        <tr class="{% if row.id == current_user.id %}me-row{% endif %}">
+          <td class="rank">{% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% else %}{{ loop.index }}{% endif %}</td>
+          <td>
+            {{ row.full_name or 'Founder' }}
+            {% if row.id == current_user.id %}<span class="me-badge">YOU</span>{% endif %}
+          </td>
+          <td style="text-align:right; font-weight:800;">{{ row.referrals }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">No referrals yet — be the first to share your link and top the board! 🚀</div>
+    {% endif %}
+  </div>
+
+  <p class="rf-fine">
+    Referrals are counted from real sign-ups that use your link. The $25 gift card is issued after 10 successful
+    referrals; the Fintoit team will contact you to arrange it. One reward per founder.
+  </p>
+</div>
+
+<script>
+function copyRef() {
+  const el = document.getElementById('refLink');
+  el.select(); el.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(el.value).then(() => {
+    const b = document.querySelector('.copy-btn');
+    const t = b.textContent; b.textContent = '✓ Copied!';
+    setTimeout(() => { b.textContent = t; }, 1600);
+  }).catch(() => {});
+}
+</script>
+{% endblock %}

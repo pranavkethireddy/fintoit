@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}AI Insights - Fintoit{% endblock %}
+
+{% block content %}
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+</style>
+
+<div class="fp" style="max-width:56rem;margin:0 auto;padding:2.5rem 1rem;">
+
+    <!-- Header -->
+    <div class="fp-head">
+        <div>
+            <div class="fp-eyebrow">AI</div>
+            <h1 class="fp-title">🤖 AI Financial Insights</h1>
+            <p class="fp-sub">Generated {{ insights.timestamp }}</p>
+        </div>
+        <div class="fp-actions">
+            <a href="/dashboard" class="fp-btn fp-btn-ghost">← Dashboard</a>
+            <a href="/ai-insights" class="fp-btn fp-btn-dark">🔄 New Insights</a>
+        </div>
+    </div>
+
+    {% if insights.sections.get('FINANCIAL HEALTH SCORE') %}
+    <div class="fp-card" style="margin-bottom:1.25rem;background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:4px 4px 0 rgba(10,10,15,.35);">
+        <h2 style="font-size:1.2rem;font-weight:800;letter-spacing:-.02em;margin:0 0 1rem;">📊 Financial Health Score</h2>
+        <div style="font-size:1rem;line-height:1.65;opacity:.9;">{{ insights.sections['FINANCIAL HEALTH SCORE'] }}</div>
+    </div>
+    {% endif %}
+
+    {% if insights.sections.get('KEY INSIGHTS') %}
+    <div class="fp-card" style="margin-bottom:1.25rem;border-left:5px solid var(--blue);">
+        <h2 style="font-size:1.1rem;font-weight:800;letter-spacing:-.02em;margin:0 0 .875rem;">💡 Key Insights</h2>
+        <div style="white-space:pre-line;line-height:1.65;font-size:.9rem;">{{ insights.sections['KEY INSIGHTS'] }}</div>
+    </div>
+    {% endif %}
+
+    {% if insights.sections.get('URGENT WARNINGS') %}
+    <div class="fp-card" style="margin-bottom:1.25rem;border-left:5px solid var(--red);background:#fff8f8;">
+        <h2 style="font-size:1.1rem;font-weight:800;letter-spacing:-.02em;margin:0 0 .875rem;color:var(--red);">🚨 Urgent Warnings</h2>
+        <div style="color:#991b1b;white-space:pre-line;line-height:1.65;font-size:.9rem;">{{ insights.sections['URGENT WARNINGS'] }}</div>
+    </div>
+    {% endif %}
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1.25rem;margin-bottom:1.25rem;">
+        {% if insights.sections.get('COST OPTIMIZATION OPPORTUNITIES') %}
+        <div class="fp-card" style="border-left:5px solid var(--green);background:#f0fdf4;">
+            <h2 style="font-size:1.1rem;font-weight:800;letter-spacing:-.02em;margin:0 0 .875rem;color:var(--green);">💰 Cost Optimization</h2>
+            <div style="color:#166534;white-space:pre-line;line-height:1.65;font-size:.85rem;">{{ insights.sections['COST OPTIMIZATION OPPORTUNITIES'] }}</div>
+        </div>
+        {% endif %}
+
+        {% if insights.sections.get('GROWTH RECOMMENDATIONS') %}
+        <div class="fp-card" style="border-left:5px solid var(--blue);background:#eff6ff;">
+            <h2 style="font-size:1.1rem;font-weight:800;letter-spacing:-.02em;margin:0 0 .875rem;color:var(--blue);">📈 Growth Recommendations</h2>
+            <div style="color:#1e40af;white-space:pre-line;line-height:1.65;font-size:.85rem;">{{ insights.sections['GROWTH RECOMMENDATIONS'] }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if insights.sections.get('NEXT STEPS') %}
+    <div class="fp-card" style="margin-bottom:1.5rem;border-left:5px solid var(--amber);background:#fffbeb;">
+        <h2 style="font-size:1.1rem;font-weight:800;letter-spacing:-.02em;margin:0 0 .875rem;color:var(--amber);">✅ Next Steps</h2>
+        <div style="color:#92400e;white-space:pre-line;line-height:1.65;font-size:.9rem;">{{ insights.sections['NEXT STEPS'] }}</div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

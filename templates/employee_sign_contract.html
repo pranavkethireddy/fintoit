@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Sign Your Employment Contract{% endblock %}
+{% block content %}
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+/* signing-page extras */
+.fp-contract-preview{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:2.5rem;margin-bottom:1.75rem;}
+.fp-kv{display:flex;flex-direction:column;gap:.15rem;margin-bottom:.6rem;font-size:.9rem;}
+.fp-kv strong{color:var(--ink);}
+</style>
+
+<div class="fp" style="max-width:780px;margin:0 auto;padding:1.5rem 1rem 3rem;">
+
+  <!-- Page header -->
+  <div style="text-align:center;margin-bottom:2rem;">
+    <div style="font-size:3rem;margin-bottom:.75rem;">✍️</div>
+    <div class="fp-eyebrow" style="text-align:center;margin-bottom:.6rem;">Employment</div>
+    <h1 class="fp-title" style="margin-bottom:.6rem;">Sign Your Employment Contract</h1>
+    <p class="fp-sub" style="text-align:center;">Please review the contract below and sign at the bottom.</p>
+  </div>
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+  <div style="margin-bottom:1.25rem;padding:.75rem 1rem;border-radius:10px;font-size:.875rem;font-weight:600;
+    {% if category == 'error' %}background:#fef2f2;color:#b91c1c;border:1.5px solid #fecaca;
+    {% else %}background:#f0fdf4;color:#15803d;border:1.5px solid #bbf7d0;{% endif %}">
+    {{ message }}
+  </div>
+  {% endfor %}
+  {% endwith %}
+
+  <!-- Contract Preview -->
+  <div class="fp-contract-preview">
+    <div style="text-align:center;margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:2px solid var(--border);">
+      <h2 style="font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin:0 0 .3rem;">Employment Agreement</h2>
+      <p style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--muted);margin:0;">Please read carefully before signing</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1.25rem;font-size:.9rem;color:#333;line-height:1.65;">
+      <div>
+        <div class="fp-kv"><span><strong>Employee:</strong> {{ emp.name }}</span></div>
+        <div class="fp-kv"><span><strong>Position:</strong> {{ emp.title or 'Team Member' }}{% if emp.department %} — {{ emp.department }}{% endif %}</span></div>
+        <div class="fp-kv"><span><strong>Employment Type:</strong> {{ emp.employment_type.replace('_', ' ').title() if emp.employment_type else 'Full-Time' }}</span></div>
+        <div class="fp-kv"><span><strong>Start Date:</strong> {{ emp.start_date or 'As agreed' }}</span></div>
+      </div>
+      <div>
+        <div class="fp-kv"><span><strong>Salary:</strong> ${{ "{:,.2f}".format(emp.salary|float) }} per {{ emp.pay_frequency or 'month' }}</span></div>
+        {% if emp.equity_percent and emp.equity_percent > 0 %}
+        <div class="fp-kv"><span><strong>Equity:</strong> {{ emp.equity_percent }}% — {{ emp.vesting_schedule or '4 years, 1 year cliff' }}</span></div>
+        {% endif %}
+      </div>
+      {% if emp.notes %}
+      <div>
+        <div class="fp-kv"><span><strong>Additional Terms:</strong> {{ emp.notes }}</span></div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Company Signature -->
+    <div style="margin-top:2rem;padding-top:1.25rem;border-top:2px solid var(--border);">
+      <p class="fp-label">Company Signature</p>
+      <p style="font-size:1.2rem;font-weight:700;font-style:italic;color:var(--blue);margin:.25rem 0 .2rem;">{{ emp.company_signature }}</p>
+      <p style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);margin:0;">Signed {{ emp.company_signed_at }}</p>
+    </div>
+  </div>
+
+  <!-- Employee Signing Form -->
+  <div class="fp-card">
+    <h2 style="font-size:1.05rem;font-weight:800;margin:0 0 .35rem;">Your Signature</h2>
+    <p style="font-size:.85rem;color:var(--muted);margin:0 0 1.25rem;">By signing below you confirm you have read and agree to the terms of this employment agreement.</p>
+
+    <form method="POST" style="display:flex;flex-direction:column;gap:1rem;">
+      <div>
+        <label class="fp-label">Your Email <span style="color:var(--red);">*</span></label>
+        <input type="email" name="employee_email" required
+               value="{{ emp.employee_email or '' }}"
+               placeholder="your@email.com"
+               class="fp-input">
+      </div>
+      <div>
+        <label class="fp-label">Your Signature <span style="color:var(--red);">*</span></label>
+        <input type="text" name="employee_signature" required
+               placeholder="Type your full legal name to sign"
+               class="fp-input" style="font-style:italic;color:var(--green);font-size:1.05rem;font-weight:600;">
+        <p style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);margin:.3rem 0 0;">Typing your full name constitutes a legally binding electronic signature</p>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:.6rem;">
+        <input type="checkbox" required class="mt-1 rounded border-gray-300 text-green-600" style="margin-top:.2rem;flex-shrink:0;">
+        <span style="font-size:.88rem;color:#444;">I have read and agree to all the terms of this Employment Agreement. I understand this is a legally binding document.</span>
+      </div>
+      <button type="submit" class="fp-btn fp-btn-dark" style="justify-content:center;padding:.9rem 1rem;font-size:1rem;">
+        ✍️ Sign Contract
+      </button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

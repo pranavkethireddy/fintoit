@@ -1,0 +1,377 @@
+{% extends "base.html" %}
+{% block title %}Contractor W-9 Form - Fintoit{% endblock %}
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap');
+:root{--ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--purple:#7c3aed;--muted:#6b6b7a;--border:#e2e1db;}
+
+.pw{font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.page-title{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:.25rem;}
+.page-sub{font-size:.875rem;color:var(--muted);font-family:'DM Mono',monospace;}
+.back-link{font-size:.78rem;font-weight:600;color:var(--muted);text-decoration:none;font-family:'DM Mono',monospace;display:inline-flex;align-items:center;gap:.35rem;margin-bottom:.75rem;transition:color .15s;}
+.back-link:hover{color:var(--ink);}
+
+/* form wrap — same as other pages */
+.form-wrap{background:white;border:2px solid var(--ink);border-radius:20px;padding:2rem;box-shadow:6px 6px 0 var(--ink);}
+.form-label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-family:'DM Mono',monospace;color:var(--ink);margin-bottom:.35rem;}
+.form-label span.opt{font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);}
+.form-hint{font-size:.68rem;color:var(--muted);margin-top:.3rem;font-family:'DM Mono',monospace;line-height:1.5;}
+.form-input{width:100%;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-size:.9rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:var(--paper);outline:none;transition:border-color .18s,background .18s,box-shadow .18s;box-sizing:border-box;}
+.form-input:focus{border-color:var(--ink);background:white;box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.form-input::placeholder{color:#a1a1aa;}
+select.form-input{cursor:pointer;}
+.form-group{margin-bottom:1rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+@media(max-width:600px){.form-row,.form-row-3{grid-template-columns:1fr;}}
+
+.submit-btn{width:100%;background:var(--ink);color:white;padding:.875rem;border:none;border-radius:12px;font-size:1rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.5rem;}
+.submit-btn:hover{background:#1e1e2e;transform:translateY(-1px);box-shadow:0 6px 18px rgba(10,10,15,.2);}
+
+/* Section dividers */
+.section-hdr{display:flex;align-items:center;gap:.75rem;margin:1.5rem 0 1rem;}
+.section-hdr::before{content:'';flex:0 0 3px;height:18px;background:var(--ink);border-radius:2px;}
+.section-title{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--ink);font-family:'DM Mono',monospace;}
+.section-hdr::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* Part badges */
+.part-label{display:inline-flex;align-items:center;gap:.5rem;margin-bottom:.75rem;}
+.part-badge{background:var(--ink);color:white;font-family:'DM Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.22rem .6rem;border-radius:5px;}
+.part-name{font-size:.8rem;font-weight:700;color:var(--ink);}
+
+/* Tax classification radio cards */
+.tax-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:.625rem;margin-top:.35rem;}
+.tax-option{cursor:pointer;}
+.tax-option input{display:none;}
+.tax-card{border:1.5px solid var(--border);border-radius:10px;padding:.7rem .875rem;background:var(--paper);transition:all .15s;display:flex;align-items:flex-start;gap:.6rem;}
+.tax-option:hover .tax-card{border-color:var(--blue);background:#eff6ff;}
+.tax-option input:checked + .tax-card{border-color:var(--ink);background:var(--paper);box-shadow:3px 3px 0 var(--ink);}
+.radio-circle{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:2px;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.tax-option input:checked + .tax-card .radio-circle{border-color:var(--ink);background:var(--ink);}
+.radio-circle::after{content:'';width:5px;height:5px;border-radius:50%;background:white;display:none;}
+.tax-option input:checked + .tax-card .radio-circle::after{display:block;}
+.tax-card-text{font-size:.825rem;font-weight:700;color:var(--ink);line-height:1.3;}
+.tax-card-sub{font-size:.68rem;color:var(--muted);font-family:'DM Mono',monospace;margin-top:.15rem;}
+
+/* TIN segmented fields */
+.tin-segment{display:flex;align-items:center;gap:.35rem;}
+.tin-segment input{text-align:center;font-family:'DM Mono',monospace;font-size:.95rem;font-weight:700;letter-spacing:.1em;padding:.75rem .5rem;}
+.tin-dash{font-size:1.1rem;color:var(--muted);font-weight:700;flex-shrink:0;}
+.tin-or{display:flex;align-items:center;gap:.75rem;margin:1.25rem 0;}
+.tin-or::before,.tin-or::after{content:'';flex:1;height:1px;background:var(--border);}
+.tin-or span{font-size:.72rem;font-weight:700;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;}
+
+/* Certification items */
+.cert-box{background:var(--paper);border:1.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;}
+.cert-items{display:flex;flex-direction:column;gap:.6rem;margin-top:.625rem;}
+.cert-item{display:flex;gap:.625rem;font-size:.8rem;color:var(--muted);line-height:1.65;}
+.cert-num{font-family:'DM Mono',monospace;font-size:.68rem;font-weight:700;color:var(--ink);flex-shrink:0;padding-top:2px;}
+
+/* Agree checkbox */
+.agree-label{display:flex;align-items:flex-start;gap:.75rem;cursor:pointer;padding:.875rem 1rem;border:1.5px solid var(--border);border-radius:10px;background:var(--paper);transition:all .15s;margin-top:.875rem;}
+.agree-label:hover{border-color:var(--green);background:#f0fdf4;}
+.agree-label input{display:none;}
+.agree-box{width:18px;height:18px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;margin-top:1px;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.agree-label input:checked ~ .agree-box{background:var(--green);border-color:var(--green);}
+.agree-label input:checked ~ .agree-box svg{display:block;}
+.agree-box svg{display:none;width:11px;height:11px;stroke:white;stroke-width:2.5;}
+.agree-text{font-size:.825rem;color:var(--muted);line-height:1.6;}
+.agree-text strong{color:var(--ink);}
+
+/* Signature */
+.sig-input{font-style:italic;font-size:1.05rem;}
+
+/* Flash messages */
+.flash-ok{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:.75rem 1rem;font-size:.875rem;color:#15803d;font-weight:600;margin-bottom:1.25rem;}
+.flash-err{background:#fef2f2;border:1.5px solid #fecaca;border-radius:10px;padding:.75rem 1rem;font-size:.875rem;color:var(--red);font-weight:600;margin-bottom:1.25rem;}
+
+/* IRS notice bar */
+.irs-notice{background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:.875rem 1.1rem;font-size:.78rem;color:#1e40af;line-height:1.65;margin-bottom:1.5rem;}
+.irs-notice strong{font-weight:700;}
+</style>
+
+<div class="pw">
+  <div style="max-width:680px;margin:0 auto;">
+
+    <div style="margin-bottom:1.75rem;">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.375rem;">
+        <span style="font-size:1.75rem;">📋</span>
+        <h1 class="page-title">Contractor W-9</h1>
+      </div>
+      <p class="page-sub">Request for Taxpayer Identification Number and Certification · IRS Rev. March 2024 · OMB No. 1545-0003</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="{% if category=='success' %}flash-ok{% else %}flash-err{% endif %}">
+      {{ '✓' if category=='success' else '✗' }} {{ message }}
+    </div>
+    {% endfor %}
+    {% endwith %}
+
+    <div class="irs-notice">
+      <strong>📌 Why we collect this:</strong> Federal law requires us to obtain your TIN before making payments of $600 or more in a calendar year. We use this to file Form 1099-NEC at year-end. Providing false information may result in backup withholding at 24%.
+    </div>
+
+    <div class="form-wrap">
+      <form method="POST" style="display:flex;flex-direction:column;gap:0;">
+
+        <!-- ── IDENTITY ── -->
+        <div class="section-hdr"><span class="section-title">Identity</span></div>
+
+        <div class="form-group">
+          <label class="form-label">1 — Name as shown on income tax return *</label>
+          <input type="text" name="full_name" required
+                 value="{{ form.full_name if form else '' }}"
+                 placeholder="Your full legal name"
+                 class="form-input">
+          <div class="form-hint">Must match exactly what appears on your federal tax return. Do not leave blank.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">2 — Business name / disregarded entity <span class="opt">(if different from above)</span></label>
+          <input type="text" name="business_name"
+                 value="{{ form.business_name if form else '' }}"
+                 placeholder="DBA or entity name — leave blank if same as Line 1"
+                 class="form-input">
+        </div>
+
+        <!-- ── TAX CLASSIFICATION ── -->
+        <div class="section-hdr"><span class="section-title">Federal Tax Classification</span></div>
+
+        <div class="form-group">
+          <label class="form-label">3a — Check one box *</label>
+          <div class="tax-grid">
+            {% for value, label, sub in [
+              ('individual',  'Individual / Sole Proprietor', 'or single-member LLC'),
+              ('c_corp',      'C Corporation', ''),
+              ('s_corp',      'S Corporation', ''),
+              ('partnership', 'Partnership', ''),
+              ('trust',       'Trust / Estate', ''),
+              ('llc',         'Limited Liability Company', 'enter LLC type below'),
+              ('other',       'Other', 'enter description below'),
+            ] %}
+            <label class="tax-option">
+              <input type="radio" name="tax_classification" value="{{ value }}"
+                     {% if form and form.tax_classification == value %}checked{% endif %}
+                     onchange="showLLCField()">
+              <div class="tax-card">
+                <div class="radio-circle"></div>
+                <div>
+                  <div class="tax-card-text">{{ label }}</div>
+                  {% if sub %}<div class="tax-card-sub">{{ sub }}</div>{% endif %}
+                </div>
+              </div>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div id="llcTypeField" style="display:none;" class="form-group">
+          <label class="form-label">LLC tax classification / Other description *</label>
+          <input type="text" name="llc_type"
+                 value="{{ form.llc_type if form else '' }}"
+                 placeholder="e.g. C, S, P — or describe the entity type"
+                 class="form-input">
+        </div>
+
+        <div class="form-row" style="margin-bottom:1rem;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">3b — Exempt payee code <span class="opt">(if any)</span></label>
+            <input type="text" name="exempt_payee_code" maxlength="2"
+                   value="{{ form.exempt_payee_code if form else '' }}"
+                   placeholder="e.g. 1"
+                   class="form-input">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">FATCA exemption code <span class="opt">(if any)</span></label>
+            <input type="text" name="fatca_code" maxlength="2"
+                   value="{{ form.fatca_code if form else '' }}"
+                   placeholder="e.g. A"
+                   class="form-input">
+          </div>
+        </div>
+
+        <!-- ── ADDRESS ── -->
+        <div class="section-hdr"><span class="section-title">Address</span></div>
+
+        <div class="form-group">
+          <label class="form-label">4 — Street address, apt. or suite no. *</label>
+          <input type="text" name="address" required
+                 value="{{ form.address if form else '' }}"
+                 placeholder="123 Main St, Suite 400"
+                 class="form-input">
+        </div>
+
+        <div class="form-row-3">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">5 — City *</label>
+            <input type="text" name="city" required
+                   value="{{ form.city if form else '' }}"
+                   placeholder="Dallas"
+                   class="form-input">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">State *</label>
+            <select name="state" required class="form-input">
+              <option value="">—</option>
+              {% for s in ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID',
+                           'IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS',
+                           'MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK',
+                           'OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV',
+                           'WI','WY'] %}
+              <option value="{{ s }}" {% if form and form.state == s %}selected{% elif s == '-' and not form %}selected{% endif %}>{{ s }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">ZIP code *</label>
+            <input type="text" name="zip_code" required maxlength="10"
+                   value="{{ form.zip_code if form else '' }}"
+                   placeholder="75201"
+                   class="form-input" inputmode="numeric">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:1rem;">
+          <label class="form-label">6 — Account number(s) <span class="opt">(optional)</span></label>
+          <input type="text" name="account_numbers"
+                 value="{{ form.account_numbers if form else '' }}"
+                 placeholder="Optional — used to identify your account with the requester"
+                 class="form-input">
+        </div>
+
+        <!-- ── PART I: TIN ── -->
+        <div class="section-hdr" style="margin-top:.75rem;"><span class="section-title">Part I — Taxpayer Identification Number</span></div>
+
+        <div class="part-label">
+          <span class="part-badge">Part I</span>
+          <span class="part-name">Enter your TIN — provide SSN <em>or</em> EIN, not both</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Social Security Number (individuals)</label>
+          <div class="tin-segment">
+            <input type="text" name="ssn_1" maxlength="3" placeholder="•••"
+                   value="{{ form.ssn_1 if form else '' }}"
+                   class="form-input" style="width:3.8em;" inputmode="numeric"
+                   oninput="this.value=this.value.replace(/\D/g,'');if(this.value.length>=3)document.getElementById('ssn2').focus()">
+            <span class="tin-dash">–</span>
+            <input type="text" name="ssn_2" id="ssn2" maxlength="2" placeholder="••"
+                   value="{{ form.ssn_2 if form else '' }}"
+                   class="form-input" style="width:3em;" inputmode="numeric"
+                   oninput="this.value=this.value.replace(/\D/g,'');if(this.value.length>=2)document.getElementById('ssn3').focus()">
+            <span class="tin-dash">–</span>
+            <input type="text" name="ssn_3" id="ssn3" maxlength="4" placeholder="••••"
+                   value="{{ form.ssn_3 if form else '' }}"
+                   class="form-input" style="width:4.6em;" inputmode="numeric"
+                   oninput="this.value=this.value.replace(/\D/g,'')">
+          </div>
+          <div class="form-hint">For individuals, sole proprietors, and single-member LLCs</div>
+        </div>
+
+        <div class="tin-or"><span>or</span></div>
+
+        <div class="form-group">
+          <label class="form-label">Employer Identification Number (entities)</label>
+          <div class="tin-segment">
+            <input type="text" name="ein_1" maxlength="2" placeholder="••"
+                   value="{{ form.ein_1 if form else '' }}"
+                   class="form-input" style="width:3em;" inputmode="numeric"
+                   oninput="this.value=this.value.replace(/\D/g,'');if(this.value.length>=2)document.getElementById('ein2').focus()">
+            <span class="tin-dash">–</span>
+            <input type="text" name="ein_2" id="ein2" maxlength="7" placeholder="•••••••"
+                   value="{{ form.ein_2 if form else '' }}"
+                   class="form-input" style="width:6.5em;" inputmode="numeric"
+                   oninput="this.value=this.value.replace(/\D/g,'')">
+          </div>
+          <div class="form-hint">For corporations, partnerships, and multi-member LLCs</div>
+        </div>
+
+        <!-- ── PART II: CERTIFICATION ── -->
+        <div class="section-hdr" style="margin-top:.75rem;"><span class="section-title">Part II — Certification</span></div>
+
+        <div class="part-label">
+          <span class="part-badge">Part II</span>
+          <span class="part-name">Under penalties of perjury, I certify that:</span>
+        </div>
+
+        <div class="cert-box" style="margin-bottom:1rem;">
+          <div class="cert-items">
+            <div class="cert-item">
+              <span class="cert-num">1.</span>
+              <span>The number shown on this form is my correct taxpayer identification number (or I am waiting for a number to be issued to me).</span>
+            </div>
+            <div class="cert-item">
+              <span class="cert-num">2.</span>
+              <span>I am not subject to backup withholding because I am exempt, or the IRS has not notified me that I am subject to backup withholding due to a failure to report all interest or dividends.</span>
+            </div>
+            <div class="cert-item">
+              <span class="cert-num">3.</span>
+              <span>I am a U.S. citizen or other U.S. person as defined by the IRS.</span>
+            </div>
+            <div class="cert-item">
+              <span class="cert-num">4.</span>
+              <span>The FATCA code(s) entered on this form (if any) indicating that I am exempt from FATCA reporting is correct.</span>
+            </div>
+          </div>
+        </div>
+
+        <label class="agree-label">
+          <input type="checkbox" name="certified" value="yes" required
+                 {% if form and form.certified %}checked{% endif %}>
+          <div class="agree-box">
+            <svg viewBox="0 0 12 12"><polyline points="1.5,6 5,9.5 10.5,2.5" fill="none"/></svg>
+          </div>
+          <div class="agree-text">
+            <strong>I certify under penalty of perjury</strong> that all information provided on this form is true, correct, and complete to the best of my knowledge.
+          </div>
+        </label>
+
+        <!-- ── SIGNATURE ── -->
+        <div class="section-hdr" style="margin-top:1.5rem;"><span class="section-title">Signature</span></div>
+
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Signature of U.S. person *</label>
+            <input type="text" name="signature" required
+                   value="{{ form.signature if form else '' }}"
+                   placeholder="Type your full legal name"
+                   class="form-input sig-input">
+            <div class="form-hint">Typing your name constitutes a legally binding electronic signature</div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Date</label>
+            <input type="date" name="signed_date"
+                   value="{{ form.signed_date if form else today }}"
+                   class="form-input">
+          </div>
+        </div>
+
+        <!-- ── SUBMIT ── -->
+        <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1.5px solid var(--border);">
+          <div style="font-size:.72rem;color:var(--muted);font-family:'DM Mono',monospace;line-height:1.7;margin-bottom:1rem;">
+            🔒 Your TIN is encrypted in transit and at rest. Fintoit uses this information solely for IRS tax reporting obligations. Cat. No. 10231X — Form W-9 (Rev. 3-2024)
+          </div>
+          <button type="submit" class="submit-btn">
+            ✓ Submit W-9 Form
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showLLCField() {
+  const val = document.querySelector('input[name="tax_classification"]:checked')?.value;
+  document.getElementById('llcTypeField').style.display = (val === 'llc' || val === 'other') ? '' : 'none';
+}
+// Run on page load in case of re-render with existing value
+showLLCField();
+</script>
+
+{% endblock %}

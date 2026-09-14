@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% block title %}Payroll - Fintoit{% endblock %}
+{% block content %}
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+</style>
+
+<div class="fp">
+
+    <!-- Header -->
+    <div class="fp-head">
+        <div>
+            <div class="fp-eyebrow">Payroll</div>
+            <h1 class="fp-title">👥 Payroll</h1>
+            <p class="fp-sub">Manage employees, salaries and pay runs</p>
+        </div>
+        <div class="fp-actions">
+            <a href="/payroll/add-run" class="fp-btn fp-btn-dark">
+                💰 Record Pay Run
+            </a>
+            <a href="/payroll/add-employee" class="fp-btn fp-btn-ghost">
+                ➕ Add Employee
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem;">
+        <div class="fp-card">
+            <div class="fp-stat-label">Headcount</div>
+            <div class="fp-stat-val num">{{ summary.headcount or 0 }}</div>
+            <div class="fp-stat-cap">active employees</div>
+        </div>
+        <div class="fp-card">
+            <div class="fp-stat-label">Monthly Payroll</div>
+            <div class="fp-stat-val num" style="color:var(--red);">${{ "{:,.0f}".format(summary.total_monthly_salary|float or 0) }}</div>
+            <div class="fp-stat-cap">total salary/mo</div>
+        </div>
+        <div class="fp-card">
+            <div class="fp-stat-label">Full-Time</div>
+            <div class="fp-stat-val num" style="color:var(--green);">{{ summary.full_time or 0 }}</div>
+            <div class="fp-stat-cap">employees</div>
+        </div>
+        <div class="fp-card">
+            <div class="fp-stat-label">Contractors</div>
+            <div class="fp-stat-val num" style="color:var(--amber);">{{ summary.contractors or 0 }}</div>
+            <div class="fp-stat-cap">active</div>
+        </div>
+    </div>
+
+    {% if employees %}
+
+    <!-- Employees by Department -->
+    <div style="margin-bottom:2rem;">
+        <h2 style="font-size:1.15rem;font-weight:800;letter-spacing:-.02em;margin:0 0 1rem;">👤 Team</h2>
+        {% for dept, data in departments.items() %}
+        <div class="fp-card" style="margin-bottom:1.25rem;padding:0;overflow:hidden;">
+            <!-- Department header -->
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.5rem;background:var(--paper);border-bottom:1.5px solid var(--border);">
+                <span style="font-weight:700;font-size:.95rem;">{{ dept }}</span>
+                <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);">
+                    {{ data.employees|length }} people · ${{ "{:,.0f}".format(data.total) }}/mo
+                </span>
+            </div>
+
+            {% for emp in data.employees %}
+            <div style="padding:1.25rem 1.5rem;{% if not loop.last %}border-bottom:1px solid var(--border);{% endif %}">
+                <!-- Employee Info Row -->
+                <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.9rem;">
+                    <div style="display:flex;align-items:center;gap:.75rem;">
+                        <div style="width:2.5rem;height:2.5rem;background:var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1rem;flex-shrink:0;">
+                            {{ emp.name[0].upper() }}
+                        </div>
+                        <div>
+                            <div style="font-weight:700;font-size:.95rem;">{{ emp.name }}</div>
+                            <div style="font-size:.75rem;color:var(--muted);">{{ emp.title or '—' }} · {{ emp.employment_type.replace('_', ' ').title() }}</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;">
+                        <span class="num" style="font-weight:700;font-size:.9rem;">${{ "{:,.0f}".format(emp.salary|float) }}/{{ emp.pay_frequency or 'mo' }}</span>
+                        {% if emp.equity_percent and emp.equity_percent > 0 %}
+                        <span class="fp-badge" style="color:#7c3aed;border-color:#c4b5fd;background:#f5f3ff;">{{ emp.equity_percent }}% equity</span>
+                        {% endif %}
+                        {% if emp.start_date %}
+                        <span style="font-size:.75rem;color:var(--muted);">Since {{ emp.start_date }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+
+                    <!-- Edit -->
+                    <a href="/payroll/edit-employee/{{ emp.id }}"
+                       class="fp-btn fp-btn-ghost" style="font-size:.75rem;padding:.35rem .8rem;">
+                        ✏️ Edit
+                    </a>
+
+                    <!-- Generate Contract -->
+                    <a href="/payroll/generate-contract/{{ emp.id }}"
+                       target="_blank"
+                       class="fp-btn fp-btn-ghost" style="font-size:.75rem;padding:.35rem .8rem;">
+                        📄 Contract
+                    </a>
+
+                    <!-- Upload Signed Contract -->
+                    <label class="fp-btn fp-btn-ghost" style="font-size:.75rem;padding:.35rem .8rem;cursor:pointer;">
+                        📤 Upload Contract
+                        <form method="POST" action="/payroll/upload-contract/{{ emp.id }}" enctype="multipart/form-data" class="hidden">
+                            <input type="file" name="contract" accept=".pdf,.doc,.docx"
+                                   onchange="this.closest('form').submit()">
+                        </form>
+                        <input type="file" accept=".pdf,.doc,.docx"
+                               onchange="uploadFile(this, '/payroll/upload-contract/{{ emp.id }}')" class="hidden">
+                    </label>
+
+                    <!-- Download Signed Contract -->
+                    {% if emp.contract_name %}
+                    <a href="/payroll/download-contract/{{ emp.id }}"
+                       class="fp-btn fp-btn-ghost" style="font-size:.75rem;padding:.35rem .8rem;color:var(--green);border-color:var(--green);">
+                        📎 {{ emp.contract_name | truncate(20) }}
+                    </a>
+                    {% endif %}
+
+                    <!-- Upload Resume -->
+                    <label class="fp-btn fp-btn-ghost" style="font-size:.75rem;padding:.35rem .8rem;cursor:pointer;">
+                        📤 Upload Resume
+                        <input type="file" accept=".pdf,.doc,.docx"
+                               onchange="uploadFile(this, '/payroll/upload-resume/{{ emp.id }}')" class="hidden">
+                    </label>
+
+                    <!-- Download Resume -->
+                    {% if emp.resume_name %}
+                    <a href="/payroll/download-resume/{{ emp.id }}"
+                       class="fp-btn fp-btn-ghost" style="font-size:.75rem;padding:.35rem .8rem;color:#7c3aed;border-color:#c4b5fd;">
+                        📄 {{ emp.resume_name | truncate(20) }}
+                    </a>
+                    {% endif %}
+
+                    <!-- Cap Table -->
+                    {% if emp.equity_percent and emp.equity_percent > 0 %}
+                    <a href="/cap-table/add?name={{ emp.name | urlencode }}&type=employee"
+                       class="fp-btn fp-btn-ghost" style="font-size:.75rem;padding:.35rem .8rem;color:#7c3aed;border-color:#c4b5fd;"
+                       title="Add {{ emp.name }} to cap table">
+                        📊 Cap Table
+                    </a>
+                    {% endif %}
+
+                    <!-- Delete -->
+                    <form method="POST" action="/payroll/delete-employee/{{ emp.id }}"
+                          onsubmit="return confirm('Remove {{ emp.name }}?')" style="display:inline;">
+                        <button type="submit"
+                                class="fp-btn fp-btn-ghost" style="font-size:.75rem;padding:.35rem .8rem;color:var(--red);border-color:var(--red);">
+                            🗑️
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="fp-empty" style="margin-bottom:2rem;">
+        <span class="fp-empty-icon">👥</span>
+        <div class="fp-empty-title">No Employees Yet</div>
+        <p class="fp-empty-sub">Add your team members to track payroll costs.</p>
+        <a href="/payroll/add-employee" class="fp-btn fp-btn-dark">
+            ➕ Add First Employee
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Pay Run History -->
+    <div class="fp-card" style="padding:0;overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;border-bottom:1.5px solid var(--border);">
+            <h2 style="font-size:1rem;font-weight:800;margin:0;">💰 Pay Run History</h2>
+            <a href="/payroll/add-run" class="fp-btn fp-btn-dark" style="font-size:.8rem;padding:.4rem .85rem;">
+                + Record Pay Run
+            </a>
+        </div>
+        {% if pay_runs %}
+        <div style="overflow-x:auto;">
+            <table class="fp-table">
+                <thead>
+                    <tr>
+                        <th>Run Date</th>
+                        <th>Period</th>
+                        <th style="text-align:right;">Gross</th>
+                        <th style="text-align:right;">Tax</th>
+                        <th style="text-align:right;">Net</th>
+                        <th>Notes</th>
+                        <th style="text-align:center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for run in pay_runs %}
+                    <tr>
+                        <td class="num" style="font-weight:600;">{{ run.run_date }}</td>
+                        <td style="color:var(--muted);">{{ run.period_start }} → {{ run.period_end }}</td>
+                        <td class="num" style="text-align:right;font-weight:600;">${{ "{:,.0f}".format(run.total_gross|float) }}</td>
+                        <td class="num" style="text-align:right;color:var(--red);">${{ "{:,.0f}".format(run.total_tax|float) }}</td>
+                        <td class="num" style="text-align:right;font-weight:800;color:var(--green);">${{ "{:,.0f}".format(run.total_net|float) }}</td>
+                        <td style="color:var(--muted);">{{ run.notes or '—' }}</td>
+                        <td style="text-align:center;">
+                            <form method="POST" action="/payroll/delete-run/{{ run.id }}"
+                                  onsubmit="return confirm('Delete this pay run?')">
+                                <button type="submit"
+                                        class="fp-btn fp-btn-ghost" style="font-size:.75rem;padding:.3rem .7rem;color:var(--red);border-color:var(--red);">
+                                    🗑️ Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="fp-empty" style="border:none;border-radius:0;">
+            <span class="fp-empty-icon">💰</span>
+            <div class="fp-empty-title">No Pay Runs Yet</div>
+            <p class="fp-empty-sub">No pay runs recorded yet.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+function uploadFile(input, url) {
+    if (!input.files || !input.files[0]) return;
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+    form.enctype = 'multipart/form-data';
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.name = url.includes('contract') ? 'contract' : 'resume';
+    const dt = new DataTransfer();
+    dt.items.add(input.files[0]);
+    fileInput.files = dt.files;
+    form.appendChild(fileInput);
+    document.body.appendChild(form);
+    form.submit();
+}
+</script>
+{% endblock %}

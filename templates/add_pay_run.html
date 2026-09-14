@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Record Pay Run - Fintoit{% endblock %}
+{% block content %}
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+</style>
+
+<div class="fp" style="max-width:640px;margin:0 auto;">
+
+  <div class="fp-head">
+    <div>
+      <div class="fp-eyebrow">Payroll</div>
+      <h1 class="fp-title">💰 Record Pay Run</h1>
+      <p class="fp-sub">Log a payroll payment for your team</p>
+    </div>
+    <div class="fp-actions">
+      <a href="/payroll" class="fp-btn fp-btn-ghost">← Back to Payroll</a>
+    </div>
+  </div>
+
+  {% if employees %}
+  <!-- Quick Total Helper -->
+  <div class="fp-card" style="margin-bottom:1.25rem;background:var(--paper);border-color:var(--blue);box-shadow:4px 4px 0 var(--blue);">
+    <p style="font-family:'DM Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin:0 0 .75rem;">💡 Current Monthly Payroll</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem;">
+      {% for emp in employees %}
+      <span style="font-size:.75rem;background:#fff;border:1.5px solid var(--border);border-radius:100px;padding:.2rem .65rem;color:var(--blue);font-weight:600;">
+        {{ emp.name }}: ${{ "{:,.0f}".format(emp.salary|float) }}
+      </span>
+      {% endfor %}
+    </div>
+    <button type="button" onclick="autoFillTotal()" class="fp-btn fp-btn-dark" style="font-size:.75rem;padding:.4rem .85rem;">
+      Auto-fill total from team salaries
+    </button>
+  </div>
+  {% endif %}
+
+  <div class="fp-card">
+    <form method="POST" style="display:flex;flex-direction:column;gap:1.25rem;">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div>
+          <label class="fp-label">Run Date <span style="color:var(--red);">*</span></label>
+          <input type="date" name="run_date" value="{{ today }}" required class="fp-input">
+        </div>
+        <div></div>
+        <div>
+          <label class="fp-label">Period Start <span style="color:var(--red);">*</span></label>
+          <input type="date" name="period_start" required class="fp-input">
+        </div>
+        <div>
+          <label class="fp-label">Period End <span style="color:var(--red);">*</span></label>
+          <input type="date" name="period_end" required class="fp-input">
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;border-top:1.5px solid var(--border);padding-top:1.25rem;">
+        <div>
+          <label class="fp-label">Total Gross <span style="color:var(--red);">*</span></label>
+          <div style="position:relative;">
+            <span style="position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.9rem;">$</span>
+            <input type="number" name="total_gross" id="totalGross" step="0.01" min="0" required
+                   placeholder="0.00"
+                   oninput="calcNet()"
+                   class="fp-input" style="padding-left:1.75rem;">
+          </div>
+        </div>
+        <div>
+          <label class="fp-label">Total Tax / Deductions <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;font-family:'Bricolage Grotesque',sans-serif;font-size:.8rem;">(optional)</span></label>
+          <div style="position:relative;">
+            <span style="position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.9rem;">$</span>
+            <input type="number" name="total_tax" id="totalTax" step="0.01" min="0"
+                   placeholder="0.00"
+                   oninput="calcNet()"
+                   class="fp-input" style="padding-left:1.75rem;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Net display -->
+      <div style="background:var(--paper);border:1.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:.88rem;font-weight:700;color:var(--green);">Net Pay (Gross - Tax)</span>
+        <span class="num" style="font-size:1.3rem;font-weight:800;color:var(--green);" id="netDisplay">$0</span>
+      </div>
+
+      <div>
+        <label class="fp-label">Notes</label>
+        <textarea name="notes" rows="2"
+                  placeholder="e.g. March 2026 payroll, includes bonuses..."
+                  class="fp-textarea"></textarea>
+      </div>
+
+      <div style="display:flex;gap:.75rem;padding-top:.25rem;">
+        <button type="submit" class="fp-btn fp-btn-dark" style="flex:1;justify-content:center;">
+          💰 Record Pay Run
+        </button>
+        <a href="/payroll" class="fp-btn fp-btn-ghost" style="flex:1;justify-content:center;">
+          Cancel
+        </a>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+<script>
+const teamTotal = {{ employees | sum(attribute='salary') | float }};
+
+function autoFillTotal() {
+    document.getElementById('totalGross').value = teamTotal.toFixed(2);
+    calcNet();
+}
+
+function calcNet() {
+    const gross = parseFloat(document.getElementById('totalGross').value) || 0;
+    const tax = parseFloat(document.getElementById('totalTax').value) || 0;
+    const net = gross - tax;
+    document.getElementById('netDisplay').textContent = '$' + net.toLocaleString('en-US', { minimumFractionDigits: 2 });
+}
+</script>
+{% endblock %}

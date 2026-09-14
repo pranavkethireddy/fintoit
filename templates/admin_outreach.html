@@ -1,0 +1,678 @@
+{% extends "base.html" %}
+{% block title %}Outreach Tracker - Fintoit Admin{% endblock %}
+{% block content %}
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+
+/* Page-specific helpers */
+.fp-modal-overlay{position:fixed;inset:0;background:rgba(10,10,15,.55);z-index:50;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.fp-modal{background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);width:100%;padding:1.75rem;}
+.fp-modal-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem;}
+.fp-modal-title{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;}
+.fp-modal-close{background:none;border:none;font-size:1.5rem;line-height:1;color:var(--muted);cursor:pointer;padding:.2rem .4rem;border-radius:6px;}
+.fp-modal-close:hover{color:var(--ink);background:var(--paper);}
+.fp-form-row{display:grid;gap:.75rem;margin-bottom:.75rem;}
+.fp-form-row.cols-2{grid-template-columns:1fr 1fr;}
+.fp-form-group{display:flex;flex-direction:column;}
+.fp-form-actions{display:flex;gap:.6rem;padding-top:.75rem;}
+.fp-form-actions .fp-btn{flex:1;justify-content:center;}
+.fp-contact-row{border-bottom:1px solid var(--border);padding:1.1rem 1.5rem;transition:background .12s;}
+.fp-contact-row:last-child{border-bottom:none;}
+.fp-contact-row:hover{background:var(--paper);}
+.fp-avatar{width:2.4rem;height:2.4rem;border-radius:50%;background:linear-gradient(135deg,var(--blue),#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.95rem;flex-shrink:0;border:2px solid var(--ink);}
+.fp-contact-meta{font-size:.8rem;color:var(--muted);margin-top:.15rem;}
+.fp-contact-email{font-size:.78rem;color:var(--blue);text-decoration:none;}
+.fp-contact-email:hover{text-decoration:underline;}
+.fp-contact-note{font-size:.75rem;color:var(--muted);font-style:italic;margin-top:.25rem;}
+.fp-contact-time{font-size:.72rem;color:#bbb;margin-top:.15rem;}
+.fp-inline-form{display:flex;align-items:center;gap:.4rem;}
+.fp-input-xs{border:1.5px solid var(--border);border-radius:8px;padding:.35rem .55rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.78rem;box-sizing:border-box;}
+.fp-input-xs:focus{outline:none;border-color:var(--ink);}
+.fp-select-xs{border:1.5px solid var(--border);border-radius:8px;padding:.35rem .5rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.78rem;}
+.fp-select-xs:focus{outline:none;border-color:var(--ink);}
+.fp-btn-xs{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .7rem;border-radius:8px;font-size:.75rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);cursor:pointer;transition:all .12s;white-space:nowrap;}
+.fp-btn-xs-dark{background:var(--ink);color:#fff;}
+.fp-btn-xs-dark:hover{background:#1e1e2e;}
+.fp-btn-xs-ghost{background:#fff;color:var(--ink);}
+.fp-btn-xs-ghost:hover{background:var(--paper);}
+.fp-btn-xs-danger{background:#fff;color:var(--red);border-color:#fca5a5;}
+.fp-btn-xs-danger:hover{background:var(--red);color:#fff;border-color:var(--red);}
+.fp-type-badge-investor{background:#f5f3ff;color:#7c3aed;border-color:#c4b5fd;}
+.fp-type-badge-press{background:#eff6ff;color:var(--blue);border-color:#93c5fd;}
+.fp-type-badge-partner{background:#f0fdf4;color:var(--green);border-color:#86efac;}
+.fp-type-badge-customer{background:#fff7ed;color:#c2410c;border-color:#fdba74;}
+.fp-type-badge-other{background:var(--paper);color:var(--muted);border-color:var(--border);}
+.fp-status-badge-not_contacted{background:var(--paper);color:var(--muted);border-color:var(--border);}
+.fp-status-badge-contacted{background:#eff6ff;color:var(--blue);border-color:#93c5fd;}
+.fp-status-badge-replied{background:#fefce8;color:#a16207;border-color:#fde047;}
+.fp-status-badge-meeting{background:#f5f3ff;color:#7c3aed;border-color:#c4b5fd;}
+.fp-status-badge-bounced{background:#fef2f2;color:var(--red);border-color:#fca5a5;}
+.fp-stat-card{background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:3px 3px 0 var(--ink);padding:1rem;text-align:center;}
+.fp-contacts-toolbar{display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;padding:.9rem 1.5rem;border-bottom:2px solid var(--ink);}
+.fp-toolbar-left{display:flex;align-items:center;gap:.6rem;}
+.fp-toolbar-right{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
+.fp-checkbox-label{display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:var(--muted);cursor:pointer;user-select:none;font-family:'DM Mono',monospace;}
+.fp-count-chip{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);}
+.fp-alert-tip{background:#fefce8;border:1.5px solid #fde047;border-radius:10px;padding:.6rem .9rem;font-size:.78rem;color:#a16207;margin-bottom:1rem;}
+.fp-type-radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;}
+.fp-type-radio-option{cursor:pointer;}
+.fp-type-radio-option input[type="radio"]{position:absolute;opacity:0;width:0;height:0;}
+.fp-type-radio-box{display:block;text-align:center;padding:.5rem;border:1.5px solid var(--border);border-radius:10px;font-size:.82rem;font-weight:600;color:var(--ink);transition:all .12s;}
+.fp-type-radio-option input[type="radio"]:checked + .fp-type-radio-box{border-color:var(--ink);background:var(--paper);box-shadow:2px 2px 0 var(--ink);}
+.fp-type-radio-box:hover{border-color:var(--muted);}
+</style>
+
+<div class="fp">
+
+    <!-- ── Page Header ─────────────────────────────── -->
+    <div class="fp-head">
+        <div>
+            <div class="fp-eyebrow">Admin</div>
+            <h1 class="fp-title">Outreach Tracker</h1>
+            <p class="fp-sub">Manage contacts, send emails, and track outreach status across investors, press, and partners.</p>
+        </div>
+        <div class="fp-actions">
+            <button type="button"
+                    onclick="document.getElementById('addModal').classList.remove('hidden')"
+                    class="fp-btn fp-btn-dark">
+                ➕ Add Contact
+            </button>
+            <button type="button"
+                    onclick="document.getElementById('csvModal').classList.remove('hidden')"
+                    class="fp-btn fp-btn-ghost">
+                📊 Import CSV
+            </button>
+            <button type="button"
+                    onclick="openBulkEmailModal()"
+                    class="fp-btn fp-btn-ghost">
+                📨 Bulk Email
+            </button>
+            <button type="button"
+                    onclick="openBulkStatusModal()"
+                    class="fp-btn fp-btn-ghost">
+                🔄 Bulk Status
+            </button>
+            <button type="button"
+                    onclick="zohoSync()"
+                    class="fp-btn fp-btn-ghost">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+                Zoho CRM Sync
+            </button>
+            <form method="POST" action="/admin/outreach/clear"
+                  onsubmit="return confirm('Delete ALL contacts? This cannot be undone.')">
+                <button type="submit" class="fp-btn fp-btn-ghost" style="color:var(--red);border-color:#fca5a5;">
+                    🗑️ Clear All
+                </button>
+            </form>
+            <a href="/admin" class="fp-btn fp-btn-ghost">← Admin</a>
+        </div>
+    </div>
+
+    <!-- ── Summary Stat Cards ──────────────────────── -->
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:.75rem;margin-bottom:2rem;">
+        {% for count, label, color in [
+            (summary.total, 'Total', 'gray'),
+            (summary.not_contacted, 'Not Contacted', 'gray'),
+            (summary.contacted, 'Contacted', 'blue'),
+            (summary.replied, 'Replied', 'yellow'),
+            (summary.meeting, 'Meeting', 'purple'),
+            (summary.bounced, 'Bounced', 'red')
+        ] %}
+        <div class="fp-stat-card">
+            <div class="fp-stat-val num"
+                 style="color:{% if color == 'red' %}var(--red){% elif color == 'blue' %}var(--blue){% elif color == 'yellow' %}var(--amber){% elif color == 'purple' %}#7c3aed{% else %}var(--ink){% endif %}">
+                {{ count or 0 }}
+            </div>
+            <div class="fp-stat-label" style="margin-top:.4rem;">{{ label }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ── Contacts Card ───────────────────────────── -->
+    <div class="fp-card" style="padding:0;overflow:hidden;margin-bottom:2rem;">
+        <div class="fp-contacts-toolbar">
+            <div class="fp-toolbar-left">
+                <span style="font-weight:800;font-size:1rem;">Contacts</span>
+            </div>
+            <div class="fp-toolbar-right">
+                <label class="fp-checkbox-label">
+                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"
+                           style="width:1rem;height:1rem;accent-color:var(--ink);cursor:pointer;">
+                    Select all
+                </label>
+                <select id="statusFilter" onchange="filterContacts()"
+                        class="fp-select-xs">
+                    <option value="">All Statuses</option>
+                    <option value="not_contacted">Not Contacted</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="replied">Replied</option>
+                    <option value="meeting">Meeting</option>
+                    <option value="bounced">Bounced</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="🔍 Search..."
+                       onkeyup="filterContacts()"
+                       class="fp-input-xs" style="width:160px;">
+                <span id="contactCount" class="fp-count-chip"></span>
+            </div>
+        </div>
+
+        {% if contacts %}
+        <div id="contactsList">
+            {% for c in contacts %}
+            <div class="fp-contact-row contact-row"
+                 data-search="{{ c.name | lower }} {{ c.email | lower }} {{ (c.company or '') | lower }}"
+                 data-status="{{ c.status }}">
+                <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:.75rem;">
+
+                    <!-- Checkbox + Avatar + Info -->
+                    <div style="display:flex;align-items:flex-start;gap:.75rem;">
+                        <input type="checkbox" name="contact_ids" value="{{ c.id }}"
+                               class="contact-checkbox"
+                               style="margin-top:.35rem;width:1rem;height:1rem;accent-color:var(--ink);cursor:pointer;flex-shrink:0;">
+                        <div class="fp-avatar">{{ c.name[0].upper() }}</div>
+                        <div>
+                            <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:.2rem;">
+                                <span style="font-weight:800;font-size:.95rem;">{{ c.name }}</span>
+                                <span class="fp-badge
+                                    {% if c.type == 'investor' %}fp-type-badge-investor
+                                    {% elif c.type == 'press' %}fp-type-badge-press
+                                    {% elif c.type == 'partner' %}fp-type-badge-partner
+                                    {% elif c.type == 'customer' %}fp-type-badge-customer
+                                    {% else %}fp-type-badge-other{% endif %}">
+                                    {{ c.type.title() }}
+                                </span>
+                                <span class="fp-badge
+                                    {% if c.status == 'not_contacted' %}fp-status-badge-not_contacted
+                                    {% elif c.status == 'contacted' %}fp-status-badge-contacted
+                                    {% elif c.status == 'replied' %}fp-status-badge-replied
+                                    {% elif c.status == 'meeting' %}fp-status-badge-meeting
+                                    {% elif c.status in ('bounced', 'passed') %}fp-status-badge-bounced
+                                    {% endif %}">
+                                    {% if c.status in ('bounced', 'passed') %}Bounced{% else %}{{ c.status.replace('_', ' ').title() }}{% endif %}
+                                </span>
+                            </div>
+                            <p class="fp-contact-meta">
+                                {% if c.role %}{{ c.role }}{% endif %}
+                                {% if c.role and c.company %} at {% endif %}
+                                {% if c.company %}{{ c.company }}{% endif %}
+                            </p>
+                            <a href="mailto:{{ c.email }}" class="fp-contact-email">{{ c.email }}</a>
+                            {% if c.notes %}
+                            <p class="fp-contact-note">📝 {{ c.notes }}</p>
+                            {% endif %}
+                            {% if c.last_contacted_at %}
+                            <p class="fp-contact-time">Last contacted: {{ c.last_contacted_at }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Row Actions -->
+                    <div style="display:flex;flex-wrap:wrap;gap:.4rem;align-items:flex-start;flex-shrink:0;">
+                        <button type="button"
+                                onclick="openEmailModal('{{ c.id }}', '{{ c.name | replace("'", "\\'") }}', '{{ c.email }}')"
+                                class="fp-btn-xs fp-btn-xs-dark">
+                            ✉️ Send Email
+                        </button>
+                        <button type="button"
+                                onclick="openEditModal('{{ c.id }}', '{{ c.name | replace("'", "\\'") }}', '{{ c.email | replace("'", "\\'") }}', '{{ (c.company or "") | replace("'", "\\'") }}', '{{ (c.role or "") | replace("'", "\\'") }}', '{{ c.type }}', '{{ (c.notes or "") | replace("'", "\\'") }}')"
+                                class="fp-btn-xs fp-btn-xs-ghost">
+                            ✏️ Edit
+                        </button>
+                        <form method="POST" action="/admin/outreach/status/{{ c.id }}" class="fp-inline-form">
+                            <select name="status" class="fp-select-xs">
+                                {% for s in ['not_contacted', 'contacted', 'replied', 'meeting', 'bounced'] %}
+                                <option value="{{ s }}" {% if c.status in ('bounced','passed') and s == 'bounced' %}selected{% elif c.status == s %}selected{% endif %}>
+                                    {% if s == 'bounced' %}Bounced{% else %}{{ s.replace('_', ' ').title() }}{% endif %}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <input type="text" name="notes" placeholder="Note..."
+                                   value="{{ c.notes or '' }}"
+                                   class="fp-input-xs" style="width:5.5rem;">
+                            <button type="submit" class="fp-btn-xs fp-btn-xs-dark">Save</button>
+                        </form>
+                        <form method="POST" action="/admin/outreach/delete/{{ c.id }}"
+                              onsubmit="return confirm('Remove {{ c.name | replace("'", "\\'") }}?')">
+                            <button type="submit" class="fp-btn-xs fp-btn-xs-danger">🗑️</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="fp-empty" style="margin:1.5rem;border-radius:14px;">
+            <span class="fp-empty-icon">📬</span>
+            <div class="fp-empty-title">No contacts yet</div>
+            <p class="fp-empty-sub">Add investors, press, or partners to start tracking outreach.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div><!-- /.fp -->
+
+<!-- ─── CSV Import Modal ──────────────────────────── -->
+<div id="csvModal" class="hidden fp-modal-overlay" style="display:none;">
+    <div class="fp-modal" style="max-width:24rem;">
+        <div class="fp-modal-header">
+            <div class="fp-modal-title">📊 Import CSV</div>
+            <button type="button"
+                    onclick="document.getElementById('csvModal').classList.add('hidden')"
+                    class="fp-modal-close">×</button>
+        </div>
+        <form method="POST" action="/admin/outreach/import-csv" enctype="multipart/form-data">
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">CSV File *</label>
+                <input type="file" name="csv_file" accept=".csv" required
+                       class="fp-input" style="padding:.5rem .7rem;font-size:.82rem;">
+                <p style="font-size:.72rem;color:var(--muted);margin-top:.3rem;">Expected columns: startup, founder, website, company_email</p>
+            </div>
+            <div style="margin-bottom:.75rem;">
+                <label class="fp-label">Contact Type *</label>
+                <div class="fp-type-radio-grid">
+                    {% for value, label, color in [
+                        ('investor', '💰 Investor', 'purple'),
+                        ('press', '📰 Press', 'blue'),
+                        ('partner', '🤝 Partner', 'green'),
+                        ('customer', '👤 Customer', 'orange'),
+                        ('startup', '👤 Startup', 'pink'),
+                        ('other', '📋 Other', 'gray')
+                    ] %}
+                    <label class="fp-type-radio-option">
+                        <input type="radio" name="contact_type" value="{{ value }}"
+                               class="sr-only peer"
+                               {% if value == 'investor' %}checked{% endif %}>
+                        <div class="fp-type-radio-box">{{ label }}</div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="fp-form-actions">
+                <button type="submit" class="fp-btn fp-btn-dark">Import</button>
+                <button type="button"
+                        onclick="document.getElementById('csvModal').classList.add('hidden')"
+                        class="fp-btn fp-btn-ghost">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ─── Add Contact Modal ─────────────────────────── -->
+<div id="addModal" class="hidden fp-modal-overlay" style="display:none;">
+    <div class="fp-modal" style="max-width:28rem;">
+        <div class="fp-modal-header">
+            <div class="fp-modal-title">➕ Add Contact</div>
+            <button type="button"
+                    onclick="document.getElementById('addModal').classList.add('hidden')"
+                    class="fp-modal-close">×</button>
+        </div>
+        <form method="POST" action="/admin/outreach/add">
+            <div class="fp-form-row cols-2">
+                <div class="fp-form-group">
+                    <label class="fp-label">Name *</label>
+                    <input type="text" name="name" required placeholder="Full name" class="fp-input">
+                </div>
+                <div class="fp-form-group">
+                    <label class="fp-label">Email *</label>
+                    <input type="email" name="email" required placeholder="email@example.com" class="fp-input">
+                </div>
+            </div>
+            <div class="fp-form-row cols-2">
+                <div class="fp-form-group">
+                    <label class="fp-label">Company</label>
+                    <input type="text" name="company" placeholder="Company name" class="fp-input">
+                </div>
+                <div class="fp-form-group">
+                    <label class="fp-label">Role</label>
+                    <input type="text" name="role" placeholder="e.g. Partner, Editor" class="fp-input">
+                </div>
+            </div>
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Type</label>
+                <select name="type" class="fp-select">
+                    <option value="investor">Investor</option>
+                    <option value="press">Press</option>
+                    <option value="partner">Partner</option>
+                    <option value="customer">Customer</option>
+                    <option value="startup">Startup</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Notes</label>
+                <textarea name="notes" rows="2" placeholder="Any context..." class="fp-textarea"></textarea>
+            </div>
+            <div class="fp-form-actions">
+                <button type="submit" class="fp-btn fp-btn-dark">Add Contact</button>
+                <button type="button"
+                        onclick="document.getElementById('addModal').classList.add('hidden')"
+                        class="fp-btn fp-btn-ghost">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ─── Edit Contact Modal ────────────────────────── -->
+<div id="editModal" class="hidden fp-modal-overlay" style="display:none;">
+    <div class="fp-modal" style="max-width:28rem;">
+        <div class="fp-modal-header">
+            <div class="fp-modal-title">✏️ Edit Contact</div>
+            <button type="button"
+                    onclick="document.getElementById('editModal').classList.add('hidden')"
+                    class="fp-modal-close">×</button>
+        </div>
+        <form id="editForm" method="POST" action="">
+            <div class="fp-form-row cols-2">
+                <div class="fp-form-group">
+                    <label class="fp-label">Name *</label>
+                    <input type="text" id="editName" name="name" required class="fp-input">
+                </div>
+                <div class="fp-form-group">
+                    <label class="fp-label">Email *</label>
+                    <input type="email" id="editEmail" name="email" required class="fp-input">
+                </div>
+            </div>
+            <div class="fp-form-row cols-2">
+                <div class="fp-form-group">
+                    <label class="fp-label">Company</label>
+                    <input type="text" id="editCompany" name="company" class="fp-input">
+                </div>
+                <div class="fp-form-group">
+                    <label class="fp-label">Role</label>
+                    <input type="text" id="editRole" name="role" class="fp-input">
+                </div>
+            </div>
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Type</label>
+                <select id="editType" name="type" class="fp-select">
+                    <option value="investor">Investor</option>
+                    <option value="press">Press</option>
+                    <option value="partner">Partner</option>
+                    <option value="customer">Customer</option>
+                    <option value="startup">Startup</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Notes</label>
+                <textarea id="editNotes" name="notes" rows="2" class="fp-textarea"></textarea>
+            </div>
+            <div class="fp-form-actions">
+                <button type="submit" class="fp-btn fp-btn-dark">💾 Save Changes</button>
+                <button type="button"
+                        onclick="document.getElementById('editModal').classList.add('hidden')"
+                        class="fp-btn fp-btn-ghost">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ─── Bulk Status Modal ─────────────────────────── -->
+<div id="bulkStatusModal" class="hidden fp-modal-overlay" style="display:none;">
+    <div class="fp-modal" style="max-width:22rem;">
+        <div class="fp-modal-header">
+            <div class="fp-modal-title">🔄 Bulk Status Change</div>
+            <button type="button"
+                    onclick="document.getElementById('bulkStatusModal').classList.add('hidden')"
+                    class="fp-modal-close">×</button>
+        </div>
+        <p id="bulkStatusCount" style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">0 contacts selected.</p>
+        <form id="bulkStatusForm" method="POST" action="/admin/outreach/bulk-status">
+            <div id="bulkStatusHiddenIds"></div>
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">New Status</label>
+                <select name="bulk_status" required class="fp-select">
+                    <option value="">— Select status —</option>
+                    <option value="not_contacted">Not Contacted</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="replied">Replied</option>
+                    <option value="meeting">Meeting</option>
+                    <option value="bounced">Bounced</option>
+                </select>
+            </div>
+            <div class="fp-form-actions">
+                <button type="submit" class="fp-btn fp-btn-dark">Apply to Selected</button>
+                <button type="button"
+                        onclick="document.getElementById('bulkStatusModal').classList.add('hidden')"
+                        class="fp-btn fp-btn-ghost">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ─── Send Individual Email Modal ──────────────── -->
+<div id="emailModal" class="hidden fp-modal-overlay" style="display:none;">
+    <div class="fp-modal" style="max-width:36rem;">
+        <div class="fp-modal-header">
+            <div>
+                <div class="fp-modal-title">✉️ Send Email</div>
+                <p id="emailRecipient" style="font-size:.8rem;color:var(--muted);margin-top:.25rem;"></p>
+            </div>
+            <button type="button"
+                    onclick="document.getElementById('emailModal').classList.add('hidden')"
+                    class="fp-modal-close">×</button>
+        </div>
+        <form id="emailForm" method="POST">
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Send As *</label>
+                <select name="sender" onchange="updateSenderSignature(this)" class="fp-select">
+                    <option value="pranav">Pranav (pranav.kethireddy@fintoit.com)</option>
+                    <option value="vishruth">Vishruth (vishruth.bejugam@fintoit.com)</option>
+                </select>
+            </div>
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Subject *</label>
+                <input type="text" name="subject" required
+                       placeholder="e.g. Intro to Fintoit — AI CFO for Startups"
+                       class="fp-input">
+            </div>
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Message *</label>
+                <textarea name="body" rows="8" required
+                          class="fp-textarea" style="font-family:'DM Mono',monospace;font-size:.82rem;"></textarea>
+            </div>
+            <div class="fp-form-actions">
+                <button type="submit" class="fp-btn fp-btn-dark">🚀 Send Email</button>
+                <button type="button"
+                        onclick="document.getElementById('emailModal').classList.add('hidden')"
+                        class="fp-btn fp-btn-ghost">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ─── Bulk Email Modal ──────────────────────────── -->
+<div id="bulkEmailModal" class="hidden fp-modal-overlay" style="display:none;">
+    <div class="fp-modal" style="max-width:36rem;">
+        <div class="fp-modal-header">
+            <div>
+                <div class="fp-modal-title">📨 Bulk Email</div>
+                <p style="font-size:.8rem;color:var(--muted);margin-top:.25rem;">Sends to all <strong id="bulkCount" style="color:var(--ink);">0</strong> contacts with the selected status</p>
+            </div>
+            <button type="button"
+                    onclick="document.getElementById('bulkEmailModal').classList.add('hidden')"
+                    class="fp-modal-close">×</button>
+        </div>
+        <div class="fp-alert-tip">
+            ⚠️ Use <code style="font-family:'DM Mono',monospace;">{name}</code> in your message to personalize. Recipients will be marked as <strong>Contacted</strong>.
+        </div>
+        <form method="POST" action="/admin/outreach/bulk-email">
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Send To *</label>
+                <select name="target_status" id="bulkStatusSelect" onchange="updateBulkCount()" class="fp-select">
+                    <option value="not_contacted">Not Contacted</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="replied">Replied</option>
+                    <option value="meeting">Meeting</option>
+                    <option value="bounced">Bounced</option>
+                    <option value="all">Everyone</option>
+                </select>
+            </div>
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Send As *</label>
+                <select name="sender" onchange="updateSenderSignature(this)" class="fp-select">
+                    <option value="pranav">Pranav (pranav.kethireddy@fintoit.com)</option>
+                    <option value="vishruth">Vishruth (vishruth.bejugam@fintoit.com)</option>
+                </select>
+            </div>
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Subject *</label>
+                <input type="text" name="subject" required
+                       value="Quick question — do you know your exact runway?"
+                       class="fp-input">
+            </div>
+            <div class="fp-form-group" style="margin-bottom:.75rem;">
+                <label class="fp-label">Message * <span style="color:var(--muted);font-size:.6rem;">(use {name})</span></label>
+                <textarea name="body" rows="10" required
+                          class="fp-textarea" style="font-family:'DM Mono',monospace;font-size:.82rem;"></textarea>
+            </div>
+            <div class="fp-form-actions">
+                <button type="submit" class="fp-btn fp-btn-dark">🚀 Send Bulk Email</button>
+                <button type="button"
+                        onclick="document.getElementById('bulkEmailModal').classList.add('hidden')"
+                        class="fp-btn fp-btn-ghost">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ─── Zoho sync form (hidden, submitted via JS) ── -->
+<form id="zohoSyncForm" method="POST" action="/admin/outreach/zoho-sync" class="hidden"></form>
+
+<script>
+// ── Edit Modal ──────────────────────────────────────
+function openEditModal(id, name, email, company, role, type, notes) {
+    document.getElementById('editForm').action = `/admin/outreach/edit/${id}`;
+    document.getElementById('editName').value    = name;
+    document.getElementById('editEmail').value   = email;
+    document.getElementById('editCompany').value = company;
+    document.getElementById('editRole').value    = role;
+    document.getElementById('editType').value    = type;
+    document.getElementById('editNotes').value   = notes;
+    document.getElementById('editModal').classList.remove('hidden');
+}
+
+// ── Email Modal ─────────────────────────────────────
+function openEmailModal(id, name, email) {
+    document.getElementById('emailForm').action = `/admin/outreach/send-email/${id}`;
+    document.getElementById('emailRecipient').textContent = `To: ${name} <${email}>`;
+    document.getElementById('emailModal').classList.remove('hidden');
+}
+
+// ── Bulk Email ──────────────────────────────────────
+function openBulkEmailModal() {
+    document.getElementById('bulkEmailModal').classList.remove('hidden');
+    updateBulkCount();
+}
+
+function updateBulkCount() {
+    const status = document.getElementById('bulkStatusSelect').value;
+    let count = status === 'all'
+        ? document.querySelectorAll('.contact-row').length
+        : document.querySelectorAll(`.contact-row[data-status="${status}"]`).length;
+    document.getElementById('bulkCount').textContent = count;
+}
+
+// ── Bulk Status ─────────────────────────────────────
+function openBulkStatusModal() {
+    const checked = document.querySelectorAll('.contact-checkbox:checked');
+    if (!checked.length) {
+        alert('Select at least one contact first.');
+        return;
+    }
+    // Populate hidden inputs
+    const container = document.getElementById('bulkStatusHiddenIds');
+    container.innerHTML = '';
+    checked.forEach(cb => {
+        const inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = 'contact_ids';
+        inp.value = cb.value;
+        container.appendChild(inp);
+    });
+    document.getElementById('bulkStatusCount').textContent =
+        `${checked.length} contact${checked.length !== 1 ? 's' : ''} selected.`;
+    document.getElementById('bulkStatusModal').classList.remove('hidden');
+}
+
+// ── Select All ──────────────────────────────────────
+function toggleSelectAll(master) {
+    document.querySelectorAll('.contact-checkbox').forEach(cb => {
+        const row = cb.closest('.contact-row');
+        if (row && row.style.display !== 'none') cb.checked = master.checked;
+    });
+}
+
+// ── Zoho Sync ───────────────────────────────────────
+function zohoSync() {
+    if (!confirm('Sync all contacts to Zoho CRM as Leads? Duplicates will be updated by email.')) return;
+    document.getElementById('zohoSyncForm').submit();
+}
+
+// ── Filter ──────────────────────────────────────────
+function filterContacts() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const status = document.getElementById('statusFilter').value;
+    const rows = document.querySelectorAll('.contact-row');
+    let visible = 0;
+
+    rows.forEach(row => {
+        const matchSearch = !q || row.dataset.search.includes(q);
+        const statusVal = row.dataset.status;
+        const matchStatus = !status || statusVal === status ||
+            (status === 'bounced' && statusVal === 'passed');
+        const show = matchSearch && matchStatus;
+        row.style.display = show ? '' : 'none';
+        if (show) visible++;
+    });
+
+    document.getElementById('contactCount').textContent = visible + ' contact' + (visible !== 1 ? 's' : '');
+    // Uncheck select-all if filter changes
+    document.getElementById('selectAll').checked = false;
+}
+
+// ── Sender signature helper ─────────────────────────
+function updateSenderSignature(selectEl) {
+    const textarea = selectEl.closest('form').querySelector('textarea[name="body"]');
+    if (!textarea) return;
+    const signatures = {
+        pranav: `Thanks,\nPranav Kethireddy\npranav.kethireddy@fintoit.com\nfintoit.com`,
+        vishruth: `Thanks,\nVishruth Bejugam\nvishruth.bejugam@fintoit.com\nfintoit.com`
+    };
+    let content = textarea.value.replace(/Thanks,[\s\S]*$/i, '').trim();
+    textarea.value = content + '\n\n' + signatures[selectEl.value];
+}
+</script>
+{% endblock %}

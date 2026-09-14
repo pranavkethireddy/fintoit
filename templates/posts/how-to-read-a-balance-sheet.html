@@ -1,0 +1,128 @@
+{% extends "post_base.html" %}
+{% block title %}How to Read a Balance Sheet — Fintoit Blog{% endblock %}
+
+{% block post_title %}How to Read a Balance Sheet (Without an Accounting Degree){% endblock %}
+{% block post_subtitle %}Assets, liabilities, equity: what they actually mean for your startup and how to spot warning signs in under 10 minutes.{% endblock %}
+
+{% block toc %}
+<li><a href="#what-is-it">What a balance sheet actually is</a></li>
+<li><a href="#assets">The Assets side</a></li>
+<li><a href="#liabilities">Liabilities</a></li>
+<li><a href="#equity">Equity</a></li>
+<li><a href="#the-equation">The fundamental equation</a></li>
+<li><a href="#warning-signs">5 warning signs to look for</a></li>
+{% endblock %}
+
+{% block post_content %}
+
+<p>Most founders treat the balance sheet like a tax form: something your accountant handles, that you sign off on, and that you never really look at. That's a mistake. The balance sheet is a snapshot of your company's financial health at a single point in time, and once you know how to read it, it tells you things your bank balance never will.</p>
+
+<p>This guide will get you up to speed in one read. No jargon. No accounting degree required.</p>
+
+<h2 id="what-is-it">What a Balance Sheet Actually Is</h2>
+
+<p>A balance sheet answers one question: <strong>what does the company own, what does it owe, and what's left over?</strong> It has three sections (assets, liabilities, and equity), and they always balance. That's not a coincidence; it's baked into the structure.</p>
+
+<p>Unlike your P&L (which covers a period of time, like "revenue this quarter"), the balance sheet is a <em>moment in time</em>: a photo, not a video. "As of June 30, 2025" means: this is exactly where we stood at midnight on that date.</p>
+
+<div class="callout">
+  <div class="callout-label">💡 Key insight</div>
+  <p>Your P&L shows performance. Your balance sheet shows position. You need both to understand your startup's financial reality.</p>
+</div>
+
+<h2 id="assets">The Assets Side</h2>
+
+<p>Assets are everything your company owns or is owed. They're split into two buckets:</p>
+
+<p><strong>Current assets</strong> are things that can be converted to cash within 12 months:</p>
+<ul>
+  <li>Cash and cash equivalents (your bank balance)</li>
+  <li>Accounts receivable (money customers owe you)</li>
+  <li>Prepaid expenses (things you've paid for but not used yet, like annual software subscriptions)</li>
+</ul>
+
+<p><strong>Non-current assets</strong> are things you hold for longer than 12 months:</p>
+<ul>
+  <li>Equipment, computers, hardware</li>
+  <li>Intellectual property, patents</li>
+  <li>Security deposits on your office lease</li>
+</ul>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Asset Type</th><th>Example</th><th>Why It Matters</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Cash</td><td>$180,000 in checking</td><td>Your runway source</td></tr>
+    <tr><td>Accounts Receivable</td><td>$22,000 owed by customers</td><td>Watch for slow-paying clients</td></tr>
+    <tr><td>Prepaid Expenses</td><td>$4,800 in annual SaaS</td><td>Normalizes monthly burn</td></tr>
+    <tr><td>Equipment</td><td>$12,000 in laptops</td><td>Depreciates over time</td></tr>
+    <tr class="total"><td>Total Assets</td><td>$218,800</td><td></td></tr>
+  </tbody>
+</table>
+
+<h2 id="liabilities">Liabilities</h2>
+
+<p>Liabilities are what your company owes to others. Again, split into two buckets:</p>
+
+<p><strong>Current liabilities</strong> are due within 12 months:</p>
+<ul>
+  <li>Accounts payable (bills you owe but haven't paid yet)</li>
+  <li>Accrued expenses (salaries earned but not yet paid out)</li>
+  <li>Deferred revenue (customer payments for services not yet delivered)</li>
+  <li>Short-term debt or credit lines</li>
+</ul>
+
+<p><strong>Non-current liabilities</strong> are due after 12 months:</p>
+<ul>
+  <li>Long-term loans</li>
+  <li>Convertible notes</li>
+</ul>
+
+<div class="callout green">
+  <div class="callout-label">⚠️ Watch this one</div>
+  <p><strong>Deferred revenue</strong> is often misread as a liability to worry about, but for SaaS startups, it's actually a sign of health. It means customers paid you upfront. Just make sure you can deliver what you promised.</p>
+</div>
+
+<h2 id="equity">Equity</h2>
+
+<p>Equity is what's left after you subtract liabilities from assets. For a startup, this section typically shows:</p>
+
+<ul>
+  <li><strong>Paid-in capital</strong>: money investors put in (your seed round, etc.)</li>
+  <li><strong>Retained earnings</strong>: cumulative profit or loss since the company was founded (usually negative for early startups)</li>
+</ul>
+
+<p>Negative equity doesn't automatically mean your startup is failing; almost all pre-revenue or early-revenue startups have negative retained earnings because they've been spending to grow. What matters is <em>trend</em> and <em>cash</em>.</p>
+
+<h2 id="the-equation">The Fundamental Equation</h2>
+
+<p>Every balance sheet, always, for every company in the world, satisfies this:</p>
+
+<div class="formula">
+  <div class="formula-label">The Accounting Equation</div>
+  <div><span class="hl">Assets</span> = <span class="hl">Liabilities</span> + <span class="hl-green">Equity</span></div>
+  <div style="margin-top:0.75rem; color:rgba(255,255,255,0.35); font-size:0.78rem;">Example: $218,800 = $76,400 + $142,400 ✓</div>
+</div>
+
+<p>If it doesn't balance, something is wrong: either a data entry error or, in rare cases, a sign of fraud. Fintoit automatically validates this equation every time your data updates.</p>
+
+<h2 id="warning-signs">5 Warning Signs to Look For</h2>
+
+<p>Once you understand the structure, these are the red flags that should prompt a closer look:</p>
+
+<ol>
+  <li><strong>Cash dropping faster than accounts receivable is growing</strong>: you're delivering but not collecting.</li>
+  <li><strong>Accounts payable growing much faster than cash</strong>: you're delaying payments to hide cash pressure.</li>
+  <li><strong>Equity going deeply negative with no new fundraise incoming</strong>: the company is technically insolvent.</li>
+  <li><strong>Prepaid expenses ballooning</strong>: might signal you're over-committing to annual contracts to hit targets.</li>
+  <li><strong>Deferred revenue shrinking</strong>: customers are no longer paying upfront, which affects your cash predictability.</li>
+</ol>
+
+<hr class="divider" />
+
+<p>You don't need to memorize every line of your balance sheet. But glancing at it monthly, particularly the current assets vs. current liabilities ratio (called the <em>current ratio</em>), gives you an early warning system that most founders skip entirely.</p>
+
+<p>Fintoit generates your balance sheet automatically and flags unusual changes so you catch problems early. <a href="https://fintoit.com/signup">Try it free →</a></p>
+
+{% endblock %}

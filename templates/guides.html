@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Startup Finance Guides & Free Tools | Fintoit{% endblock %}
+
+{% block head %}
+<meta name="description" content="Free guides and tools for startup founders: calculate your runway, understand burn rate, and write investor updates that build trust. No signup required.">
+<link rel="canonical" href="https://fintoit.com/guides">
+<meta name="robots" content="index,follow">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Startup Finance Guides & Free Tools | Fintoit">
+<meta property="og:description" content="Free guides and tools for founders: runway calculator, burn rate guide, and an investor update template.">
+<meta property="og:url" content="https://fintoit.com/guides">
+<meta property="og:image" content="https://fintoit.com/static/images/logo 6.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Startup Finance Guides & Free Tools">
+<meta name="twitter:description" content="Runway calculator, burn rate guide, and investor update template — all free.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Startup Finance Guides & Free Tools",
+  "description": "Free guides and tools for startup founders: runway calculator, burn rate guide, and investor update template.",
+  "url": "https://fintoit.com/guides",
+  "hasPart": [
+    { "@type": "WebApplication", "name": "Startup Runway Calculator", "url": "https://fintoit.com/runway-calculator" },
+    { "@type": "Article", "name": "What Is Burn Rate? How to Calculate It", "url": "https://fintoit.com/burn-rate-guide" },
+    { "@type": "Article", "name": "The Monthly Investor Update Template", "url": "https://fintoit.com/investor-update-template" }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+  .gx{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--muted:#6b6b7a;--border:#e2e1db;
+       font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);max-width:52rem;margin:0 auto;padding:3.5rem 1.25rem 4.5rem;}
+  .gx-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.75rem;}
+  .gx h1{font-size:clamp(2rem,4.5vw,2.9rem);font-weight:800;letter-spacing:-.03em;line-height:1.07;margin:0 0 .9rem;}
+  .gx-lede{font-size:1.05rem;line-height:1.7;color:var(--muted);max-width:36rem;margin:0 0 2.75rem;}
+  .gx-grid{display:grid;grid-template-columns:1fr;gap:1.1rem;}
+  .gx-card{display:block;background:#fff;border:2px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);
+           padding:1.6rem 1.75rem;text-decoration:none;color:var(--ink);transition:transform .16s,box-shadow .16s;}
+  .gx-card:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink);}
+  .gx-tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+          background:var(--paper);border:1.5px solid var(--border);border-radius:100px;padding:.2rem .65rem;color:var(--muted);margin-bottom:.75rem;}
+  .gx-card.hero .gx-tag{background:#eff6ff;border-color:#bfdbfe;color:var(--blue);}
+  .gx-card h2{font-size:1.3rem;font-weight:800;letter-spacing:-.02em;margin:0 0 .4rem;line-height:1.2;}
+  .gx-card p{font-size:.95rem;line-height:1.68;color:var(--muted);margin:0 0 .9rem;}
+  .gx-go{font-family:'DM Mono',monospace;font-size:.74rem;font-weight:500;color:var(--blue);}
+  .gx-foot{border-top:1.5px solid var(--border);margin-top:3rem;padding-top:1.5rem;font-size:.95rem;color:var(--muted);line-height:1.7;}
+  .gx-foot a{color:var(--blue);font-weight:600;text-decoration:underline;text-underline-offset:2px;}
+</style>
+
+<div class="gx">
+  <div class="gx-eyebrow">Guides</div>
+  <h1>Startup finance, explained simply</h1>
+  <p class="gx-lede">Free guides and tools for founders who don't have a CFO yet. No signup, no email gate — just the things we get asked about most.</p>
+
+  <div class="gx-grid">
+
+    <a class="gx-card hero" href="/runway-calculator">
+      <span class="gx-tag">Free tool</span>
+      <h2>Startup Runway Calculator</h2>
+      <p>Enter your cash and monthly burn to see exactly how many months of runway you have — and the date you run out. Instant, shareable, nothing to install.</p>
+      <span class="gx-go">Open the calculator →</span>
+    </a>
+
+    <a class="gx-card" href="/burn-rate-guide">
+      <span class="gx-tag">Guide</span>
+      <h2>What Is Burn Rate? How to Calculate It</h2>
+      <p>Gross vs. net burn, the formulas, worked examples, what counts as a "good" burn rate, and the five mistakes that make founders misjudge how much time they have.</p>
+      <span class="gx-go">Read the guide →</span>
+    </a>
+
+    <a class="gx-card" href="/investor-update-template">
+      <span class="gx-tag">Template</span>
+      <h2>The Monthly Investor Update Template</h2>
+      <p>A copy-paste format for monthly updates, what investors actually look for, the right cadence by stage, and the mistakes that quietly erode trust.</p>
+      <span class="gx-go">Get the template →</span>
+    </a>
+
+  </div>
+
+  <p class="gx-foot">
+    Want these numbers to track themselves? <a href="/signup">Fintoit</a> keeps your burn rate and runway live,
+    forecasts cash flow six months out, and turns your monthly update into a review-and-send.
+    <a href="/features">See what's included</a>.
+  </p>
+</div>
+{% endblock %}

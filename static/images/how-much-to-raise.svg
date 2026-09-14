@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="600"
+     viewBox="0 0 1400 600" role="img"
+     aria-label="Working a seed round size backwards from burn and milestone: the invented example Cedarline arrives at $1.5M against a $3.7M median priced seed">
+  <defs>
+    <style type="text/css"><![CDATA[
+      @font-face {
+        font-family: 'BricolageSub';
+        font-weight: 800;
+        font-style: normal;
+        src: url(data:font/woff2;base64,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) format('woff2');
+      }
+      @font-face {
+        font-family: 'DMMonoSub';
+        font-weight: 500;
+        font-style: normal;
+        src: url(data:font/woff2;base64,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) format('woff2');
+      }
+      .eyebrow  { font-family:'DMMonoSub',monospace; font-size:27px; font-weight:500;
+                  letter-spacing:5.4px; fill:#1d4ed8; }
+      .h1       { font-family:'BricolageSub',sans-serif; font-size:84px; font-weight:800;
+                  letter-spacing:-2px; fill:#0a0a0f; }
+      .fig      { font-family:'BricolageSub',sans-serif; font-size:84px; font-weight:800;
+                  letter-spacing:-1.4px; }
+      .fig.mine { fill:#1d4ed8; }
+      .fig.mkt  { fill:#6b6b7a; opacity:0.62; }
+      .figlbl   { font-family:'DMMonoSub',monospace; font-size:18px; font-weight:500;
+                  letter-spacing:2.6px; fill:#6b6b7a; }
+      .stackhd  { font-family:'DMMonoSub',monospace; font-size:20px; font-weight:500;
+                  letter-spacing:3.4px; fill:#6b6b7a; }
+      .step     { font-family:'DMMonoSub',monospace; font-size:20px; font-weight:500;
+                  fill:#1d4ed8; opacity:0.7; }
+      .rowlbl   { font-family:'BricolageSub',sans-serif; font-size:34px; font-weight:800;
+                  letter-spacing:-0.7px; fill:#0a0a0f; }
+      .rowsub   { font-family:'DMMonoSub',monospace; font-size:19px; font-weight:500;
+                  fill:#6b6b7a; }
+      .rowval   { font-family:'DMMonoSub',monospace; font-size:30px; font-weight:500;
+                  fill:#0a0a0f; text-anchor:end; }
+      .rowval.final { fill:#1d4ed8; }
+      .roundsto { font-family:'DMMonoSub',monospace; font-size:22px; font-weight:500;
+                  letter-spacing:3px; fill:#1d4ed8; text-anchor:end; }
+      .mark     { font-family:'DMMonoSub',monospace; font-size:25px; font-weight:500;
+                  letter-spacing:4px; fill:#6b6b7a; }
+      .mark tspan.k { fill:#0a0a0f; }
+    ]]></style>
+    <pattern id="grid" width="70" height="70" patternUnits="userSpaceOnUse">
+      <path d="M 70 0 L 0 0 0 70" fill="none" stroke="#e2e1db" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="spine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#4f7ffa"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1400" height="600" fill="#ffffff"/>
+  <rect width="1400" height="600" fill="url(#grid)" opacity="0.34"/>
+
+  <text class="eyebrow" x="92" y="130">HOW MUCH TO RAISE</text>
+  <text class="h1" x="92" y="240">Your number,</text>
+  <text class="h1" x="92" y="332">not theirs</text>
+  <rect x="92" y="378" width="132" height="7" rx="3.5" fill="#0a0a0f"/>
+
+  <text class="figlbl" x="92" y="444">CEDARLINE&#39;S NUMBER</text>
+  <text class="fig mine" x="92" y="520">$1.5M</text>
+  <text class="figlbl" x="400" y="444">MEDIAN PRICED SEED</text>
+  <text class="fig mkt" x="400" y="520">$3.7M</text>
+  <text class="mark" x="92" y="580"><tspan class="k">FINTOIT</tspan> · BLOG</text>
+
+  <rect x="700" y="86" width="1.5" height="474" fill="#e2e1db"/>
+
+  <text class="stackhd" x="744" y="122">CEDARLINE · INVENTED EXAMPLE</text>
+  <g>
+    <text class="step" x="744" y="186">01</text>
+    <text class="rowlbl" x="806" y="186">Cash at close</text>
+    <text class="rowsub" x="806" y="214">$310,000 − 6 × $41,000</text>
+    <text class="rowval" x="1322" y="186">$64,000</text>
+    <rect x="806" y="236" width="516" height="1" fill="#e2e1db"/>
+  </g>
+  <g>
+    <text class="step" x="744" y="274">02</text>
+    <text class="rowlbl" x="806" y="274">Runway needed</text>
+    <text class="rowsub" x="806" y="302">18 months to the milestone + 6 to raise</text>
+    <text class="rowval" x="1322" y="274">24 months</text>
+    <rect x="806" y="324" width="516" height="1" fill="#e2e1db"/>
+  </g>
+  <g>
+    <text class="step" x="744" y="362">03</text>
+    <text class="rowlbl" x="806" y="362">Cost of 24 months</text>
+    <text class="rowsub" x="806" y="390">24 × $62,000 average net burn</text>
+    <text class="rowval" x="1322" y="362">$1,488,000</text>
+    <rect x="806" y="412" width="516" height="1" fill="#e2e1db"/>
+  </g>
+  <g>
+    <text class="step" x="744" y="450">04</text>
+    <text class="rowlbl" x="806" y="450">Round size</text>
+    <text class="rowsub" x="806" y="478">less the cash left at close</text>
+    <text class="rowval final" x="1322" y="450">$1,424,000</text>
+  </g>
+
+  <rect x="806" y="500" width="516" height="2.5" rx="1.25" fill="#0a0a0f" opacity="0.9"/>
+  <text class="roundsto" x="1322" y="542">ROUNDS TO $1.5M</text>
+
+  <rect x="0" y="0" width="18" height="600" fill="url(#spine)"/>
+</svg>

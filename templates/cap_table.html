@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% block title %}Cap Table - Fintoit{% endblock %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap");
+.fp{ --ink:#0a0a0f;--paper:#f7f6f2;--blue:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--muted:#6b6b7a;--border:#e2e1db;
+  font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);}
+.fp .num{font-family:'DM Mono',monospace;font-variant-numeric:tabular-nums;}
+.fp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.fp-eyebrow{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;}
+.fp-title{font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0;}
+.fp-sub{color:var(--muted);font-size:.9rem;margin:.5rem 0 0;}
+.fp-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.fp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:10px;font-size:.83rem;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;border:1.5px solid var(--ink);text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fp-btn-dark{background:var(--ink);color:#fff;} .fp-btn-dark:hover{background:#1e1e2e;transform:translateY(-1px);}
+.fp-btn-ghost{background:#fff;color:var(--ink);} .fp-btn-ghost:hover{background:var(--paper);transform:translateY(-1px);}
+.fp-card{background:#fff;border:2px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);padding:1.5rem;}
+.fp-stat-label{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fp-stat-val{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.fp-stat-cap{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.fp-table{width:100%;border-collapse:collapse;}
+.fp-table thead{background:var(--ink);}
+.fp-table th{padding:.8rem 1.1rem;text-align:left;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace;white-space:nowrap;}
+.fp-table td{padding:.8rem 1.1rem;font-size:.88rem;border-bottom:1px solid var(--border);}
+.fp-table tbody tr:last-child td{border-bottom:none;}
+.fp-table tbody tr:hover td{background:var(--paper);}
+.fp-table tfoot td{padding:.8rem 1.1rem;font-size:.88rem;border-top:2px solid var(--ink);font-weight:800;background:var(--paper);}
+.fp-label{display:block;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.fp-input,.fp-select,.fp-textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.65rem .8rem;font-family:'Bricolage Grotesque',sans-serif;color:var(--ink);background:#fff;font-size:.9rem;box-sizing:border-box;}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06);}
+.fp-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:100px;font-size:.7rem;font-weight:700;border:1.5px solid;}
+.fp-empty{border:2px dashed var(--border);border-radius:20px;padding:3.5rem 2rem;text-align:center;background:var(--paper);}
+.fp-empty-icon{font-size:3rem;display:block;margin-bottom:1rem;}
+.fp-empty-title{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;}
+.fp-empty-sub{color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.6;}
+.fp-progress{height:10px;background:var(--paper);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.fp-progress-fill{height:100%;border-radius:100px;}
+</style>
+
+<div class="fp">
+
+    <!-- Header -->
+    <div class="fp-head">
+        <div>
+            <div class="fp-eyebrow">Equity</div>
+            <h1 class="fp-title">📊 Cap Table</h1>
+            <p class="fp-sub">Track equity ownership, shares and investor stakes</p>
+        </div>
+        <div class="fp-actions">
+            <a href="/cap-table/add" class="fp-btn fp-btn-dark">
+                ➕ Add Shareholder
+            </a>
+        </div>
+    </div>
+
+    {% if summary.entries %}
+
+    <!-- Summary Cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem;">
+        <div class="fp-card">
+            <div class="fp-stat-label">Total Shares</div>
+            <div class="fp-stat-val num">{{ "{:,.0f}".format(summary.total_shares) }}</div>
+            <div class="fp-stat-cap">fully diluted</div>
+        </div>
+        <div class="fp-card">
+            <div class="fp-stat-label">Total Raised</div>
+            <div class="fp-stat-val num" style="color:var(--green);">${{ "{:,.0f}".format(summary.total_raised) }}</div>
+            <div class="fp-stat-cap">from investors</div>
+        </div>
+        <div class="fp-card">
+            <div class="fp-stat-label">Shareholders</div>
+            <div class="fp-stat-val num">{{ summary.entries|length }}</div>
+            <div class="fp-stat-cap">on the cap table</div>
+        </div>
+    </div>
+
+    <!-- Chart + Table -->
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:1.25rem;margin-bottom:2rem;">
+
+        <!-- Ownership Pie Chart -->
+        <div class="fp-card">
+            <h2 style="font-size:1rem;font-weight:800;margin:0 0 1rem;">Ownership Breakdown</h2>
+            <div style="position: relative; height: 280px;">
+                <canvas id="ownershipChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Cap Table -->
+        <div class="fp-card" style="padding:0;overflow:hidden;">
+            <div style="padding:1rem 1.5rem;border-bottom:1.5px solid var(--border);">
+                <h2 style="font-size:1rem;font-weight:800;margin:0;">Shareholders</h2>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="fp-table">
+                    <thead>
+                        <tr>
+                            <th>Shareholder</th>
+                            <th>Type</th>
+                            <th>Class</th>
+                            <th style="text-align:right;">Shares</th>
+                            <th style="text-align:right;">Ownership</th>
+                            <th style="text-align:right;">Invested</th>
+                            <th style="text-align:center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in summary.entries %}
+                        <tr>
+                            <td style="font-weight:600;">
+                                {{ entry.shareholder_name }}
+                                {% if entry.vesting_schedule %}
+                                <div style="font-size:.72rem;color:var(--muted);">{{ entry.vesting_schedule }}</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if entry.shareholder_type == 'founder' %}
+                                <span class="fp-badge" style="color:var(--blue);border-color:#bfdbfe;background:#eff6ff;">
+                                    {{ entry.shareholder_type.title() }}
+                                </span>
+                                {% elif entry.shareholder_type == 'investor' %}
+                                <span class="fp-badge" style="color:var(--green);border-color:#bbf7d0;background:#f0fdf4;">
+                                    {{ entry.shareholder_type.title() }}
+                                </span>
+                                {% elif entry.shareholder_type == 'employee' %}
+                                <span class="fp-badge" style="color:#7c3aed;border-color:#c4b5fd;background:#f5f3ff;">
+                                    {{ entry.shareholder_type.title() }}
+                                </span>
+                                {% else %}
+                                <span class="fp-badge" style="color:var(--muted);border-color:var(--border);background:var(--paper);">
+                                    {{ entry.shareholder_type.title() }}
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td style="color:var(--muted);">{{ entry.share_class.title() }}</td>
+                            <td class="num" style="text-align:right;font-weight:600;">
+                                {{ "{:,.0f}".format(entry.shares) }}
+                            </td>
+                            <td style="text-align:right;">
+                                <div style="display:flex;align-items:center;justify-content:flex-end;gap:.5rem;">
+                                    <div class="fp-progress" style="width:4rem;">
+                                        <div class="fp-progress-fill" style="width: {{ entry.ownership_pct }}%;background:var(--blue);"></div>
+                                    </div>
+                                    <span class="num" style="font-weight:700;min-width:3rem;text-align:right;">{{ entry.ownership_pct }}%</span>
+                                </div>
+                            </td>
+                            <td class="num" style="text-align:right;color:var(--green);font-weight:600;">
+                                {% if entry.investment_amount > 0 %}
+                                ${{ "{:,.0f}".format(entry.investment_amount) }}
+                                {% else %}—{% endif %}
+                            </td>
+                            <td style="text-align:center;">
+                                <div style="display:flex;align-items:center;justify-content:center;gap:.4rem;">
+                                    <a href="/cap-table/edit/{{ entry.id }}"
+                                       class="fp-btn fp-btn-ghost" style="font-size:.72rem;padding:.3rem .65rem;">
+                                        ✏️
+                                    </a>
+                                    <form method="POST" action="/cap-table/delete/{{ entry.id }}"
+                                          onsubmit="return confirm('Delete {{ entry.shareholder_name }} from cap table?')">
+                                        <button type="submit"
+                                                class="fp-btn fp-btn-ghost" style="font-size:.72rem;padding:.3rem .65rem;color:var(--red);border-color:var(--red);">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">Total</td>
+                            <td class="num" style="text-align:right;">
+                                {{ "{:,.0f}".format(summary.total_shares) }}
+                            </td>
+                            <td class="num" style="text-align:right;">100%</td>
+                            <td class="num" style="text-align:right;color:var(--green);">
+                                ${{ "{:,.0f}".format(summary.total_raised) }}
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- By Type Breakdown -->
+    <div class="fp-card">
+        <h2 style="font-size:1rem;font-weight:800;margin:0 0 1rem;">Ownership by Type</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;">
+            {% set types = {'founder': {'label': 'Founders', 'color': 'blue'}, 'investor': {'label': 'Investors', 'color': 'green'}, 'employee': {'label': 'Employees', 'color': 'purple'}, 'advisor': {'label': 'Advisors', 'color': 'yellow'}} %}
+            {% for type_key, type_info in types.items() %}
+            {% set type_shares = summary.entries | selectattr('shareholder_type', 'equalto', type_key) | sum(attribute='shares') %}
+            {% if type_shares > 0 %}
+            {% set type_pct = (type_shares / summary.total_shares * 100) | round(1) %}
+            <div style="background:var(--paper);border:1.5px solid var(--border);border-radius:12px;padding:1rem;text-align:center;">
+                <div class="fp-stat-label">{{ type_info.label }}</div>
+                <div class="fp-stat-val num">{{ type_pct }}%</div>
+                <div class="fp-stat-cap">{{ "{:,.0f}".format(type_shares) }} shares</div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    {% else %}
+
+    <!-- Empty State -->
+    <div class="fp-empty">
+        <span class="fp-empty-icon">📊</span>
+        <div class="fp-empty-title">No Cap Table Yet</div>
+        <p class="fp-empty-sub">Add founders, investors, and employees to track equity ownership and dilution.</p>
+        <a href="/cap-table/add" class="fp-btn fp-btn-dark">
+            ➕ Add First Shareholder
+        </a>
+    </div>
+
+    {% endif %}
+
+</div>
+
+<script>
+{% if summary.entries %}
+const entries = {{ summary.entries | tojson | safe }};
+const colors = [
+    '#3b82f6','#22c55e','#a855f7','#f59e0b','#ef4444',
+    '#06b6d4','#84cc16','#f97316','#ec4899','#6366f1'
+];
+
+new Chart(document.getElementById('ownershipChart'), {
+    type: 'doughnut',
+    data: {
+        labels: entries.map(e => e.shareholder_name),
+        datasets: [{
+            data: entries.map(e => e.ownership_pct),
+            backgroundColor: colors.slice(0, entries.length),
+            borderWidth: 2,
+            borderColor: '#fff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { font: { size: 11 }, padding: 8, usePointStyle: true }
+            },
+            tooltip: {
+                callbacks: {
+                    label: ctx => ctx.label + ': ' + ctx.parsed + '%'
+                }
+            }
+        }
+    }
+});
+{% endif %}
+</script>
+{% endblock %}
